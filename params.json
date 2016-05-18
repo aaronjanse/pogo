@@ -1,6 +1,6 @@
 {
   "name": "Pogo",
   "tagline": "A javascript pogo stick game.",
-  "body": "#Instructions\r\nTry to jump as long as possible! Press the spacebar to jump.",
+  "body": "#Instructions\r\nTry to jump as long as possible!\r\n\r\n#Moved! Go [here](aaronduino.github.io/pogo/game.html) to play",
   "note": "Don't delete this file! It's used internally to help with page regeneration."
 }
