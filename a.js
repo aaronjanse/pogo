@@ -18,7 +18,7 @@ function init() {
 	});
 	
 	world.defaultContactMaterial.friction = 100;
-	world.defaultContactMaterial.restitution = 0.5*0;
+	world.defaultContactMaterial.restitution = 0.1;
 	
 	pogo = {
 		stick : new Object(),
@@ -43,7 +43,7 @@ function init() {
 	});
 	
 	pogo.stick.body = new p2.Body({
-		mass : 0.5,
+		mass : 0.25,
 //		damping: 0.2,
 		position : [ 0, 1 ],
 		angularVelocity : av,
@@ -56,7 +56,7 @@ function init() {
 	});
 	
 	pogo.frame.body = new p2.Body({
-		mass : 2,
+		mass : 3,
 		position : [ 0, 3 ],
 		angularVelocity : av,
 		velocity : [ 5, 0 ]
@@ -83,8 +83,8 @@ function init() {
 		localAxisA : [ 0, 1 ],
 		disableRotationalLock : true,
 	});
-	 c1.setLimits(-2, 0.5);
-	 c2.setLimits(-2, 0.5);
+	 c1.setLimits(-1.5, 0.5);
+	 c2.setLimits(-1.5, 0.5);
 	world.addConstraint(c2);
 	world.addConstraint(c1);
 	
@@ -207,7 +207,7 @@ function keyup(evt) {
 	// }
 	
 	if (evt.keyCode == 65) {
-		pogo.spring.restLength = 0.75;
+		pogo.spring.restLength = 0.25;
 		pogo.spring.applyForce();
 	}
 	
