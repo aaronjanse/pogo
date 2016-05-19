@@ -166,6 +166,12 @@ function init() {
 	window.addEventListener("keypress", keypress, false);
 }
 
+var keys = {
+	left: 37,
+	right: 39,
+	up: 38
+}
+
 function keydown(evt) {
 	// t = 5;
 	// switch(evt.keyCode){
@@ -177,18 +183,22 @@ function keydown(evt) {
 	// break;
 	// }
 	
-//	alert(evt.charCode)
-	if (evt.keyCode == 65) {
+	if([32, 37, 38, 39, 40].indexOf(evt.keyCode) > -1) {
+        evt.preventDefault();
+    }
+	
+//	alert(evt.keyCode)
+	if (evt.keyCode == keys.up) {
 		pogo.spring.restLength = 1.25;
 		pogo.spring.applyForce();
 	}
 	
-	if (evt.keyCode == 83) {
+	if (evt.keyCode == keys.left) {
 		// alert("Hi")
 		pogo.frame.body.angularVelocity = +twistval
 		// pogo.stick.body.angularVelocity+=twistval
 	}
-	if (evt.keyCode == 68) {
+	if (evt.keyCode == keys.right) {
 		// alert("Hi")
 		pogo.frame.body.angularVelocity = -twistval
 		// pogo.stick.body.angularVelocity+=twistval
@@ -206,12 +216,16 @@ function keyup(evt) {
 	// break;
 	// }
 	
-	if (evt.keyCode == 65) {
+//	if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+//        e.preventDefault();
+//    }
+	
+	if (evt.keyCode == keys.up) {
 		pogo.spring.restLength = 0.25;
 		pogo.spring.applyForce();
 	}
 	
-	if (evt.keyCode == 83 || evt.keyCode == 68) {
+	if (evt.keyCode == keys.left || evt.keyCode == keys.right) {
 		// alert("Hi")
 		pogo.frame.body.angularVelocity = 0
 		// pogo.stick.body.angularVelocity+=twistval
@@ -226,12 +240,16 @@ function keyup(evt) {
 var twistval = 5;
 function keypress(evt) {
 	// alert(evt.keyCode)
-	 if (evt.keyCode == 115) {
+//	if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+//        e.preventDefault();
+//    }
+	
+	 if (evt.keyCode == keys.left) {
 	 // alert("Hi")
 	 pogo.frame.body.angularVelocity=twistval
 	 // pogo.stick.body.angularVelocity+=twistval
 	 }
-	 if (evt.keyCode == 100) {
+	 if (evt.keyCode == keys.right) {
 	 // alert("Hi")
 	 pogo.frame.body.angularVelocity=-twistval
 	 // pogo.stick.body.angularVelocity+=twistval
