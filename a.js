@@ -1,7 +1,11 @@
+
 var canvas, ctx, w, h, world, planeBody, boxBody, boxShape;
 var pogo;
 var data = [];
 var heightfield = new Object();
+
+var gameOver = false
+
 init();
 requestAnimationFrame(animate);
 
@@ -52,7 +56,8 @@ function init() {
 	
 	pogo.frame.shape = new p2.Box({
 		width : 0.5,
-		height : 1.5
+		height : 1.5,
+		sensor: true
 	});
 	
 	pogo.frame.body = new p2.Body({
@@ -164,6 +169,12 @@ function init() {
 	window.addEventListener("keydown", keydown, false);
 	window.addEventListener("keyup", keyup, false);
 	window.addEventListener("keypress", keypress, false);
+	
+	world.on("beginContact",function(event){
+		if(event.bodyA == pogo.frame.body || event.bodyB == pogo.frame.body) {
+			gameOver = true;
+		}
+	});
 }
 
 var keys = {
@@ -330,8 +341,29 @@ function render() {
 	// ctx.lineTo(-gameWidth/2,-gameHeight/2);
 	ctx.stroke();
 	// Restore transform
+	
 	ctx.restore();
+	
+	if(gameOver) {
+		ctx.font = "30px Comic Sans MS";
+		ctx.fillStyle = "red";
+		ctx.textAlign = "center";
+		if (!pendingquit) {
+			score = Math.round(pogo.frame.body.position[0]);
+			pendingquit = true
+			setTimeout(function() {
+//				return;
+				gameOver = false
+				pendingquit = false
+				init();
+			}, 1000*3);
+		}
+		ctx.fillText(score, canvas.width/2, canvas.height/2); 
+	}
 }
+var score = null
+var pendingquit = false
+
 // Animation loop
 
 speed = 60*5
@@ -352,3 +384,8 @@ function animate(time) {
 	// Render scene
 	render();
 }
+
+
+//while (true) {
+//	playGame();
+//}
