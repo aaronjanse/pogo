@@ -83,9 +83,8 @@ function init() {
 		localAxisA : [ 0, 1 ],
 		disableRotationalLock : true,
 	});
-	
-	c1.setLimits(-1.5, 0.5);
-	c2.setLimits(-1.5, 0.5);
+	 c1.setLimits(-1.5, 0.5);
+	 c2.setLimits(-1.5, 0.5);
 	world.addConstraint(c2);
 	world.addConstraint(c1);
 	
@@ -135,8 +134,7 @@ function init() {
 		var value1 = noise.perlin2(v, 0);
 		// data.push(0.5*Math.cos(0.2*i) * Math.sin(0.5*i) + 0.6*Math.sin(0.1*i)
 		// * Math.sin(0.05*i));
-//		data.push(value * 1.75)
-		data.push(0)
+		data.push(value * 1.75)
 	}
 	heightfield.shape = new p2.Heightfield({
 		heights : data,
