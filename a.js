@@ -161,7 +161,7 @@ function ontouchmove(e) {
 	e.preventDefault();
 	if(lastmouse.x!=null) {
     	if (lastmouse.x!=e.touches[0].clientX) {
-    		amnt = Math.min(Math.abs(lastmouse.x-e.clientX), 100)/5
+    		amnt = Math.min(Math.abs(lastmouse.x-e.touches[0].clientX), 100)/5
 	    	if (lastmouse.x-e.touches[0].clientX > 0) {
 	    		pogo.frame.body.angularVelocity = +twistval*amnt;
 	    	} else {
