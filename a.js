@@ -175,6 +175,53 @@ function init() {
 			gameOver = true;
 		}
 	});
+	
+	canvas.onmousedown = onmousedown
+
+}
+
+var lastmouse = {
+		x: null,
+		y: null
+}
+
+function onmousedown() {
+	pogo.spring.restLength = 0.25;
+	pogo.spring.applyForce();
+		  document.onmousemove = function(e) {
+//		    e = e || event
+//		    fixPageXY(e)  
+		    // put ball center under mouse pointer. 25 is half of width/height
+//		    self.style.left = e.pageX-25+'px' 
+//		    self.style.top = e.pageY-25+'px' 
+		    if(lastmouse.x!=null) {
+		    	if (lastmouse.x!=e.pageX) {
+		    		amnt = Math.min(Math.abs(lastmouse.x-e.pageX), 100)/5
+			    	if (lastmouse.x-e.pageX > 0) {
+			    		pogo.frame.body.angularVelocity = +twistval*amnt;
+			    	} else {
+			    		pogo.frame.body.angularVelocity = -twistval*amnt;
+			    	}
+		    	} else {
+		    		pogo.frame.body.angularVelocity = 0;
+		    	}
+		    }
+			    lastmouse = {
+		    			x: e.pageX,
+		    			y: e.pageY
+		    	}
+		    
+		  }
+		  this.onmouseup = function() {
+		    document.onmousemove = null
+		    lastmouse = {
+		    		x: null,
+		    		y: null
+		    }
+		    pogo.frame.body.angularVelocity = 0;
+		    pogo.spring.restLength = 1.25;
+		    pogo.spring.applyForce();
+		  }
 }
 
 var keys = {
