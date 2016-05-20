@@ -53,7 +53,7 @@ function initgame() {
 	pogo.stick.body = new p2.Body({
 		mass : 0.25,
 //		damping: 0.2,
-		position : [ 0, 1 ],
+		position : [ 0, 2.75],
 		angularVelocity : av,
 		velocity : [ 5, 0 ]
 	});
@@ -77,7 +77,7 @@ function initgame() {
 	world.addBody(pogo.frame.body);
 	world.addBody(pogo.stick.body);
 	
-	var stiffness = 350, damping = 0.5, restLength = 1
+	var stiffness = 350, damping = 0.5, restLength = 0.25
 
 	var c1 = new p2.PrismaticConstraint(pogo.frame.body, pogo.stick.body, {
 		localAnchorA : [ 0, 0.5 ],
@@ -91,8 +91,7 @@ function initgame() {
 		localAxisA : [ 0, 1 ],
 		disableRotationalLock : true,
 	});
-	 c1.setLimits(-1.5, 0.5);
-	 c2.setLimits(-1.5, 0.5);
+	 c1.setLimits(-1.25, -0.5);
 	world.addConstraint(c2);
 	world.addConstraint(c1);
 	
