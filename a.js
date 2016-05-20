@@ -26,7 +26,10 @@ function init() {
 	window.addEventListener("keypress", keypress, false);
 	
 	canvas.onmousedown = onmousedown
-
+	
+	canvas.addEventListener('touchstart', ontouchstart, false);        
+	canvas.addEventListener('touchmove', ontouchmove, false);
+	canvas.addEventListener('touchend', ontouchend, false);
 }
 
 function initgame() {
@@ -149,6 +152,41 @@ var lastmouse = {
 		y: null
 }
 
+function ontouchstart(e) {
+	pogo.spring.restLength = 0.25;
+	pogo.spring.applyForce();
+}
+
+function ontouchmove(e) {
+	e.preventDefault();
+	if(lastmouse.x!=null) {
+    	if (lastmouse.x!=e.touches[0].clientX) {
+    		amnt = Math.min(Math.abs(lastmouse.x-e.clientX), 100)/5
+	    	if (lastmouse.x-e.touches[0].clientX > 0) {
+	    		pogo.frame.body.angularVelocity = +twistval*amnt;
+	    	} else {
+	    		pogo.frame.body.angularVelocity = -twistval*amnt;
+	    	}
+    	} else {
+    		pogo.frame.body.angularVelocity = 0;
+    	}
+    }
+	    lastmouse = {
+    			x: e.touches[0].clientX,
+    			y: e.touches[0].clientY
+    	}
+}
+
+function ontouchend(e) {
+    lastmouse = {
+    		x: null,
+    		y: null
+    }
+    pogo.frame.body.angularVelocity = 0;
+    pogo.spring.restLength = 1.25;
+    pogo.spring.applyForce();
+}
+
 function onmousedown() {
 	pogo.spring.restLength = 0.25;
 	pogo.spring.applyForce();
@@ -159,9 +197,9 @@ function onmousedown() {
 //		    self.style.left = e.pageX-25+'px' 
 //		    self.style.top = e.pageY-25+'px' 
 		    if(lastmouse.x!=null) {
-		    	if (lastmouse.x!=e.pageX) {
-		    		amnt = Math.min(Math.abs(lastmouse.x-e.pageX), 100)/5
-			    	if (lastmouse.x-e.pageX > 0) {
+		    	if (lastmouse.x!=e.clientX) {
+		    		amnt = Math.min(Math.abs(lastmouse.x-e.clientX), 100)/5
+			    	if (lastmouse.x-e.clientX > 0) {
 			    		pogo.frame.body.angularVelocity = +twistval*amnt;
 			    	} else {
 			    		pogo.frame.body.angularVelocity = -twistval*amnt;
@@ -171,8 +209,8 @@ function onmousedown() {
 		    	}
 		    }
 			    lastmouse = {
-		    			x: e.pageX,
-		    			y: e.pageY
+		    			x: e.clientX,
+		    			y: e.clientY
 		    	}
 		    
 		  }
