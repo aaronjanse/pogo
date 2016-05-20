@@ -6,6 +6,8 @@ var heightfield = new Object();
 
 var gameOver = false
 
+var av = -0.25
+
 init();
 requestAnimationFrame(animate);
 
@@ -17,6 +19,17 @@ function init() {
 	ctx = canvas.getContext("2d");
 	ctx.lineWidth = 0.05;
 	// Init p2.js
+	initgame()
+	
+	window.addEventListener("keydown", keydown, false);
+	window.addEventListener("keyup", keyup, false);
+	window.addEventListener("keypress", keypress, false);
+	
+	canvas.onmousedown = onmousedown
+
+}
+
+function initgame() {
 	world = new p2.World({
 		gravity : [ 0, -7 ]
 	});
@@ -28,18 +41,9 @@ function init() {
 		stick : new Object(),
 		frame : new Object(),
 		spring : null
-	// ,tip: new Object()
 	};
 	
-	// pogo.tip.shape = new p2.Circle({ radius: 0.3 })
-	//        
-	// pogo.tip.body = new p2.Body({
-	// mass: 1,
-	// position: [0,2],
-	// angularVelocity: -0.5
-	// });
 	
-	var av = -0.25
 
 	pogo.stick.shape = new p2.Box({
 		width : 0.25,
@@ -70,7 +74,6 @@ function init() {
 	pogo.frame.body.addShape(pogo.frame.shape);
 	pogo.stick.body.addShape(pogo.stick.shape);
 	
-	// world.addBody(pogo.tip.body);
 	world.addBody(pogo.frame.body);
 	world.addBody(pogo.stick.body);
 	
@@ -93,14 +96,6 @@ function init() {
 	world.addConstraint(c2);
 	world.addConstraint(c1);
 	
-	// world.addSpring(new p2.LinearSpring(pogo.frame.body, pogo.stick.body, {
-	// restLength : restLength,
-	// stiffness : stiffness,
-	// damping : damping,
-	// localAnchorA : [0,0],
-	// localAnchorB : [0,0],
-	// }));
-	
 	pogo.spring = new p2.LinearSpring(pogo.frame.body, pogo.stick.body, {
 		restLength : restLength,
 		stiffness : stiffness,
@@ -110,25 +105,6 @@ function init() {
 	});
 	
 	world.addSpring(pogo.spring);
-	
-	// Add a box
-	// boxShape = pogo.frame.shape
-	// boxBody = pogo.frame.body
-	// boxShape = new p2.Box({
-	// width: 0.5,
-	// height: 1.5
-	// });
-	// boxBody = new p2.Body({
-	// mass: 1,
-	// position: [0,3],
-	// angularVelocity: -0.5
-	// });
-	// boxBody.addShape(boxShape);
-	// world.addBody(boxBody);
-	// Add a plane
-	// planeShape = new p2.Plane();
-	// planeBody = new p2.Body();
-	// planeBody.addShape(planeShape);
 	
 	noise.seed(Math.random());
 	data.push(0)
@@ -151,33 +127,22 @@ function init() {
 	heightfield.body.addShape(heightfield.shape);
 	world.addBody(heightfield.body);
 	
-	// world.addBody(planeBody);
-	
 	// Setup Collisions
 	var FRAME = 1, STICK = 2, GROUND = 4;
 	
-	// pogo.tip.shape.collisionGroup = TIP;
 	pogo.frame.shape.collisionGroup = FRAME;
 	pogo.stick.shape.collisionGroup = STICK;
 	heightfield.shape.collisionGroup = GROUND;
 	
-	// pogo.tip.shape.collisionMask = ~STICK;
 	pogo.frame.shape.collisionMask = ~STICK;
 	pogo.stick.shape.collisionMask = ~FRAME;
 	heightfield.shape.collisionMask = -1;
-	
-	window.addEventListener("keydown", keydown, false);
-	window.addEventListener("keyup", keyup, false);
-	window.addEventListener("keypress", keypress, false);
 	
 	world.on("beginContact",function(event){
 		if(event.bodyA == pogo.frame.body || event.bodyB == pogo.frame.body) {
 			gameOver = true;
 		}
 	});
-	
-	canvas.onmousedown = onmousedown
-
 }
 
 var lastmouse = {
@@ -261,6 +226,8 @@ function keydown(evt) {
 		pogo.frame.body.angularVelocity = -twistval
 		// pogo.stick.body.angularVelocity+=twistval
 	}
+	
+//	return !(evt.keyCode == 32 && (evt.target.type != 'text' && evt.target.type != 'textarea'));
 }
 
 function keyup(evt) {
@@ -402,7 +369,7 @@ function render() {
 //				return;
 				gameOver = false
 				pendingquit = false
-				init();
+				initgame();
 			}, 1000*3);
 		}
 		ctx.fillText(score, canvas.width/2, canvas.height/2); 
