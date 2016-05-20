@@ -19,7 +19,7 @@ function init() {
 	ctx = canvas.getContext("2d");
 	ctx.lineWidth = 0.05;
 	// Init p2.js
-	initgame()
+	initgame();
 	
 	window.addEventListener("keydown", keydown, false);
 	window.addEventListener("keyup", keyup, false);
@@ -27,9 +27,9 @@ function init() {
 	
 	canvas.onmousedown = onmousedown
 	
-	canvas.addEventListener('touchstart', ontouchstart, false);        
-	canvas.addEventListener('touchmove', ontouchmove, false);
-	canvas.addEventListener('touchend', ontouchend, false);
+	canvas.touchstart = ontouchstart      
+	canvas.touchmove = ontouchmove
+	canvas.touchend = ontouchend
 }
 
 function initgame() {
@@ -181,7 +181,7 @@ function ontouchend(e) {
     lastmouse = {
     		x: null,
     		y: null
-    }
+    };
     pogo.frame.body.angularVelocity = 0;
     pogo.spring.restLength = 1.25;
     pogo.spring.applyForce();
