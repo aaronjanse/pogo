@@ -19,6 +19,19 @@ function init() {
 	ctx = canvas.getContext("2d");
 	ctx.lineWidth = 0.05;
 	// Init p2.js
+	
+	noise.seed(Math.random());
+	data.push(0)
+	var numDataPoints = 500;
+	for (var i = 0; i < numDataPoints; i++) {
+		v = i / 10
+		var value = noise.simplex2(v, 0);
+		var value1 = noise.perlin2(v, 0);
+		// data.push(0.5*Math.cos(0.2*i) * Math.sin(0.5*i) + 0.6*Math.sin(0.1*i)
+		// * Math.sin(0.05*i));
+		data.push(value * 1.75)
+	}
+	
 	initgame()
 	
 	window.addEventListener("keydown", keydown, false);
@@ -108,17 +121,6 @@ function initgame() {
 	
 	world.addSpring(pogo.spring);
 	
-	noise.seed(Math.random());
-	data.push(0)
-	var numDataPoints = 500;
-	for (var i = 0; i < numDataPoints; i++) {
-		v = i / 10
-		var value = noise.simplex2(v, 0);
-		var value1 = noise.perlin2(v, 0);
-		// data.push(0.5*Math.cos(0.2*i) * Math.sin(0.5*i) + 0.6*Math.sin(0.1*i)
-		// * Math.sin(0.05*i));
-		data.push(value * 1.75)
-	}
 	heightfield.shape = new p2.Heightfield({
 		heights : data,
 		elementWidth : 2
