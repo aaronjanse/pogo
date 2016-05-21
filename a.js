@@ -199,21 +199,19 @@ function onmousedown() {
 //		    self.style.left = e.pageX-25+'px' 
 //		    self.style.top = e.pageY-25+'px' 
 		    if(lastmouse.x!=null) {
-		    	if (lastmouse.x!=e.clientX) {
-		    		amnt = Math.min(Math.abs(lastmouse.x-e.clientX), 100)/5
-			    	if (lastmouse.x-e.clientX > 0) {
-			    		pogo.frame.body.angularVelocity = +twistval*amnt;
-			    	} else {
-			    		pogo.frame.body.angularVelocity = -twistval*amnt;
-			    	}
+		    	if (lastmouse.x!=e.clientX||true) {
+		    		a = lastmouse.x-e.clientX;
+		    		b = Math.min(lastmouse.y-e.clientY, -1);
+		    		pogo.frame.body.angularVelocity = ((Math.atan(a/b)-pogo.frame.body.angle));
 		    	} else {
 		    		pogo.frame.body.angularVelocity = 0;
 		    	}
-		    }
+		    } else {
 			    lastmouse = {
 		    			x: e.clientX,
 		    			y: e.clientY
 		    	}
+		    }
 		    
 		  }
 		  this.onmouseup = function() {
