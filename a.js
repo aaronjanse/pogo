@@ -334,7 +334,7 @@ function drawpogo() {
 // }
 
 function drawbox(obj) {
-//	ctx.beginPath();
+	ctx.beginPath();
 	var x = obj.body.interpolatedPosition[0], y = obj.body.interpolatedPosition[1];
 	ctx.save();
 	ctx.translate(x, y); // Translate to the center of the box
