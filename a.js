@@ -330,8 +330,12 @@ function keypress(evt) {
 }
 
 function drawpogo() {
+	ctx.fillStyle = "#ff66ff";
 	drawbox(pogo.stick)
+	ctx.fill();
+	ctx.fillStyle = "#ed00ed";
 	drawbox(pogo.frame)
+	ctx.fill();
 	// drawBox({body: boxBody, shape: boxShape})
 }
 
@@ -364,6 +368,10 @@ var xscroll = 0
 function render() {
 	// Clear the canvas
 	ctx.clearRect(0, 0, w, h);
+	
+	ctx.fillStyle = "#4d79ff";
+	ctx.fillRect(0,0,w,h);
+	ctx.fill()
 	// Transform the canvas
 	// Note that we need to flip the y axis since Canvas pixel coordinates
 	// goes from top to bottom, while physics does the opposite.
@@ -379,6 +387,7 @@ function render() {
 	ctx.translate(xscroll, 0)
 	// Draw all bodies
 	// drawbox(pogo.frame);
+	ctx.strokeStyle = "#000000";
 	drawpogo();
 	// drawBox(pogo.frame)
 	// drawPlane();
@@ -391,16 +400,20 @@ function render() {
 	// x = 0
 	
 	ctx.beginPath();
-	ctx.moveTo(x, y + data[0]);
+	ctx.moveTo(x, -h/100+0.15);
 	
 	var i = 0;
 	for ( var d in data) {
 		ctx.lineTo(x + i * heightfield.shape.elementWidth, y + data[i]);
 		i += 1;
 	}
+	ctx.lineTo(x+data.length-1*heightfield.shape.elementWidth, -h/100+0.15)
 	// ctx.lineTo(gameWidth/2,gameHeight/2);
 	// ctx.lineTo(-gameWidth/2,gameHeight/2);
 	// ctx.lineTo(-gameWidth/2,-gameHeight/2);
+	ctx.closePath()
+	ctx.fillStyle = "#00b300"
+	ctx.fill()
 	ctx.stroke();
 	// Restore transform
 	
@@ -424,9 +437,7 @@ function render() {
 		ctx.fillStyle = "#999999";
 		ctx.stroke();
 		ctx.fill();
-		ctx.fillStyle = "#FFFFFF";
 		ctx.lineWidth = origw
-		ctx.strokeStyle = "#000000";
 	}
 	
 	if(gameOver) {
