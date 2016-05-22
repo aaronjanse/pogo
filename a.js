@@ -162,24 +162,26 @@ function ontouchstart(e) {
 function ontouchmove(e) {
 	e.preventDefault();
 	if(lastmouse.x!=null) {
-    	if (lastmouse.x!=e.touches[0].clientX) {
-    		amnt = Math.min(Math.abs(lastmouse.x-e.touches[0].clientX), 100)/5
-	    	if (lastmouse.x-e.touches[0].clientX > 0) {
-	    		pogo.frame.body.angularVelocity = +twistval*amnt;
-	    	} else {
-	    		pogo.frame.body.angularVelocity = -twistval*amnt;
-	    	}
+    	if (lastmouse.x!=e.touches[0].clientX||true) {
+    		a = lastmouse.x-e.touches[0].clientX;
+    		b = lastmouse.y-e.touches[0].clientY;
+    		pogo.frame.body.angularVelocity = 3*((Math.atan(a/b)-pogo.frame.body.angle));
     	} else {
     		pogo.frame.body.angularVelocity = 0;
     	}
-    }
+    } else {
 	    lastmouse = {
     			x: e.touches[0].clientX,
     			y: e.touches[0].clientY
     	}
+    }
+    currentmouse = e
+    mousedrag = true
 }
 
 function ontouchend(e) {
+	currentmouse = null
+    mousedrag = false
     lastmouse = {
     		x: null,
     		y: null
@@ -189,10 +191,16 @@ function ontouchend(e) {
     pogo.spring.applyForce();
 }
 
+var mousedrag = false
+
+var currentmouse = null
+
 function onmousedown() {
 	pogo.spring.restLength = 0.25;
 	pogo.spring.applyForce();
+	
 		  document.onmousemove = function(e) {
+			  
 //		    e = e || event
 //		    fixPageXY(e)  
 		    // put ball center under mouse pointer. 25 is half of width/height
@@ -201,8 +209,8 @@ function onmousedown() {
 		    if(lastmouse.x!=null) {
 		    	if (lastmouse.x!=e.clientX||true) {
 		    		a = lastmouse.x-e.clientX;
-		    		b = Math.min(lastmouse.y-e.clientY, -1);
-		    		pogo.frame.body.angularVelocity = ((Math.atan(a/b)-pogo.frame.body.angle));
+		    		b = lastmouse.y-e.clientY;
+		    		pogo.frame.body.angularVelocity = 3*((Math.atan(a/b)-pogo.frame.body.angle));
 		    	} else {
 		    		pogo.frame.body.angularVelocity = 0;
 		    	}
@@ -212,10 +220,13 @@ function onmousedown() {
 		    			y: e.clientY
 		    	}
 		    }
-		    
+		    currentmouse = e
+		    mousedrag = true
 		  }
 		  this.onmouseup = function() {
 		    document.onmousemove = null
+		    currentmouse = null
+		    mousedrag = false
 		    lastmouse = {
 		    		x: null,
 		    		y: null
