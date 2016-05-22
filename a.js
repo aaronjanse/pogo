@@ -390,7 +390,7 @@ function render() {
 //	x+=xscroll
 	// x = 0
 	
-	// ctx.beginPath();
+	ctx.beginPath();
 	ctx.moveTo(x, y + data[0]);
 	
 	var i = 0;
@@ -405,6 +405,29 @@ function render() {
 	// Restore transform
 	
 	ctx.restore();
+	
+	if(mousedrag) {
+		var rect = canvas.getBoundingClientRect();
+		var mx1 = Math.round((lastmouse.x-rect.left)/(rect.right-rect.left)*canvas.width);
+		var my1 = Math.round((lastmouse.y-rect.top)/(rect.bottom-rect.top)*canvas.height);
+		var mx2 = Math.round((currentmouse.clientX-rect.left)/(rect.right-rect.left)*canvas.width);
+		var my2 = Math.round((currentmouse.clientY-rect.top)/(rect.bottom-rect.top)*canvas.height);
+		ctx.beginPath();
+		var origw = ctx.lineWidth
+		ctx.lineWidth = 2
+		ctx.strokeStyle = "#999999";
+		ctx.moveTo(mx1, my1);
+		ctx.lineTo(mx2, my2);
+		ctx.stroke();
+		ctx.beginPath();
+		ctx.arc(mx2, my2, 4, 0, 2 * Math.PI, false);
+		ctx.fillStyle = "#999999";
+		ctx.stroke();
+		ctx.fill();
+		ctx.fillStyle = "#FFFFFF";
+		ctx.lineWidth = origw
+		ctx.strokeStyle = "#000000";
+	}
 	
 	if(gameOver) {
 		ctx.font = "30px Comic Sans MS";
