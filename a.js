@@ -415,14 +415,14 @@ function render() {
 	// x = 0
 	
 	ctx.beginPath();
-	ctx.moveTo(x, -h/100+0.15);
+	ctx.moveTo(x, -h/100);
 	
 	var i = 0;
 	for ( var d in data) {
 		ctx.lineTo(x + i * heightfield.shape.elementWidth, y + data[i]);
 		i += 1;
 	}
-	ctx.lineTo(x+data.length-1*heightfield.shape.elementWidth, -h/100+0.15)
+	ctx.lineTo(x+data.length-1*heightfield.shape.elementWidth, -h/100)
 	// ctx.lineTo(gameWidth/2,gameHeight/2);
 	// ctx.lineTo(-gameWidth/2,gameHeight/2);
 	// ctx.lineTo(-gameWidth/2,-gameHeight/2);
