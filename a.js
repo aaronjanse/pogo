@@ -162,24 +162,26 @@ function ontouchstart(e) {
 function ontouchmove(e) {
 	e.preventDefault();
 	if(lastmouse.x!=null) {
-    	if (lastmouse.x!=e.touches[0].clientX) {
-    		amnt = Math.min(Math.abs(lastmouse.x-e.touches[0].clientX), 100)/5
-	    	if (lastmouse.x-e.touches[0].clientX > 0) {
-	    		pogo.frame.body.angularVelocity = +twistval*amnt;
-	    	} else {
-	    		pogo.frame.body.angularVelocity = -twistval*amnt;
-	    	}
+    	if (lastmouse.x!=e.touches[0].clientX||true) {
+    		a = lastmouse.x-e.touches[0].clientX;
+    		b = lastmouse.y-e.touches[0].clientY;
+    		pogo.frame.body.angularVelocity = 3*((Math.atan(a/b)-pogo.frame.body.angle));
     	} else {
     		pogo.frame.body.angularVelocity = 0;
     	}
-    }
+    } else {
 	    lastmouse = {
     			x: e.touches[0].clientX,
     			y: e.touches[0].clientY
     	}
+    }
+    currentmouse = e
+    mousedrag = true
 }
 
 function ontouchend(e) {
+	currentmouse = null
+    mousedrag = false
     lastmouse = {
     		x: null,
     		y: null
@@ -189,35 +191,42 @@ function ontouchend(e) {
     pogo.spring.applyForce();
 }
 
+var mousedrag = false
+
+var currentmouse = null
+
 function onmousedown() {
 	pogo.spring.restLength = 0.25;
 	pogo.spring.applyForce();
+	
 		  document.onmousemove = function(e) {
+			  
 //		    e = e || event
 //		    fixPageXY(e)  
 		    // put ball center under mouse pointer. 25 is half of width/height
 //		    self.style.left = e.pageX-25+'px' 
 //		    self.style.top = e.pageY-25+'px' 
 		    if(lastmouse.x!=null) {
-		    	if (lastmouse.x!=e.clientX) {
-		    		amnt = Math.min(Math.abs(lastmouse.x-e.clientX), 100)/5
-			    	if (lastmouse.x-e.clientX > 0) {
-			    		pogo.frame.body.angularVelocity = +twistval*amnt;
-			    	} else {
-			    		pogo.frame.body.angularVelocity = -twistval*amnt;
-			    	}
+		    	if (lastmouse.x!=e.clientX||true) {
+		    		a = lastmouse.x-e.clientX;
+		    		b = lastmouse.y-e.clientY;
+		    		pogo.frame.body.angularVelocity = 3*((Math.atan(a/b)-pogo.frame.body.angle));
 		    	} else {
 		    		pogo.frame.body.angularVelocity = 0;
 		    	}
-		    }
+		    } else {
 			    lastmouse = {
 		    			x: e.clientX,
 		    			y: e.clientY
 		    	}
-		    
+		    }
+		    currentmouse = e
+		    mousedrag = true
 		  }
 		  this.onmouseup = function() {
 		    document.onmousemove = null
+		    currentmouse = null
+		    mousedrag = false
 		    lastmouse = {
 		    		x: null,
 		    		y: null
@@ -381,7 +390,7 @@ function render() {
 //	x+=xscroll
 	// x = 0
 	
-	// ctx.beginPath();
+	ctx.beginPath();
 	ctx.moveTo(x, y + data[0]);
 	
 	var i = 0;
@@ -396,6 +405,29 @@ function render() {
 	// Restore transform
 	
 	ctx.restore();
+	
+	if(mousedrag) {
+		var rect = canvas.getBoundingClientRect();
+		var mx1 = Math.round((lastmouse.x-rect.left)/(rect.right-rect.left)*canvas.width);
+		var my1 = Math.round((lastmouse.y-rect.top)/(rect.bottom-rect.top)*canvas.height);
+		var mx2 = Math.round((currentmouse.clientX-rect.left)/(rect.right-rect.left)*canvas.width);
+		var my2 = Math.round((currentmouse.clientY-rect.top)/(rect.bottom-rect.top)*canvas.height);
+		ctx.beginPath();
+		var origw = ctx.lineWidth
+		ctx.lineWidth = 2
+		ctx.strokeStyle = "#999999";
+		ctx.moveTo(mx1, my1);
+		ctx.lineTo(mx2, my2);
+		ctx.stroke();
+		ctx.beginPath();
+		ctx.arc(mx2, my2, 4, 0, 2 * Math.PI, false);
+		ctx.fillStyle = "#999999";
+		ctx.stroke();
+		ctx.fill();
+		ctx.fillStyle = "#FFFFFF";
+		ctx.lineWidth = origw
+		ctx.strokeStyle = "#000000";
+	}
 	
 	if(gameOver) {
 		ctx.font = "30px Comic Sans MS";
