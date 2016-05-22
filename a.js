@@ -329,13 +329,23 @@ function keypress(evt) {
 	 }
 }
 
+var colorful = true;
+
+function toggleColor() {
+	colorful=!colorful;
+}
+
 function drawpogo() {
 	ctx.fillStyle = "#ff66ff";
 	drawbox(pogo.stick)
-	ctx.fill();
+	if(colorful) {
+		ctx.fill();
+	}
 	ctx.fillStyle = "#ed00ed";
 	drawbox(pogo.frame)
-	ctx.fill();
+	if(colorful) {
+		ctx.fill();
+	}
 	// drawBox({body: boxBody, shape: boxShape})
 }
 
@@ -372,9 +382,11 @@ function render() {
 	// Clear the canvas
 	ctx.clearRect(0, 0, w, h);
 	
-	ctx.fillStyle = "#4d79ff";
-	ctx.fillRect(0,0,w,h);
-	ctx.fill()
+	if(colorful) {
+		ctx.fillStyle = "#4d79ff";
+		ctx.fillRect(0,0,w,h);
+		ctx.fill()
+	}
 	// Transform the canvas
 	// Note that we need to flip the y axis since Canvas pixel coordinates
 	// goes from top to bottom, while physics does the opposite.
@@ -416,7 +428,9 @@ function render() {
 	// ctx.lineTo(-gameWidth/2,-gameHeight/2);
 	ctx.closePath()
 	ctx.fillStyle = "#00b300"
-	ctx.fill()
+	if(colorful) {
+		ctx.fill();
+	}
 	ctx.stroke();
 	// Restore transform
 	
