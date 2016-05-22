@@ -366,6 +366,9 @@ function drawPlane() {
 
 var xscroll = 0
 function render() {
+	if(pogo.frame.body.position[0]<0) {
+		gameOver = true;
+	}
 	// Clear the canvas
 	ctx.clearRect(0, 0, w, h);
 	
