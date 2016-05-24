@@ -8,8 +8,12 @@ var gameOver = false
 
 var av = -0.25
 
-init();
-requestAnimationFrame(animate);
+function play() {
+	document.getElementById("menu").style.display = 'none'
+	document.getElementById("myCanvas").style.display = 'inline'
+	init();
+	requestAnimationFrame(animate);
+}
 
 function init() {
 	// Init canvas

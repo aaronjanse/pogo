@@ -17,6 +17,57 @@
 <script src="https://rawgit.com/schteppe/p2.js/master/build/p2.min.js"></script>
 <script src="https://rawgit.com/josephg/noisejs/master/perlin.js"></script>
 
+<style>
+
+#menu {
+display: flex;
+justify-content: center;
+flex-direction: column;
+}
+
+
+.menubutton {
+	background-color: white;
+    color: black;
+    border: 2px solid #555555;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;*/
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+.future {
+	opacity: 0.6;
+    cursor: not-allowed;
+}
+
+#menu span {
+	align-content: center;
+	display: flex;
+	justify-content: center;
+}
+
+#myCanvas {
+	display: none;
+}
+
+#gamearea {
+	border-style: solid;
+	width: 500px;
+	height: 400px;
+}
+
+.menubutton:hover {
+    background-color: #555555;
+    color: white;
+}
+</style>
+
 <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -41,8 +92,16 @@
 					<a id="game" class="anchor" href="#game" aria-hidden="true"><span
 						aria-hidden="true" class="octicon octicon-link"></span></a>Game
 				</h1>
-
+				
+				<div id="gamearea">
+				<div id="menu">
+					<span><button class="menubutton" onclick="play()">Play</button></span>
+					<span><button class="future menubutton">Settings</button><br></span>
+					<span><button class="future menubutton">Help</button></span>
+				</div>
 				<canvas width="500" height="400" id="myCanvas"></canvas>
+				</div>
+				
 				<h1>
 					<a id="instructions" class="anchor" href="#instructions"
 						aria-hidden="true"><span aria-hidden="true"
