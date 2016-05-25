@@ -8,11 +8,25 @@ var gameOver = false
 
 var av = -0.25
 
+var pause = false;
+
 function play() {
 	document.getElementById("menu").style.display = 'none'
 	document.getElementById("myCanvas").style.display = 'inline'
-	init();
+	document.getElementById("pause").style.display = 'inline'
+	if(!pause) {
+		init();
+	}
 	requestAnimationFrame(animate);
+	
+	pause = false;
+}
+
+function pausegame() {
+	pause = true;
+	document.getElementById("menu").style.display = 'inline'
+	document.getElementById("myCanvas").style.display = 'none'
+	document.getElementById("pause").style.display = 'none'
 }
 
 function init() {
@@ -489,7 +503,9 @@ var lastTime;
 var maxSubSteps = 5; // Max physics ticks per render frame
 var fixedDeltaTime = 1 / speed; // Physics "tick" delta time
 function animate(time) {
-	requestAnimationFrame(animate);
+	if(!pause) {
+		requestAnimationFrame(animate);
+	}
 	// Get the elapsed time since last frame, in seconds
 	var deltaTime = lastTime ? (time - lastTime) / 1000 : 0;
 	lastTime = time;

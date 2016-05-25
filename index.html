@@ -5,6 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="chrome=1">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1">
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
 <link href='https://fonts.googleapis.com/css?family=Architects+Daughter'
 	rel='stylesheet' type='text/css'>
 <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css"
@@ -35,7 +36,7 @@ flex-direction: column;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin: 4px 2px;*/
+    margin: 4px 2px;
     -webkit-transition-duration: 0.4s; /* Safari */
     transition-duration: 0.4s;
     cursor: pointer;
@@ -46,6 +47,16 @@ flex-direction: column;
     cursor: not-allowed;
 }
 
+#pause {
+	display: none;
+	position: absolute;
+	z-index: 2;
+	border-radius: 50%;
+	padding: 6px 11px;
+	left: 440px;
+	top: 80px;
+}
+
 #menu span {
 	align-content: center;
 	display: flex;
@@ -53,7 +64,10 @@ flex-direction: column;
 }
 
 #myCanvas {
-	display: none;
+	position: relative;
+	z-index: 1;
+	top: 0px;
+	right: 0px;
 }
 
 #gamearea {
@@ -67,6 +81,8 @@ flex-direction: column;
     color: white;
 }
 </style>
+
+<script src="a.js"></script>
 
 <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -100,6 +116,7 @@ flex-direction: column;
 					<span><button class="future menubutton">Help</button></span>
 				</div>
 				<canvas width="500" height="400" id="myCanvas"></canvas>
+				<button id="pause" class="menubutton" onclick="pausegame()"><i class="fa fa-pause"></i></button>
 				</div>
 				
 				<h1>
@@ -159,9 +176,6 @@ flex-direction: column;
 
 
 	<script async defer src="https://buttons.github.io/buttons.js"></script>
-	<script src="a.js">
-		
-	</script>
 
 </body>
 </html>
