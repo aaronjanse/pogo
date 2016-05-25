@@ -1,82 +1,181 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
-	
-	<script src="https://rawgit.com/schteppe/p2.js/master/build/p2.min.js"></script>
-    <script src="https://rawgit.com/josephg/noisejs/master/perlin.js"></script>
-	
-    <!--[if lt IE 9]>
+<head>
+<meta charset='utf-8'>
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+<link href='https://fonts.googleapis.com/css?family=Architects+Daughter'
+	rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css"
+	media="screen">
+<link rel="stylesheet" type="text/css"
+	href="stylesheets/github-light.css" media="screen">
+<link rel="stylesheet" type="text/css" href="stylesheets/print.css"
+	media="print">
+
+<script src="https://rawgit.com/schteppe/p2.js/master/build/p2.min.js"></script>
+<script src="https://rawgit.com/josephg/noisejs/master/perlin.js"></script>
+
+<style>
+
+#menu {
+display: flex;
+justify-content: center;
+flex-direction: column;
+}
+
+
+.menubutton {
+	background-color: white;
+    color: black;
+    border: 2px solid #555555;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+.future {
+	opacity: 0.6;
+    cursor: not-allowed;
+}
+
+#pause {
+	display: none;
+	position: absolute;
+	z-index: 2;
+	border-radius: 50%;
+	padding: 6px 11px;
+	left: 440px;
+	top: 80px;
+}
+
+#menu span {
+	align-content: center;
+	display: flex;
+	justify-content: center;
+}
+
+#myCanvas {
+	position: relative;
+	z-index: 1;
+	top: 0px;
+	right: 0px;
+}
+
+#gamearea {
+	border-style: solid;
+	width: 500px;
+	height: 400px;
+}
+
+.menubutton:hover {
+    background-color: #555555;
+    color: white;
+}
+</style>
+
+<script src="a.js"></script>
+
+<!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
-    <title>Pogo by Aaronduino</title>
-  </head>
+<title>Pogo by Aaronduino</title>
+</head>
 
-  <body>
-    <header>
-      <div class="inner">
-        <h1>Pogo</h1>
-        <h2>A javascript pogo stick game.</h2>
-        <a href="https://github.com/Aaronduino/pogo" class="button"><small>View project on</small> GitHub</a>
-      </div>
-    </header>
+<body>
+	<header>
+		<div class="inner">
+			<h1>Pogo</h1>
+			<h2>A javascript pogo stick game.</h2>
+			<a href="https://github.com/Aaronduino/pogo" class="button"><small>View
+					project on</small> GitHub</a>
+		</div>
+	</header>
 
-    <div id="content-wrapper">
-      <div class="inner clearfix">
-        <section id="main-content">
-          <h1><a id="game" class="anchor" href="#game" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Game</h1>
-          
-          <canvas width="500" height="400" id="myCanvas"></canvas>
-<h1><a id="instructions" class="anchor" href="#instructions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Instructions</h1>
+	<div id="content-wrapper">
+		<div class="inner clearfix">
+			<section id="main-content">
+				<h1>
+					<a id="game" class="anchor" href="#game" aria-hidden="true"><span
+						aria-hidden="true" class="octicon octicon-link"></span></a>Game
+				</h1>
+				
+				<div id="gamearea">
+				<div id="menu">
+					<span><button class="menubutton" onclick="play()">Play</button></span>
+					<span><button class="future menubutton">Settings</button><br></span>
+					<span><button class="future menubutton">Help</button></span>
+				</div>
+				<canvas width="500" height="400" id="myCanvas"></canvas>
+				<button id="pause" class="menubutton" onclick="pausegame()"><i class="fa fa-pause"></i></button>
+				</div>
+				
+				<h1>
+					<a id="instructions" class="anchor" href="#instructions"
+						aria-hidden="true"><span aria-hidden="true"
+						class="octicon octicon-link"></span></a>Instructions
+				</h1>
 
-<input type="button" id="1" value="Toggle color" style="color:blue"
-       onclick="toggleColor();">
+				<input type="button" id="1" value="Toggle color" style="color: blue"
+					onclick="toggleColor();">
 
-<p>Try to jump as long as possible!</p>
-<p>Press the up arrow to expand spring, and the left and right arrow keys to twist left and right respectively<br>
-   Alternatively, click/tap to compress spring, drag like controlling a joystick, then release to expand spring</p>
-	<p>Suggest changes & star on github!</p>
-	<a class="github-button" href="https://github.com/Aaronduino/pogo" data-icon="octicon-star" data-style="mega" data-count-href="/Aaronduino/pogo/stargazers" data-count-api="/repos/Aaronduino/pogo#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star Aaronduino/pogo on GitHub">Star</a>    
-	
+				<p>Try to jump as long as possible!</p>
+				<p>
+					Press the up arrow to expand spring, and the left and right arrow
+					keys to twist left and right respectively<br> Alternatively,
+					click/tap to compress spring, drag like controlling a joystick,
+					then release to expand spring
+				</p>
+				<p>Suggest changes & star on github!</p>
+				<a class="github-button" href="https://github.com/Aaronduino/pogo"
+					data-icon="octicon-star" data-style="mega"
+					data-count-href="/Aaronduino/pogo/stargazers"
+					data-count-api="/repos/Aaronduino/pogo#stargazers_count"
+					data-count-aria-label="# stargazers on GitHub"
+					aria-label="Star Aaronduino/pogo on GitHub">Star</a>
 
-<h1></h1>
-<!--<a id="moved-go-here-to-play" class="anchor" href="#moved-go-here-to-play" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Moved! Go <a href="aaronduino.github.io/pogo/game.html">here</a> to play</h1>-->
-<!-- Place this tag where you want the button to render. -->
-        </section>
-	
-        <aside id="sidebar">
-          <a href="https://github.com/Aaronduino/pogo/zipball/master" class="button">
-            <small>Download</small>
-            .zip file
-          </a>
-          <a href="https://github.com/Aaronduino/pogo/tarball/master" class="button">
-            <small>Download</small>
-            .tar.gz file
-          </a>
 
-          <p class="repo-owner"><a href="https://github.com/Aaronduino/pogo"></a> is maintained by <a href="https://github.com/Aaronduino">Aaronduino</a>.</p>
+				<h1></h1>
+				<!--<a id="moved-go-here-to-play" class="anchor" href="#moved-go-here-to-play" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Moved! Go <a href="aaronduino.github.io/pogo/game.html">here</a> to play</h1>-->
+				<!-- Place this tag where you want the button to render. -->
+			</section>
 
-          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
-        </aside>
-        
-	
-	
-      </div>
-    </div>
-   
-   
+			<aside id="sidebar">
+				<a href="https://github.com/Aaronduino/pogo/zipball/master"
+					class="button"> <small>Download</small> .zip file
+				</a> <a href="https://github.com/Aaronduino/pogo/tarball/master"
+					class="button"> <small>Download</small> .tar.gz file
+				</a>
 
-  <script async defer src="https://buttons.github.io/buttons.js"></script>
-  <script src="a.js">
-      
-    </script>
-    
-  </body>
+				<p class="repo-owner">
+					<a href="https://github.com/Aaronduino/pogo"></a> is maintained by
+					<a href="https://github.com/Aaronduino">Aaronduino</a>.
+				</p>
+
+				<p>
+					This page was generated by <a href="https://pages.github.com">GitHub
+						Pages</a> using the Architect theme by <a
+						href="https://twitter.com/jasonlong">Jason Long</a>.
+				</p>
+			</aside>
+
+
+
+		</div>
+	</div>
+
+
+
+	<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+</body>
 </html>
