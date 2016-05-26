@@ -240,7 +240,8 @@ function onmousedown() {
 var keys = {
 	left: 37,
 	right: 39,
-	up: 38
+	up: 38,
+	space: 32
 }
 
 function keydown(evt) {
@@ -259,7 +260,7 @@ function keydown(evt) {
     }
 	
 //	alert(evt.keyCode)
-	if (evt.keyCode == keys.up) {
+	if (evt.keyCode == keys.up || evt.keyCode == keys.space) {
 		pogo.spring.restLength = 1.25;
 		pogo.spring.applyForce();
 	}
@@ -293,7 +294,7 @@ function keyup(evt) {
 //        e.preventDefault();
 //    }
 	
-	if (evt.keyCode == keys.up) {
+	if (evt.keyCode == keys.up || evt.keyCode == keys.space) {
 		pogo.spring.restLength = 0.25;
 		pogo.spring.applyForce();
 	}
@@ -316,6 +317,11 @@ function keypress(evt) {
 //	if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
 //        e.preventDefault();
 //    }
+	
+	
+	if([32].indexOf(evt.keyCode) > -1) {
+        evt.preventDefault();
+    }
 	
 	 if (evt.keyCode == keys.left) {
 	 // alert("Hi")
