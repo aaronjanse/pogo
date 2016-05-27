@@ -33,8 +33,8 @@ z-index: 2;
 
 
 .menubutton {
-	background-color: white;
-    color: black;
+    background-color: #555555;
+    color: white;
     border: 2px solid #555555;
     padding: 16px 32px;
     text-align: center;
@@ -54,7 +54,8 @@ z-index: 2;
 
 #pause {
 	opacity: 1;
-	background: rgba(0, 0, 0, 0.15);
+	background-color: rgba(0, 0, 0, 0.15);
+	color: black;
 	display: none;
 	position: absolute;
 	z-index: 2;
@@ -63,6 +64,12 @@ z-index: 2;
 	padding: 6px 11px;
 	right: 10px;
 	top: 10px;
+}
+
+#pause:hover {
+	background-color: rgba(85, 85, 85, 0.3));
+    color: white;
+    border-color: rgb(256, 256, 256);
 }
 
 #menu span {
@@ -82,13 +89,14 @@ width: 100%;
 #gamearea {
 	position: relative;
 	border-style: solid;
+	border-color: #222222;
 	width: 500px;
 	height: 400px;
 }
 
 .menubutton:hover {
-    background-color: #555555;
-    color: white;
+    background-color: white;
+    color: black;
 }
 </style>
 
