@@ -21,9 +21,14 @@
 <style>
 
 #menu {
+position: absolute;
+top: 25%;
+height: 50%;
+width: 100%;
 display: flex;
 justify-content: center;
 flex-direction: column;
+z-index: 2;
 }
 
 
@@ -48,16 +53,20 @@ flex-direction: column;
 }
 
 #pause {
+	opacity: 1;
+	background: rgba(0, 0, 0, 0.15);
 	display: none;
 	position: absolute;
 	z-index: 2;
 	border-radius: 50%;
+	border-color: rgb(10, 10, 10);
 	padding: 6px 11px;
-	left: 440px;
-	top: 80px;
+	right: 10px;
+	top: 10px;
 }
 
 #menu span {
+width: 100%;
 	align-content: center;
 	display: flex;
 	justify-content: center;
@@ -71,6 +80,7 @@ flex-direction: column;
 }
 
 #gamearea {
+	position: relative;
 	border-style: solid;
 	width: 500px;
 	height: 400px;

@@ -14,6 +14,8 @@ function play() {
 	document.getElementById("menu").style.display = 'none'
 	document.getElementById("myCanvas").style.display = 'inline'
 	document.getElementById("pause").style.display = 'inline'
+	document.getElementById("myCanvas").style.opacity = '1'
+	
 	if(!pause) {
 		init();
 	}
@@ -25,7 +27,8 @@ function play() {
 function pausegame() {
 	pause = true;
 	document.getElementById("menu").style.display = 'inline'
-	document.getElementById("myCanvas").style.display = 'none'
+//	document.getElementById("myCanvas").style.display = 'none'
+	document.getElementById("myCanvas").style.opacity = '0.3'
 	document.getElementById("pause").style.display = 'none'
 }
 
