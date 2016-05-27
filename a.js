@@ -397,6 +397,7 @@ function drawPlane() {
 }
 
 var xscroll = 0
+var yscroll = 0
 function render() {
 	if(pogo.frame.body.position[0]<0) {
 		gameOver = true;
@@ -416,12 +417,27 @@ function render() {
 	
 	ctx.save();
 	xscroll = -pogo.frame.body.position[0]
+	v = pogo.frame.body.position[1]-yscroll
+	
+	if (Math.abs(v)>0.35) {
+		lerpval = 0.015
+	} else {
+		lerpval = 0.01
+	}
+	
+	if (v<-0.2) {
+		lerpval = 0.0325
+	}
+	yscroll = v*lerpval+yscroll
+//	yscroll = Math.max(yscroll, 0)
+//	yscroll = Math.min(yscroll, 1)
+	
 //	ctx.translate(xscroll, 0)
 	
 	ctx.translate(w / 2, h / 2); // Translate to the center
 	ctx.scale(50, -50); // Zoom in and flip y axis
 	
-	ctx.translate(xscroll, 0)
+	ctx.translate(xscroll, -yscroll)
 	// Draw all bodies
 	// drawbox(pogo.frame);
 	ctx.strokeStyle = "#000000";
@@ -437,14 +453,14 @@ function render() {
 	// x = 0
 	
 	ctx.beginPath();
-	ctx.moveTo(x, -h/100);
+	ctx.moveTo(x, -h/50);
 	
 	var i = 0;
 	for ( var d in data) {
 		ctx.lineTo(x + i * heightfield.shape.elementWidth, y + data[i]);
 		i += 1;
 	}
-	ctx.lineTo(x+data.length-1*heightfield.shape.elementWidth, -h/100)
+	ctx.lineTo(x+data.length-1*heightfield.shape.elementWidth, -h/50)
 	// ctx.lineTo(gameWidth/2,gameHeight/2);
 	// ctx.lineTo(-gameWidth/2,gameHeight/2);
 	// ctx.lineTo(-gameWidth/2,-gameHeight/2);
