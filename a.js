@@ -11,8 +11,8 @@ var av = -0.25
 var pause = false;
 
 function play() {
-	document.getElementById("menu").style.display = 'none'
-	document.getElementById("menu").style.opacity = '0'
+	document.getElementById("mainmenu").style.display = 'none'
+	document.getElementById("mainmenu").style.opacity = '0'
 	document.getElementById("myCanvas").style.display = 'inline'
 	document.getElementById("pause").style.display = 'inline'
 	document.getElementById("myCanvas").style.opacity = '1'
@@ -27,8 +27,8 @@ function play() {
 
 function pausegame() {
 	pause = true;
-	document.getElementById("menu").style.display = 'inline'
-		document.getElementById("menu").style.opacity = '1'
+	document.getElementById("mainmenu").style.display = 'inline'
+		document.getElementById("mainmenu").style.opacity = '1'
 //	document.getElementById("myCanvas").style.display = 'none'
 	document.getElementById("myCanvas").style.opacity = '0.3'
 	document.getElementById("pause").style.display = 'none'

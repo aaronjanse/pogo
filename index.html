@@ -19,22 +19,35 @@
 <script src="https://rawgit.com/josephg/noisejs/master/perlin.js"></script>
 
 <style>
+#gamearea {
+	position: relative;
+	border-style: solid;
+	border-color: #222222;
+	width: 500px;
+	height: 400px;
+}
 
-#menu {
-position: absolute;
-top: 25%;
-height: 50%;
-width: 100%;
-display: flex;
-justify-content: center;
-flex-direction: column;
-z-index: 2;
--webkit-transition-duration: 0.35s; /* Safari */
+#mainmenu {
+	position: absolute;
+	top: 25%;
+	height: 50%;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	z-index: 2;
+	-webkit-transition-duration: 0.35s; /* Safari */
     transition-duration: 0.35s;
 }
 
+#mainmenu span {
+	width: 100%;
+	align-content: center;
+	display: flex;
+	justify-content: center;
+}
 
-.menubutton {
+button {
     background-color: #555555;
     color: white;
     border: 2px solid #555555;
@@ -49,9 +62,9 @@ z-index: 2;
     cursor: pointer;
 }
 
-.future {
-	opacity: 0.6;
-    cursor: not-allowed;
+button:hover {
+    background-color: white;
+    color: black;
 }
 
 #pause {
@@ -74,13 +87,6 @@ z-index: 2;
     border-color: rgb(256, 256, 256);
 }
 
-#menu span {
-width: 100%;
-	align-content: center;
-	display: flex;
-	justify-content: center;
-}
-
 #myCanvas {
 	position: relative;
 	z-index: 1;
@@ -88,17 +94,9 @@ width: 100%;
 	right: 0px;
 }
 
-#gamearea {
-	position: relative;
-	border-style: solid;
-	border-color: #222222;
-	width: 500px;
-	height: 400px;
-}
-
-.menubutton:hover {
-    background-color: white;
-    color: black;
+.future {
+	opacity: 0.6;
+    cursor: not-allowed;
 }
 </style>
 
@@ -130,10 +128,10 @@ width: 100%;
 				</h1>
 				
 				<div id="gamearea">
-				<div id="menu">
-					<span><button class="menubutton" onclick="play()">Play</button></span>
-					<span><button class="future menubutton">Settings</button><br></span>
-					<span><button class="future menubutton">Help</button></span>
+				<div id="mainmenu">
+					<span><button onclick="play()">Play</button></span>
+					<span><button class="future">Settings</button><br></span>
+					<span><button class="future">Help</button></span>
 				</div>
 				<canvas width="500" height="400" id="myCanvas"></canvas>
 				<button id="pause" class="menubutton" onclick="pausegame()"><i class="fa fa-pause"></i></button>
