@@ -25,6 +25,8 @@
 	border-color: #222222;
 	width: 500px;
 	height: 400px;
+	-webkit-transition-duration: 0.35s; /* Safari */
+    transition-duration: 0.35s;
 }
 
 #mainmenu {
@@ -62,29 +64,66 @@ button {
     cursor: pointer;
 }
 
-button:hover {
+#mainmenu button:hover {
     background-color: white;
     color: black;
 }
 
-#pause {
-	opacity: 1;
+.circlebutton {
 	background-color: rgba(0, 0, 0, 0.15);
 	color: black;
-	display: none;
 	position: absolute;
 	z-index: 2;
 	border-radius: 50%;
 	border-color: rgb(10, 10, 10);
-	padding: 6px 11px;
+	width: 40px;
+	height: 40px;
+	margin: 0px;
+	padding: 0px;
 	right: 10px;
 	top: 10px;
 }
 
-#pause:hover {
+.circlebutton:hover {
 	background-color: rgba(85, 85, 85, 0.3));
     color: white;
-    border-color: rgb(256, 256, 256);
+    border-color: rgba(256, 256, 256, 0.3);
+}
+
+.circlebuttoni {
+	background-color: rgba(65, 65, 65, 0);
+    color: white;
+    border-color: rgba(256, 256, 256, 0.4);
+    
+	position: absolute;
+	z-index: 2;
+	border-radius: 50%;
+	width: 40px;
+	height: 40px;
+	margin: 0px;
+	padding: 0px;
+	right: 10px;
+	top: 10px;
+}
+
+.circlebuttoni:hover {
+	background-color: rgba(65, 65, 65, 0.4);
+	/*color: black;*/
+	border-color: rgb(200, 200, 200);
+}
+
+#pausebutton {
+	display: none;
+}
+
+#helpbutton {
+	top: 55px;
+	display: none;
+}
+
+#settingsbutton {
+	top: 100px;
+	display: none;
 }
 
 #myCanvas {
@@ -134,7 +173,9 @@ button:hover {
 					<span><button class="future">Help</button></span>
 				</div>
 				<canvas width="500" height="400" id="myCanvas"></canvas>
-				<button id="pause" class="menubutton" onclick="pausegame()"><i class="fa fa-pause"></i></button>
+				<button id="pausebutton" class="circlebutton" onclick="pausegame()"><i class="fa fa-pause"></i></button>
+				<button id="helpbutton" class="circlebutton" onclick="pausegame()"><i class="fa fa-question" aria-hidden="true"></i></button>
+				<button id="settingsbutton" class="circlebutton" onclick="pausegame()"><i class="fa fa-cog" aria-hidden="true"></i></button>
 				</div>
 				
 				<h1>

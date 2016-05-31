@@ -11,11 +11,21 @@ var av = -0.25
 var pause = false;
 
 function play() {
+	document.getElementById("pausebutton").className = 'circlebutton'
+	document.getElementById("helpbutton").className = 'circlebutton'
+	document.getElementById("settingsbutton").className = 'circlebutton'
+			
+	document.getElementById("helpbutton").style.display = 'none'
+	document.getElementById("settingsbutton").style.display = 'none'
 	document.getElementById("mainmenu").style.display = 'none'
 	document.getElementById("mainmenu").style.opacity = '0'
 	document.getElementById("myCanvas").style.display = 'inline'
-	document.getElementById("pause").style.display = 'inline'
+	document.getElementById("pausebutton").innerHTML = '<i class="fa fa-pause"></i>'
+	document.getElementById("pausebutton").style.display = 'block'
+//	document.getElementById("pausebutton").style.opacity = '1'
 	document.getElementById("myCanvas").style.opacity = '1'
+		
+	document.getElementById("gamearea").style.backgroundColor = 'black'
 	
 	if(!pause) {
 		init();
@@ -26,12 +36,23 @@ function play() {
 }
 
 function pausegame() {
-	pause = true;
-	document.getElementById("mainmenu").style.display = 'inline'
+	if(!pause) {
+		pause = true;
+		document.getElementById("mainmenu").style.display = 'inline'
 		document.getElementById("mainmenu").style.opacity = '1'
-//	document.getElementById("myCanvas").style.display = 'none'
-	document.getElementById("myCanvas").style.opacity = '0.3'
-	document.getElementById("pause").style.display = 'none'
+	//	document.getElementById("myCanvas").style.display = 'none'
+		document.getElementById("myCanvas").style.opacity = '0.3'
+		document.getElementById("pausebutton").innerHTML = '<i class="fa fa-play"></i>'
+		document.getElementById("helpbutton").style.display = 'inline-block'
+		document.getElementById("settingsbutton").style.display = 'inline-block'
+		
+		document.getElementById("pausebutton").className = 'circlebuttoni'
+		document.getElementById("helpbutton").className = 'circlebuttoni'
+		document.getElementById("settingsbutton").className = 'circlebuttoni'
+	} else {
+		play();
+	}
+//	document.getElementById("pausebutton").style.display = 'none'
 }
 
 function init() {
