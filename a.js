@@ -486,7 +486,12 @@ var colordef = {
 	stick: "#ff66ff"
 }
 
-var color = colordef
+var color = {
+		sky: "#4d79ff",
+		ground: "#00b300",
+		body: "#ed00ed",
+		stick: "#ff66ff"
+}
 
 function updateSky() {
 	color.sky = "#" + document.getElementById("skyCP").value
@@ -513,6 +518,10 @@ function resetcolors() {
 	document.getElementById("groundCP").jscolor.fromString(colordef.ground.slice(1))
 	document.getElementById("bodyCP").jscolor.fromString(colordef.body.slice(1))
 	document.getElementById("stickCP").jscolor.fromString(colordef.stick.slice(1))
+	color.sky=colordef.sky
+	color.ground=colordef.ground
+	color.body=colordef.body
+	color.stick=colordef.stick
 }
 
 var xscroll = 0
