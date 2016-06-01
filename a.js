@@ -114,6 +114,8 @@ function back() {
 	document.getElementById("settings").style.opacity = '0'
 }
 
+var numDataPoints = 500;
+
 function init() {
 	// Init canvas
 	canvas = document.getElementById("myCanvas");
@@ -125,9 +127,10 @@ function init() {
 	
 	noise.seed(Math.random());
 	data.push(0)
-	var numDataPoints = 500;
+	
 	for (var i = 0; i < numDataPoints; i++) {
 		v = i / 10
+		
 		var value = noise.simplex2(v, 0);
 		var value1 = noise.perlin2(v, 0);
 		// data.push(0.5*Math.cos(0.2*i) * Math.sin(0.5*i) + 0.6*Math.sin(0.1*i)
@@ -147,6 +150,8 @@ function init() {
 	canvas.addEventListener('touchmove', ontouchmove, false);
 	canvas.addEventListener('touchend', ontouchend, false);
 }
+
+var obstacles = [];
 
 function initgame() {
 	world = new p2.World({
@@ -233,6 +238,21 @@ function initgame() {
 	});
 	heightfield.body.addShape(heightfield.shape);
 	world.addBody(heightfield.body);
+	
+	var OBSTACLE = 8;
+	
+	obstacles = []
+	for(var i = 0; i < 200; i++) {
+		if(i%15==0) {
+			y = Math.random(0, 4)
+	        var circleShape = new p2.Circle({ radius: 0.5 });
+	        var circleBody = new p2.Body({ mass:1, position:[i*2,y], fixedX: true, fixedY: true});
+	        circleBody.addShape(circleShape);
+	        circleShape.collisionGroup = OBSTACLE;
+	        obstacles.push(circleBody);
+	        world.addBody(circleBody);
+		}
+	}
 	
 	// Setup Collisions
 	var FRAME = 1, STICK = 2, GROUND = 4;
@@ -525,6 +545,15 @@ function resetcolors() {
 	color.stick=colordef.stick
 }
 
+function drawObstacles() {
+	for(var i = 0; i < obstacles.length; i++) {
+		o = obstacles[i]
+		ctx.beginPath();
+		ctx.arc(o.position[0], o.position[1], 0.5, 0, 2 * Math.PI, false);
+		ctx.stroke()
+	}
+}
+
 var xscroll = 0
 var yscroll = 0
 function render() {
@@ -542,6 +571,7 @@ function render() {
 	
 	ctx.fillRect(0,0,w,h);
 	ctx.fill()
+	
 	
 	// Transform the canvas
 	// Note that we need to flip the y axis since Canvas pixel coordinates
@@ -575,6 +605,7 @@ function render() {
 	// drawbox(pogo.frame);
 	ctx.strokeStyle = "#000000";
 	drawpogo();
+	drawObstacles();
 	// drawBox(pogo.frame)
 	// drawPlane();
 	var y = heightfield.body.position[1]
