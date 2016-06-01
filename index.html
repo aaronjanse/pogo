@@ -17,24 +17,40 @@
 
 <script src="https://rawgit.com/schteppe/p2.js/master/build/p2.min.js"></script>
 <script src="https://rawgit.com/josephg/noisejs/master/perlin.js"></script>
+<script src="javascripts/jscolor.min.js"></script>
 
 <style>
+#gamearea {
+	position: relative;
+	border-style: solid;
+	border-color: #222222;
+	width: 500px;
+	height: 400px;
+	-webkit-transition-duration: 0.5s; /* Safari */
+    transition-duration: 0.5s;
+}
 
-#menu {
-position: absolute;
-top: 25%;
-height: 50%;
-width: 100%;
-display: flex;
-justify-content: center;
-flex-direction: column;
-z-index: 2;
--webkit-transition-duration: 0.35s; /* Safari */
+#mainmenu {
+	position: absolute;
+	top: 25%;
+	height: 50%;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	z-index: 2;
+	-webkit-transition-duration: 0.35s; /* Safari */
     transition-duration: 0.35s;
 }
 
+#mainmenu span {
+	width: 100%;
+	align-content: center;
+	display: flex;
+	justify-content: center;
+}
 
-.menubutton {
+button {
     background-color: #555555;
     color: white;
     border: 2px solid #555555;
@@ -49,36 +65,103 @@ z-index: 2;
     cursor: pointer;
 }
 
-.future {
-	opacity: 0.6;
-    cursor: not-allowed;
+#mainmenu button:hover {
+    background-color: white;
+    color: black;
 }
 
-#pause {
-	opacity: 1;
+.circlebutton {
 	background-color: rgba(0, 0, 0, 0.15);
 	color: black;
-	display: none;
 	position: absolute;
-	z-index: 2;
+	z-index: 3;
 	border-radius: 50%;
 	border-color: rgb(10, 10, 10);
-	padding: 6px 11px;
+	width: 40px;
+	height: 40px;
+	margin: 0px;
+	padding: 0px;
 	right: 10px;
 	top: 10px;
 }
 
-#pause:hover {
+.circlebutton:hover {
 	background-color: rgba(85, 85, 85, 0.3));
     color: white;
-    border-color: rgb(256, 256, 256);
+    border-color: rgba(256, 256, 256, 0.3);
 }
 
-#menu span {
-width: 100%;
-	align-content: center;
-	display: flex;
-	justify-content: center;
+.circlebuttoni {
+	background-color: rgba(65, 65, 65, 0);
+    color: white;
+    border-color: rgba(256, 256, 256, 0.4);
+    
+	position: absolute;
+	z-index: 3;
+	border-radius: 50%;
+	width: 40px;
+	height: 40px;
+	margin: 0px;
+	padding: 0px;
+	right: 10px;
+	top: 10px;
+}
+
+.circlebuttoni:hover {
+	background-color: rgba(65, 65, 65, 0.4);
+	/*color: black;*/
+	border-color: rgb(200, 200, 200);
+}
+
+.backbutton {
+	left: 10px;
+}
+
+#pausebutton {
+	display: none;
+}
+
+#helpbutton {
+	top: 55px;
+	display: none;
+}
+
+#settingsbutton {
+	top: 100px;
+	display: none;
+}
+
+#helparea {
+	opacity: 1;
+	display: none;
+	position: absolute;
+	z-index: 2;
+	top: 0px;
+	left: 10px;
+	color: white;
+}
+
+#helparea h1 {
+	color: white;
+	text-indent: 60px;
+}
+
+#settings {
+	opacity: 1;
+	display: none;
+	position: absolute;
+	z-index: 2;
+	top: 0px;
+	left: 10px;
+	color: white;
+}
+
+#settings h1 {
+	color: white;
+	text-indent: 60px;
+}
+
+#settings h2 {
 }
 
 #myCanvas {
@@ -88,17 +171,9 @@ width: 100%;
 	right: 0px;
 }
 
-#gamearea {
-	position: relative;
-	border-style: solid;
-	border-color: #222222;
-	width: 500px;
-	height: 400px;
-}
-
-.menubutton:hover {
-    background-color: white;
-    color: black;
+.future {
+	opacity: 0.6;
+    cursor: not-allowed;
 }
 </style>
 
@@ -111,7 +186,7 @@ width: 100%;
 <title>Pogo by Aaronduino</title>
 </head>
 
-<body>
+<body onload="resetcolors()">
 	<header>
 		<div class="inner">
 			<h1>Pogo</h1>
@@ -130,13 +205,41 @@ width: 100%;
 				</h1>
 				
 				<div id="gamearea">
-				<div id="menu">
-					<span><button class="menubutton" onclick="play()">Play</button></span>
-					<span><button class="future menubutton">Settings</button><br></span>
-					<span><button class="future menubutton">Help</button></span>
+				<div id="mainmenu">
+					<span><h1>Pogo Run</h1></span>
+					<span><button onclick="play()">Play</button></span>
+					<span><button onclick="settings1()">Settings</button><br></span>
+					<span><button onclick="help1()">Help</button></span>
 				</div>
 				<canvas width="500" height="400" id="myCanvas"></canvas>
-				<button id="pause" class="menubutton" onclick="pausegame()"><i class="fa fa-pause"></i></button>
+				<button id="pausebutton" class="circlebutton" onclick="pausegame()"><i class="fa fa-pause"></i></button>
+				<button id="helpbutton" class="circlebutton" onclick="help()"><i class="fa fa-question" aria-hidden="true"></i></button>
+				<button id="settingsbutton" class="circlebutton" onclick="settings()"><i class="fa fa-cog" aria-hidden="true"></i></button>
+				
+				<div id="helparea" >
+					<button class="circlebuttoni backbutton" onclick="back()"><i class="fa fa-arrow-left"></i></button>
+					<h1>Help</h1>
+					<p>Try to jump as long as possible!</p>
+					<p>
+						Press the up arrow or spacebar to expand spring, and the left and right arrow
+						keys to twist left and right respectively<br> Alternatively,
+						click/tap to compress spring, drag like controlling a joystick,
+						then release to expand spring
+					</p>
+				</div>
+				
+				<div id="settings">
+					<button class="circlebuttoni backbutton" onclick="back()"><i class="fa fa-arrow-left"></i></button>
+					<h1>Settings</h1>
+					<h2>Colors</h2>
+					<button id="coltoggle" onclick="toggleColor()">Disable colors</button><br>
+					<button onclick="resetcolors()">Reset colors</button><br>
+					Sky: <input id="skyCP" class="jscolor {onFineChange:'updateSky()'}" value="4d79ff"><br>
+					Ground: <input id="groundCP" class="jscolor {onFineChange:'updateGround()'}" value="00b300"><br>
+					Pogo *Body*: <input id="bodyCP" class="jscolor {onFineChange:'updateBody()'}" value="ed00ed"><br>
+					Pogo *Stick*: <input id="stickCP" class="jscolor {onFineChange:'updateStick()'}" value="ff66ff"><br>
+				</div>
+				
 				</div>
 				
 				<h1>
@@ -144,9 +247,6 @@ width: 100%;
 						aria-hidden="true"><span aria-hidden="true"
 						class="octicon octicon-link"></span></a>Instructions
 				</h1>
-
-				<input type="button" id="1" value="Toggle color" style="color: blue"
-					onclick="toggleColor();">
 
 				<p>Try to jump as long as possible!</p>
 				<p>
