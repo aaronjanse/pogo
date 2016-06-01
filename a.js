@@ -555,6 +555,33 @@ function drawObstacles() {
 		ctx.arc(o.position[0], o.position[1], 0.5, 0, 2 * Math.PI, false);
 		ctx.stroke()
 	}
+	
+	var d = 4
+	var px = pogo.frame.body.position[0]
+	var i = Math.floor((px+d)/(r*2))
+	
+	
+//	if(px+d<obstacles[i].position[0]) {
+//		ctx.beginPath();
+//		ctx.arc(px+d, obstacles[i].position[1], 0.5, 0, 2 * Math.PI, false);
+//		ctx.strokeStyle = "#555555"
+//		ctx.stroke()
+	canvas_arrow(px+d-0.3, obstacles[i].position[1], px+d+0.5, obstacles[i].position[1])
+//	}
+	ctx.strokeStyle = "#000000"
+}
+
+// from http://stackoverflow.com/a/6333775
+function canvas_arrow(fromx, fromy, tox, toy){
+    var headlen = 0.5;   // length of head in pixels
+    var angle = Math.atan2(toy-fromy,tox-fromx);
+    ctx.beginPath();
+    ctx.moveTo(fromx, fromy);
+    ctx.lineTo(tox, toy);
+    ctx.lineTo(tox-headlen*Math.cos(angle-Math.PI/6),toy-headlen*Math.sin(angle-Math.PI/6));
+    ctx.moveTo(tox, toy);
+    ctx.lineTo(tox-headlen*Math.cos(angle+Math.PI/6),toy-headlen*Math.sin(angle+Math.PI/6));
+    ctx.stroke()
 }
 
 var xscroll = 0
@@ -661,6 +688,11 @@ function render() {
 		ctx.fill();
 		ctx.lineWidth = origw
 	}
+	
+	ctx.font = "20px Comic Sans MS";
+	ctx.fillStyle = "#555555";
+	ctx.textAlign = "center";
+	ctx.fillText("Next obstacle: "+Math.floor((r*2)-pogo.frame.body.position[0]%(r*2)), w-100, h-20);
 	
 	if(gameOver) {
 		ctx.font = "30px Comic Sans MS";
