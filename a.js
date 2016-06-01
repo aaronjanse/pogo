@@ -11,6 +11,7 @@ var av = -0.25
 var pause = false;
 
 function play() {
+	back()
 	document.getElementById("pausebutton").className = 'circlebutton'
 	document.getElementById("helpbutton").className = 'circlebutton'
 	document.getElementById("settingsbutton").className = 'circlebutton'
@@ -38,8 +39,6 @@ function play() {
 function pausegame() {
 	if(!pause) {
 		pause = true;
-		document.getElementById("mainmenu").style.display = 'inline'
-		document.getElementById("mainmenu").style.opacity = '1'
 	//	document.getElementById("myCanvas").style.display = 'none'
 		document.getElementById("myCanvas").style.opacity = '0.3'
 		document.getElementById("pausebutton").innerHTML = '<i class="fa fa-play"></i>'
@@ -53,6 +52,66 @@ function pausegame() {
 		play();
 	}
 //	document.getElementById("pausebutton").style.display = 'none'
+}
+
+function mainbpprep() {
+	document.getElementById("mainmenu").style.display = 'none'
+	document.getElementById("mainmenu").style.opacity = '0'
+	document.getElementById("myCanvas").style.display = 'inline'
+	document.getElementById("pausebutton").innerHTML = '<i class="fa fa-pause"></i>'
+	document.getElementById("pausebutton").style.display = 'block'
+//	document.getElementById("pausebutton").style.opacity = '1'
+	document.getElementById("myCanvas").style.opacity = '1'
+		
+	document.getElementById("gamearea").style.backgroundColor = 'black'
+	init();
+	animate();
+	pause = true;
+	document.getElementById("myCanvas").style.opacity = '0.3'
+	document.getElementById("pausebutton").innerHTML = '<i class="fa fa-play"></i>'
+	document.getElementById("helpbutton").style.display = 'inline-block'
+	document.getElementById("settingsbutton").style.display = 'inline-block'
+	
+	document.getElementById("pausebutton").className = 'circlebuttoni'
+	document.getElementById("helpbutton").className = 'circlebuttoni'
+	document.getElementById("settingsbutton").className = 'circlebuttoni'
+}
+
+function help() {
+	document.getElementById("helpbutton").style.display = 'none'
+	document.getElementById("settingsbutton").style.display = 'none'
+		
+	document.getElementById("helparea").style.display = 'block'
+	document.getElementById("helparea").style.opacity = '1'
+}
+
+function help1() {
+	mainbpprep()
+	help()
+}
+
+function settings() {
+	document.getElementById("helpbutton").style.display = 'none'
+	document.getElementById("settingsbutton").style.display = 'none'
+		
+	document.getElementById("settings").style.display = 'block'
+	document.getElementById("settings").style.opacity = '1'
+}
+
+function settings1() {
+	mainbpprep()
+	settings()
+}
+
+function back() {
+	document.getElementById("helpbutton").style.display = 'inline-block'
+	document.getElementById("settingsbutton").style.display = 'inline-block'
+	
+	document.getElementById("helparea").style.display = 'none'
+	document.getElementById("helparea").style.opacity = '0'
+		
+	document.getElementById("settings").style.display = 'none'
+	document.getElementById("settings").style.opacity = '0'
 }
 
 function init() {
@@ -378,15 +437,16 @@ var colorful = true;
 
 function toggleColor() {
 	colorful=!colorful;
+	document.getElementById("coltoggle").innerHTML = (colorful ? "Disable" : "Enable") + " colors";
 }
 
 function drawpogo() {
-	ctx.fillStyle = "#ff66ff";
+	ctx.fillStyle = color.stick;
 	drawbox(pogo.stick)
 	if(colorful) {
 		ctx.fill();
 	}
-	ctx.fillStyle = "#ed00ed";
+	ctx.fillStyle = color.body;
 	drawbox(pogo.frame)
 	if(colorful) {
 		ctx.fill();
@@ -419,6 +479,42 @@ function drawPlane() {
 	ctx.stroke();
 }
 
+var colordef = {
+	sky: "#4d79ff",
+	ground: "#00b300",
+	body: "#ed00ed",
+	stick: "#ff66ff"
+}
+
+var color = colordef
+
+function updateSky() {
+	color.sky = "#" + document.getElementById("skyCP").value
+}
+
+function updateGround() {
+	color.ground = "#" + document.getElementById("groundCP").value
+}
+
+function updateBody() {
+	color.body = "#" + document.getElementById("bodyCP").value
+}
+
+function updateStick() {
+	color.stick = "#" + document.getElementById("stickCP").value
+}
+
+function resetcolors() {
+	if(!colorful) {
+		toggleColor()
+	}
+	
+	document.getElementById("skyCP").jscolor.fromString(colordef.sky.slice(1))
+	document.getElementById("groundCP").jscolor.fromString(colordef.ground.slice(1))
+	document.getElementById("bodyCP").jscolor.fromString(colordef.body.slice(1))
+	document.getElementById("stickCP").jscolor.fromString(colordef.stick.slice(1))
+}
+
 var xscroll = 0
 var yscroll = 0
 function render() {
@@ -429,10 +525,14 @@ function render() {
 	ctx.clearRect(0, 0, w, h);
 	
 	if(colorful) {
-		ctx.fillStyle = "#4d79ff";
-		ctx.fillRect(0,0,w,h);
-		ctx.fill()
+		ctx.fillStyle = color.sky;
+	} else {
+		ctx.fillStyle = "#FFFFFF"
 	}
+	
+	ctx.fillRect(0,0,w,h);
+	ctx.fill()
+	
 	// Transform the canvas
 	// Note that we need to flip the y axis since Canvas pixel coordinates
 	// goes from top to bottom, while physics does the opposite.
@@ -488,7 +588,7 @@ function render() {
 	// ctx.lineTo(-gameWidth/2,gameHeight/2);
 	// ctx.lineTo(-gameWidth/2,-gameHeight/2);
 	ctx.closePath()
-	ctx.fillStyle = "#00b300"
+	ctx.fillStyle = color.ground
 	if(colorful) {
 		ctx.fill();
 	}
