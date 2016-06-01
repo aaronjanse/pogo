@@ -258,6 +258,7 @@ var lastmouse = {
 }
 
 function ontouchstart(e) {
+	e.preventDefault();
 	pogo.spring.restLength = 0.25;
 	pogo.spring.applyForce();
 }
