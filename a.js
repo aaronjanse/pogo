@@ -437,7 +437,6 @@ function keyup(evt) {
 //	}
 	
 }
-var twistval = 5;
 var twistval = 3.5;
 function keypress(evt) {
 	// alert(evt.keyCode)
