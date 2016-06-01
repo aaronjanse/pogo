@@ -125,7 +125,7 @@ function init() {
 	ctx.lineWidth = 0.05;
 	// Init p2.js
 	
-	noise.seed(Math.random());
+	noise.seed(Math.random()*10);
 	data.push(0)
 	
 	for (var i = 0; i < numDataPoints; i++) {
@@ -242,9 +242,9 @@ function initgame() {
 	var OBSTACLE = 8;
 	
 	obstacles = []
-	for(var i = 0; i < 200; i++) {
-		if(i%15==0) {
-			y = Math.random(0, 4)
+	for(var i = 5; i < 200; i++) {
+		if(i%r==0) {
+			y = data[i]+Math.random()*5
 	        var circleShape = new p2.Circle({ radius: 0.5 });
 	        var circleBody = new p2.Body({ mass:1, position:[i*2,y], fixedX: true, fixedY: true});
 	        circleBody.addShape(circleShape);
@@ -271,6 +271,8 @@ function initgame() {
 		}
 	});
 }
+
+var r = 10
 
 var lastmouse = {
 		x: null,
@@ -436,6 +438,7 @@ function keyup(evt) {
 	
 }
 var twistval = 5;
+var twistval = 3.5;
 function keypress(evt) {
 	// alert(evt.keyCode)
 	if([32, 37, 38, 39, 40].indexOf(evt.keyCode) > -1) {
