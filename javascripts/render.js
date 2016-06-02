@@ -1,5 +1,20 @@
-var score = null
-var pendingquit = false
+var canvas, ctx, w, h;
+
+var colorful = true;
+
+var colordef = {
+		sky: "#4d79ff",
+		ground: "#00b300",
+		body: "#ed00ed",
+		stick: "#ff66ff"
+}
+
+var color = {
+		sky: "#4d79ff",
+		ground: "#00b300",
+		body: "#ed00ed",
+		stick: "#ff66ff"
+}
 
 // Animation loop
 

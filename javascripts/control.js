@@ -1,3 +1,12 @@
+var twistval = 3.5;
+
+var keys = {
+	left: 37,
+	right: 39,
+	up: 38,
+	space: 32
+}
+
 function initControls() {
 	window.addEventListener("keydown", keydown, false);
 	window.addEventListener("keyup", keyup, false);
@@ -9,8 +18,6 @@ function initControls() {
 	canvas.addEventListener('touchmove', ontouchmove, false);
 	canvas.addEventListener('touchend', ontouchend, false);
 }
-
-var twistval = 3.5;
 
 var mousedrag = false
 
@@ -99,13 +106,6 @@ function onmousedown() {
 		    pogo.spring.restLength = 1.25;
 		    pogo.spring.applyForce();
 		  }
-}
-
-var keys = {
-	left: 37,
-	right: 39,
-	up: 38,
-	space: 32
 }
 
 function keydown(evt) {
