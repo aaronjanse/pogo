@@ -24,15 +24,18 @@
 	position: relative;
 	border-style: solid;
 	border-color: #222222;
-	width: 500px;
-	height: 400px;
+	/*width: 500px;
+	height: 400px;*/
 	-webkit-transition-duration: 0.5s; /* Safari */
     transition-duration: 0.5s;
 }
 
+.comp {
+display: inline;
+}
+
 #mainmenu {
 	position: absolute;
-	top: 25%;
 	height: 50%;
 	width: 100%;
 	display: flex;
@@ -169,12 +172,60 @@ button {
 	z-index: 1;
 	top: 0px;
 	right: 0px;
+	width: 100%;
+	height: 100%;
 }
 
 .future {
 	opacity: 0.6;
     cursor: not-allowed;
 }
+
+	.comp { display: none;}
+	#gamearea {
+	border: none;
+	width: 100%;
+	padding:0px;
+	margin: 0px;
+	height: 100%;
+	}
+	
+	
+	#content-wrapper {
+	padding:0px;
+	margin: 0px;
+	height: 100%;
+	border: none;
+	}
+	
+	.inner {
+	padding:0px;
+	margin: 0px;
+	width: 100%;
+	}
+	
+	.clearfix::after {
+    content: "";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+	}
+	
+	body {
+	min-height: 100%;}
+	
+	#mainmenu {
+	height: 100%;
+	}
+	
+	#main-content {
+	display: inline;
+	width: 100%;
+	margin:0px;
+	padding:0px;
+	}
+
 </style>
 
 <script src="javascripts/menu.js"></script>
@@ -188,9 +239,8 @@ button {
 
 <title>Pogo by Aaronduino</title>
 </head>
-
-<body onload="resetcolors()">
-	<header>
+<body onload="fullscreen()">
+	<header class="comp">
 		<div class="inner">
 			<h1>Pogo</h1>
 			<h2>A javascript pogo stick game.</h2>
@@ -202,7 +252,7 @@ button {
 	<div id="content-wrapper">
 		<div class="inner clearfix">
 			<section id="main-content">
-				<h1>
+				<h1 class="comp">
 					<a id="game" class="anchor" href="#game" aria-hidden="true"><span
 						aria-hidden="true" class="octicon octicon-link"></span></a>Game
 				</h1>
@@ -214,7 +264,7 @@ button {
 					<span><button onclick="settings1()">Settings</button><br></span>
 					<span><button onclick="help1()">Help</button></span>
 				</div>
-				<canvas width="500" height="400" id="myCanvas"></canvas>
+				<canvas id="myCanvas"></canvas>
 				<button id="pausebutton" class="circlebutton" onclick="pausegame()"><i class="fa fa-pause"></i></button>
 				<button id="helpbutton" class="circlebutton" onclick="help()"><i class="fa fa-question" aria-hidden="true"></i></button>
 				<button id="settingsbutton" class="circlebutton" onclick="settings()"><i class="fa fa-cog" aria-hidden="true"></i></button>
@@ -245,6 +295,7 @@ button {
 				
 				</div>
 				
+				<div class="comp">
 				<h1>
 					<a id="instructions" class="anchor" href="#instructions"
 						aria-hidden="true"><span aria-hidden="true"
@@ -266,13 +317,10 @@ button {
 					data-count-aria-label="# stargazers on GitHub"
 					aria-label="Star Aaronduino/pogo on GitHub">Star</a>
 
-
-				<h1></h1>
-				<!--<a id="moved-go-here-to-play" class="anchor" href="#moved-go-here-to-play" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Moved! Go <a href="aaronduino.github.io/pogo/game.html">here</a> to play</h1>-->
-				<!-- Place this tag where you want the button to render. -->
+				</div>
 			</section>
 
-			<aside id="sidebar">
+			<aside id="sidebar" class="comp">
 				<a href="https://github.com/Aaronduino/pogo/zipball/master"
 					class="button"> <small>Download</small> .zip file
 				</a> <a href="https://github.com/Aaronduino/pogo/tarball/master"
@@ -298,7 +346,7 @@ button {
 
 
 
-	<script async defer src="https://buttons.github.io/buttons.js"></script>
+	<script async defer src="https://buttons.github.io/buttons.js" class="comp"></script>
 
 </body>
 </html>
