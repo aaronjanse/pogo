@@ -202,12 +202,6 @@ function drawbox(obj) {
 	ctx.stroke();
 	ctx.restore();
 }
-function drawPlane() {
-	var y = planeBody.interpolatedPosition[1];
-	ctx.moveTo(-w, y);
-	ctx.lineTo(w, y);
-	ctx.stroke();
-}
 
 function drawObstacles() {
 	for(var i = 0; i < obstacles.length; i++) {
