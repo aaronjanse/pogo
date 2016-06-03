@@ -1,3 +1,16 @@
+function gohome() {
+	document.getElementById("pausebutton").style.display = 'none'
+	document.getElementById("helpbutton").style.display = 'none'
+	document.getElementById("settingsbutton").style.display = 'none'
+	document.getElementById("mainmenu").style.display = 'inline'
+	document.getElementById("mainmenu").style.opacity = '1'
+	document.getElementById("myCanvas").style.display = 'none'
+	
+	document.getElementById("gamearea").style.backgroundColor = 'white'
+	
+	document.getElementById("homebutton").style.display = 'none'
+}
+
 function play() {
 	back()
 	document.getElementById("pausebutton").className = 'circlebutton'
@@ -16,6 +29,8 @@ function play() {
 		
 	document.getElementById("gamearea").style.backgroundColor = 'black'
 	
+	document.getElementById("homebutton").style.display = 'none'
+	
 	if(!pause) {
 		init();
 	}
@@ -32,6 +47,8 @@ function pausegame() {
 		document.getElementById("pausebutton").innerHTML = '<i class="fa fa-play"></i>'
 		document.getElementById("helpbutton").style.display = 'inline-block'
 		document.getElementById("settingsbutton").style.display = 'inline-block'
+			
+		document.getElementById("homebutton").style.display = 'inline-block'
 		
 		document.getElementById("pausebutton").className = 'circlebuttoni'
 		document.getElementById("helpbutton").className = 'circlebuttoni'
@@ -94,6 +111,7 @@ function settings1() {
 function back() {
 	document.getElementById("helpbutton").style.display = 'inline-block'
 	document.getElementById("settingsbutton").style.display = 'inline-block'
+	document.getElementById("homebutton").style.display = 'inline-block'
 	
 	document.getElementById("helparea").style.display = 'none'
 	document.getElementById("helparea").style.opacity = '0'

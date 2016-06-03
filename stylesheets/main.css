@@ -93,6 +93,11 @@ button {
 	left: 10px;
 }
 
+#homebutton {
+	display: none;
+	left: 20px;
+}
+
 #pausebutton {
 	display: none;
 }
