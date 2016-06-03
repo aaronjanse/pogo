@@ -41,6 +41,11 @@ function ontouchstart(e) {
 	e.preventDefault();
 	pogo.spring.restLength = 0.25;
 	pogo.spring.applyForce();
+	
+	currentmouse = {
+		clientX: e.touches[0].clientX,
+		clientY: e.touches[0].clientY
+	}
 }
 
 function ontouchmove(e) {
@@ -52,6 +57,11 @@ function ontouchmove(e) {
     		pogo.frame.body.angularVelocity = 3*((Math.atan(a/b)-pogo.frame.body.angle));
     	} else {
     		pogo.frame.body.angularVelocity = 0;
+    	}
+    	
+    	currentmouse = {
+    			clientX: e.touches[0].clientX,
+    			clientY: e.touches[0].clientY
     	}
     } else {
     	if(fixedjoy) {
