@@ -161,6 +161,7 @@ function initgame() {
 	        var circleBody = new p2.Body({ mass:1, position:[i*2,y], fixedX: true, fixedY: true});
 	        circleBody.addShape(circleShape);
 	        circleShape.collisionGroup = OBSTACLE;
+	        circleShape.collisionMask = -1
 	        obstacles.push(circleBody);
 	        world.addBody(circleBody);
 		}
