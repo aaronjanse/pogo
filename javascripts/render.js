@@ -90,7 +90,7 @@ function render() {
 	// drawbox(pogo.frame);
 	ctx.strokeStyle = "#000000";
 	drawpogo();
-	drawObstacles();
+	
 	// drawBox(pogo.frame)
 	// drawPlane();
 	var y = heightfield.body.position[1]
@@ -119,6 +119,9 @@ function render() {
 		ctx.fill();
 	}
 	ctx.stroke();
+	
+	drawObstacles();
+	
 	// Restore transform
 	
 	ctx.restore();
