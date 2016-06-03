@@ -189,6 +189,19 @@ function tutnext() {
 	
 	if(lvl>2) {
 		document.getElementById("tuthelp").style.display = 'none'
+		data=[]
+		noise.seed(Math.random()*10);
+		data.push(0)
+		
+		for (var i = 0; i < numDataPoints; i++) {
+			v = i / 10
+			
+			var value = noise.simplex2(v, 0);
+			var value1 = noise.perlin2(v, 0);
+			// data.push(0.5*Math.cos(0.2*i) * Math.sin(0.5*i) + 0.6*Math.sin(0.1*i)
+			// * Math.sin(0.05*i));
+			data.push(value * 1.75)
+		}
 		gohome()
 		return;
 	}
@@ -203,6 +216,20 @@ function inittut() {
 		
 		if(lvl==0) {
 			world.gravity = [0, 0]
+		}
+		
+		data = []
+		noise.seed(Math.random()*10);
+		data.push(0)
+		
+		for (var i = 0; i < numDataPoints; i++) {
+			v = i / 10
+			
+			var value = noise.simplex2(v, 0);
+			var value1 = noise.perlin2(v, 0);
+			// data.push(0.5*Math.cos(0.2*i) * Math.sin(0.5*i) + 0.6*Math.sin(0.1*i)
+			// * Math.sin(0.05*i));
+			data.push(value * 1)
 		}
 		
 		world.defaultContactMaterial.friction = 100;
