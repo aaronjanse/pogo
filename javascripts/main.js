@@ -71,7 +71,7 @@ function initgame() {
 
 	pogo.stick.shape = new p2.Box({
 		width : 0.25,
-		height : 1
+		height : 1.6
 	});
 	
 	pogo.stick.body = new p2.Body({
@@ -113,7 +113,7 @@ function initgame() {
 		localAxisA : [ 0, 1 ],
 		disableRotationalLock : true,
 	});
-	 c1.setLimits(-1.25, -0.5);
+	 c1.setLimits(-1, -0.4);
 	world.addConstraint(c2);
 	world.addConstraint(c1);
 	
