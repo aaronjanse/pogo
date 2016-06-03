@@ -44,6 +44,13 @@ function init() {
 		togglefixedjoy() //fix the joystick location on mobile in case not by default
 	}
 	
+	if(check) {
+		elems = document.getElementsByClassName("dtop")
+		for(var i = 0; i < elems.length; i++) {
+			elems[i].style.display="none"
+		}
+	}
+	
 	// Init canvas
 	canvas = document.getElementById("myCanvas");
 	w = canvas.width;

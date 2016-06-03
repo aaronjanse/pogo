@@ -86,20 +86,20 @@
 				<i class="fa fa-arrow-left"></i>
 			</button>
 			<h1>Settings</h1>
-			<p>Controls</p>
+			<p class="dtop">Controls</p>
 			<button id="fixedjoy" onclick="togglefixedjoy()">Fix
 				joystick location</button>
-			<p>Colors</p>
+			<p class="dtop">Colors</p>
 			<button id="coltoggle" onclick="toggleColor()">Disable
 				colors</button>
 			<button onclick="resetcolors()">Reset colors</button>
-			<br> <span>Sky: </span><input id="skyCP"
+			<br> <span>Sky: </span><input readonly="true" id="skyCP"
 				class="jscolor {onFineChange:'updateSky()'}" value="4d79ff"><br>
-			<span>Ground: </span><input id="groundCP"
+			<span>Ground: </span><input readonly="true" id="groundCP"
 				class="jscolor {onFineChange:'updateGround()'}" value="00b300"><br>
-			<span>Pogo *Body*: </span><input id="bodyCP"
+			<span>Pogo *Body*: </span><input readonly="true" id="bodyCP"
 				class="jscolor {onFineChange:'updateBody()'}" value="ed00ed"><br>
-			<span>Pogo *Stick*: </span><input id="stickCP"
+			<span>Pogo *Stick*: </span><input readonly="true" id="stickCP"
 				class="jscolor {onFineChange:'updateStick()'}" value="ff66ff"><br>
 		</div>
 		
