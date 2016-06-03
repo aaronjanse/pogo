@@ -195,7 +195,15 @@ function render() {
 				initgame();
 			}, 1000*3);
 		}
-		ctx.fillText(score, canvas.width/2, canvas.height/2); 
+		ctx.fillText("Score: "+score, canvas.width/2, canvas.height/2); 
+	} else {
+		ctx.font = "16px Comic Sans MS";
+		ctx.fillStyle = "black";
+		ctx.textAlign = "left";
+
+		score = Math.round(pogo.frame.body.position[0]);
+		
+		ctx.fillText("Score: "+score, 10, 20); 
 	}
 }
 
