@@ -104,9 +104,17 @@ function render() {
 	ctx.beginPath();
 	ctx.moveTo(x, -h/50);
 	
+	var px = pogo.frame.body.position[0]
+	
 	var i = 0;
 	for ( var d in data) {
-		ctx.lineTo(x + i * heightfield.shape.elementWidth, y + data[i]);
+		var x1 = i * heightfield.shape.elementWidth
+		if(x1>=px-w/50/2-1) {
+			ctx.lineTo(x + x1, y + data[i]);
+		}
+		if(x1>px+w/50/2+2) {
+			break;
+		}
 		i += 1;
 	}
 	ctx.lineTo(x+data.length-1*heightfield.shape.elementWidth, -h/50)
@@ -204,16 +212,21 @@ function drawbox(obj) {
 }
 
 function drawObstacles() {
+	var m = w/50/2
+	var d = m-1
+	var px = pogo.frame.body.position[0]
+	var i1 = Math.floor((px+d)/(r*2))
+	
 	for(var i = 0; i < obstacles.length; i++) {
 		o = obstacles[i]
-		ctx.beginPath();
-		ctx.arc(o.position[0], o.position[1], 0.5, 0, 2 * Math.PI, false);
-		ctx.stroke()
+		if(Math.abs(o.position[0]-px)<=m) {
+			ctx.beginPath();
+			ctx.arc(o.position[0], o.position[1], 0.5, 0, 2 * Math.PI, false);
+			ctx.stroke()
+		}
 	}
 	
-	var d = 4
-	var px = pogo.frame.body.position[0]
-	var i = Math.floor((px+d)/(r*2))
+	
 	
 	
 //	if(px+d<obstacles[i].position[0]) {
@@ -221,7 +234,7 @@ function drawObstacles() {
 //		ctx.arc(px+d, obstacles[i].position[1], 0.5, 0, 2 * Math.PI, false);
 //		ctx.strokeStyle = "#555555"
 //		ctx.stroke()
-	canvas_arrow(px+d-0.3, obstacles[i].position[1], px+d+0.5, obstacles[i].position[1])
+	canvas_arrow(px+d-0.3, obstacles[i1].position[1], px+d+0.5, obstacles[i1].position[1])
 //	}
 	ctx.strokeStyle = "#000000"
 }
