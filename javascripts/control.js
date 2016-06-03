@@ -58,11 +58,6 @@ function ontouchmove(e) {
     	} else {
     		pogo.frame.body.angularVelocity = 0;
     	}
-    	
-    	currentmouse = {
-    			clientX: e.touches[0].clientX,
-    			clientY: e.touches[0].clientY
-    	}
     } else {
     	if(fixedjoy) {
     		lastmouse = {
@@ -76,7 +71,10 @@ function ontouchmove(e) {
 	    	}
     	}
     }
-    currentmouse = e
+	currentmouse = {
+			clientX: e.touches[0].clientX,
+			clientY: e.touches[0].clientY
+	}
     mousedrag = true
 }
 
