@@ -102,6 +102,18 @@ function back() {
 	document.getElementById("settings").style.opacity = '0'
 }
 
+function togglefixedjoy() {
+	fixedjoy=!fixedjoy;
+	document.getElementById("fixedjoy").innerHTML = (fixedjoy ? "Unfix" : "Fix") + " joystick location";
+	if(fixedjoy) {
+		document.getElementById("unfixjoyhelp").display = 'none'
+		document.getElementById("fixjoyhelp"). display = 'inherit'
+	} else {
+		document.getElementById("unfixjoyhelp").display = 'inherit'
+		document.getElementById("fixjoyhelp"). display = 'none'
+	}
+}
+
 function toggleColor() {
 	colorful=!colorful;
 	document.getElementById("coltoggle").innerHTML = (colorful ? "Disable" : "Enable") + " colors";

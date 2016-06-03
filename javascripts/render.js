@@ -134,8 +134,29 @@ function render() {
 	
 	ctx.restore();
 	
+	var rect = canvas.getBoundingClientRect();
+	
+	ctx.save()
+	if(fixedjoy) {
+		var jx = Math.round((jloc.x-rect.left)/(rect.right-rect.left)*canvas.width)
+		var jy = Math.round((jloc.y-rect.top)/(rect.bottom-rect.top)*canvas.height);
+		ctx.beginPath();
+		ctx.arc(jx, jy, 50, 0, 2 * Math.PI, false);
+		ctx.globalAlpha=0.5;
+//		ctx.endPath();
+		ctx.fillStyle= "#555555"
+		ctx.fill()
+		
+		ctx.beginPath();
+		ctx.arc(jx, jy, 10, 0, 2 * Math.PI, false);
+		ctx.globalAlpha=0.7;
+//		ctx.endPath();
+		ctx.fillStyle= "#AAAAAA"
+		ctx.fill()
+	}
+	ctx.restore()
+	
 	if(mousedrag) {
-		var rect = canvas.getBoundingClientRect();
 		var mx1 = Math.round((lastmouse.x-rect.left)/(rect.right-rect.left)*canvas.width);
 		var my1 = Math.round((lastmouse.y-rect.top)/(rect.bottom-rect.top)*canvas.height);
 		var mx2 = Math.round((currentmouse.clientX-rect.left)/(rect.right-rect.left)*canvas.width);

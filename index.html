@@ -156,7 +156,8 @@ button {
 	text-indent: 60px;
 }
 
-#settings h2 {
+#settings p {
+line-height: 0.05em;
 }
 
 #myCanvas {
@@ -271,25 +272,40 @@ button {
 				<div id="helparea" >
 					<button class="circlebuttoni backbutton" onclick="back()"><i class="fa fa-arrow-left"></i></button>
 					<h1>Help</h1>
-					<p>Try to jump as long as possible!</p>
 					<p>
-						Press the up arrow or spacebar to expand spring, and the left and right arrow
-						keys to twist left and right respectively<br> Alternatively,
-						click/tap to compress spring, drag like controlling a joystick,
-						then release to expand spring
+						Try to jump as far as possible!<br>
+						You lose if the pogostick frame touches anything but the stick (such as terrain or obstacles)
+					</p>
+					<p>Recommended controls:</p>
+					<p id="unfixjoyhelp">
+						Click/tap to compress spring and set the center of a joystick, 
+						drag to twist like controlling a joystick, then release to expand
+						the spring
+					</p>
+					<p id="fixjoyhelp" style="display: none">
+						The grey circle is the joystick, with the center marked.
+						Tap/click to compress the spring, optionally drag to change the angle of the joystick,
+						then let go to let the spring expand.
+					</p>
+					<p>
+						Alternate controls: <br>
+						Press the up arrow or spacebar to expand the spring, and the left and right arrow
+						keys to twist left and right respectively
 					</p>
 				</div>
 				
 				<div id="settings">
 					<button class="circlebuttoni backbutton" onclick="back()"><i class="fa fa-arrow-left"></i></button>
 					<h1>Settings</h1>
-					<h2>Colors</h2>
-					<button id="coltoggle" onclick="toggleColor()">Disable colors</button><br>
+					<p>Controls</p>
+					<button id="fixedjoy" onclick="togglefixedjoy()">Fix joystick location</button>
+					<p>Colors</p>
+					<button id="coltoggle" onclick="toggleColor()">Disable colors</button>
 					<button onclick="resetcolors()">Reset colors</button><br>
-					Sky: <input id="skyCP" class="jscolor {onFineChange:'updateSky()'}" value="4d79ff"><br>
-					Ground: <input id="groundCP" class="jscolor {onFineChange:'updateGround()'}" value="00b300"><br>
-					Pogo *Body*: <input id="bodyCP" class="jscolor {onFineChange:'updateBody()'}" value="ed00ed"><br>
-					Pogo *Stick*: <input id="stickCP" class="jscolor {onFineChange:'updateStick()'}" value="ff66ff"><br>
+					<span>Sky: </span><input id="skyCP" class="jscolor {onFineChange:'updateSky()'}" value="4d79ff"><br>
+					<span>Ground: </span><input id="groundCP" class="jscolor {onFineChange:'updateGround()'}" value="00b300"><br>
+					<span>Pogo *Body*: </span><input id="bodyCP" class="jscolor {onFineChange:'updateBody()'}" value="ed00ed"><br>
+					<span>Pogo *Stick*: </span><input id="stickCP" class="jscolor {onFineChange:'updateStick()'}" value="ff66ff"><br>
 				</div>
 				
 				</div>

@@ -1,5 +1,9 @@
 var twistval = 3.5;
 
+var fixedjoy = true; //fixed joystick
+
+var jloc = new Object();
+
 var keys = {
 	left: 37,
 	right: 39,
@@ -8,6 +12,11 @@ var keys = {
 }
 
 function initControls() {
+	jloc = {
+		x: w*3/4,
+		y: h*3/4
+	};
+	
 	window.addEventListener("keydown", keydown, false);
 	window.addEventListener("keyup", keyup, false);
 	window.addEventListener("keypress", keypress, false);
@@ -45,9 +54,16 @@ function ontouchmove(e) {
     		pogo.frame.body.angularVelocity = 0;
     	}
     } else {
-	    lastmouse = {
-    			x: e.touches[0].clientX,
-    			y: e.touches[0].clientY
+    	if(fixedjoy) {
+    		lastmouse = {
+        			x: jloc.x,
+        			y: jloc.y
+        	}
+    	} else {
+		    lastmouse = {
+	    			x: e.touches[0].clientX,
+	    			y: e.touches[0].clientY
+	    	}
     	}
     }
     currentmouse = e
@@ -86,9 +102,16 @@ function onmousedown() {
 		    		pogo.frame.body.angularVelocity = 0;
 		    	}
 		    } else {
-			    lastmouse = {
-		    			x: e.clientX,
-		    			y: e.clientY
+		    	if(fixedjoy) {
+		    		lastmouse = {
+		        			x: jloc.x,
+		        			y: jloc.y
+		        	}
+		    	} else {
+				    lastmouse = {
+			    			x: e.clientX,
+			    			y: e.clientY
+			    	}
 		    	}
 		    }
 		    currentmouse = e
