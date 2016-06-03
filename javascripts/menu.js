@@ -99,6 +99,7 @@ function tutorial() {
 	document.getElementById("gamearea").style.backgroundColor = 'black'
 		
 	tutorialm=true
+	lvl=0
 	init()
 	requestAnimationFrame(animate);
 }
