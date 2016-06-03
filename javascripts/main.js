@@ -29,7 +29,9 @@ function fullscreen() {
 
 function init() {
 	$(window).blur(function(){
-		pausegame()
+		if(!pause) {
+			pausegame()
+		}
 	});	
 	
 	//detects mobile
