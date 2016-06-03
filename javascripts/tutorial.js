@@ -156,6 +156,10 @@ function rendertut() {
 			pendingquit = true
 			setTimeout(function() {
 //				return;
+				if(leftplay) {
+					leftplay=false;
+					return;
+				}
 				gameOver = false
 				pendingquit = false
 				inittut();
@@ -176,6 +180,9 @@ function rendertut() {
 
 function tutnext() {
 	lvl++
+	if(gameOver) {
+		leftplay=true;
+	}
 	if(lvl==1) {
 		document.getElementById("lvl0").style.display = 'none'
 		document.getElementById("lvl1").style.display = 'inline'
@@ -210,6 +217,8 @@ function tutnext() {
 }
 
 function inittut() {
+	gameOver = false
+	pendingquit = false
 		world = new p2.World({
 			gravity : [ 0, -7 ]
 		});
@@ -250,10 +259,12 @@ function inittut() {
 				if(event.bodyA == pogo.frame.body || event.bodyB == pogo.frame.body) {
 					gameOver = true;
 					return true;
+					leftplay = false;
 				}
 			});
 		} else {
 			world.on("beginContact", function(event){
+				leftplay = false;
 				return true;
 			});
 		}

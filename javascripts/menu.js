@@ -1,4 +1,7 @@
 function gohome() {
+	document.getElementById("pausebutton").className = 'circlebutton'
+		document.getElementById("helpbutton").className = 'circlebutton'
+		document.getElementById("settingsbutton").className = 'circlebutton'
 	document.getElementById("pausebutton").style.display = 'none'
 	document.getElementById("helpbutton").style.display = 'none'
 	document.getElementById("settingsbutton").style.display = 'none'
@@ -9,10 +12,19 @@ function gohome() {
 	document.getElementById("gamearea").style.backgroundColor = 'white'
 	
 	document.getElementById("homebutton").style.display = 'none'
+	
+	if(gameOver) {
+		leftplay=true;
+	}
+	
+	tutorialm=false
+	pause=false;
 }
 
 function play() {
-	back()
+	if(pause) {
+		back()
+	}
 	document.getElementById("pausebutton").className = 'circlebutton'
 	document.getElementById("helpbutton").className = 'circlebutton'
 	document.getElementById("settingsbutton").className = 'circlebutton'
@@ -99,9 +111,10 @@ function tutorial() {
 	document.getElementById("gamearea").style.backgroundColor = 'black'
 		
 	tutorialm=true
+	pause=false
 	lvl=0
 	init()
-	requestAnimationFrame(animate);
+	animate();
 }
 
 function help() {
@@ -110,6 +123,7 @@ function help() {
 		
 	document.getElementById("helparea").style.display = 'block'
 	document.getElementById("helparea").style.opacity = '1'
+	document.getElementById("homebutton").style.display = 'none'
 }
 
 function help1() {
@@ -118,6 +132,7 @@ function help1() {
 }
 
 function settings() {
+	document.getElementById("homebutton").style.display = 'none'
 	document.getElementById("helpbutton").style.display = 'none'
 	document.getElementById("settingsbutton").style.display = 'none'
 		

@@ -194,6 +194,10 @@ function render() {
 			pendingquit = true
 			setTimeout(function() {
 //				return;
+				if(leftplay) {
+					leftplay=false;
+					return;
+				}
 				gameOver = false
 				pendingquit = false
 				initgame();
