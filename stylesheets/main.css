@@ -8,10 +8,6 @@
 	transition-duration: 0.5s;
 }
 
-.comp {
-	display: inline;
-}
-
 #mainmenu {
 	position: absolute;
 	height: 50%;
@@ -159,29 +155,12 @@ button {
 	cursor: not-allowed;
 }
 
-.comp {
-	display: none;
-}
-
 #gamearea {
 	border: none;
 	width: 100%;
 	padding: 0px;
 	margin: 0px;
 	height: 100%;
-}
-
-#content-wrapper {
-	padding: 0px;
-	margin: 0px;
-	height: 100%;
-	border: none;
-}
-
-.inner {
-	padding: 0px;
-	margin: 0px;
-	width: 100%;
 }
 
 .clearfix::after {
@@ -204,11 +183,4 @@ body {
 
 #mainmenu h1 {
 	color: #353535;
-}
-
-#main-content {
-	display: inline;
-	width: 100%;
-	margin: 0px;
-	padding: 0px;
 }

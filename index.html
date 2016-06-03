@@ -5,10 +5,12 @@
 <meta http-equiv="X-UA-Compatible" content="chrome=1">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="keywords" content="aaronduino, pogo, pogorun, pogo run, run, github">
+<meta name="keywords"
+	content="aaronduino, pogo, pogorun, pogo run, run, github">
 <meta name="description" content="Pogostick runner">
 <meta name="author" content="Aaronduino">
-<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
 
 <script src="https://rawgit.com/schteppe/p2.js/master/build/p2.min.js"></script>
 <script src="https://rawgit.com/josephg/noisejs/master/perlin.js"></script>
@@ -16,7 +18,8 @@
 
 <link rel="stylesheet" type="text/css" href="stylesheets/main.css">
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <script src="javascripts/menu.js"></script>
 <script src="javascripts/main.js"></script>
 <script src="javascripts/control.js"></script>
@@ -29,128 +32,69 @@
 <title>Pogo by Aaronduino</title>
 </head>
 <body onload="fullscreen()">
-	<header class="comp">
-		<div class="inner">
-			<h1>Pogo</h1>
-			<h2>A javascript pogo stick game.</h2>
-			<a href="https://github.com/Aaronduino/pogo" class="button"><small>View
-					project on</small> GitHub</a>
+	<div id="gamearea">
+		<div id="mainmenu">
+			<span><h1>Pogo Run</h1></span> <span><button onclick="play()">Play</button></span>
+			<span><button onclick="settings1()">Settings</button>
+				<br></span> <span><button onclick="help1()">Help</button></span>
 		</div>
-	</header>
+		<canvas id="myCanvas"></canvas>
+		<button id="pausebutton" class="circlebutton" onclick="pausegame()">
+			<i class="fa fa-pause"></i>
+		</button>
+		<button id="helpbutton" class="circlebutton" onclick="help()">
+			<i class="fa fa-question" aria-hidden="true"></i>
+		</button>
+		<button id="settingsbutton" class="circlebutton" onclick="settings()">
+			<i class="fa fa-cog" aria-hidden="true"></i>
+		</button>
 
-	<div id="content-wrapper">
-		<div class="inner clearfix">
-			<section id="main-content">
-				<h1 class="comp">
-					<a id="game" class="anchor" href="#game" aria-hidden="true"><span
-						aria-hidden="true" class="octicon octicon-link"></span></a>Game
-				</h1>
-				
-				<div id="gamearea">
-				<div id="mainmenu">
-					<span><h1>Pogo Run</h1></span>
-					<span><button onclick="play()">Play</button></span>
-					<span><button onclick="settings1()">Settings</button><br></span>
-					<span><button onclick="help1()">Help</button></span>
-				</div>
-				<canvas id="myCanvas"></canvas>
-				<button id="pausebutton" class="circlebutton" onclick="pausegame()"><i class="fa fa-pause"></i></button>
-				<button id="helpbutton" class="circlebutton" onclick="help()"><i class="fa fa-question" aria-hidden="true"></i></button>
-				<button id="settingsbutton" class="circlebutton" onclick="settings()"><i class="fa fa-cog" aria-hidden="true"></i></button>
-				
-				<div id="helparea" >
-					<button class="circlebuttoni backbutton" onclick="back()"><i class="fa fa-arrow-left"></i></button>
-					<h1>Help</h1>
-					<p>
-						Try to jump as far as possible!<br>
-						You lose if the pogostick frame touches anything but the stick (such as terrain or obstacles)
-					</p>
-					<p>Recommended controls:</p>
-					<p id="unfixjoyhelp">
-						Click/tap to compress spring and set the center of a joystick, 
-						drag to twist like controlling a joystick, then release to expand
-						the spring
-					</p>
-					<p id="fixjoyhelp" style="display: none">
-						The grey circle is the joystick, with the center marked.
-						Tap/click to compress the spring, optionally drag to change the angle of the joystick,
-						then let go to let the spring expand.
-					</p>
-					<p>
-						Alternate controls: <br>
-						Press the up arrow or spacebar to expand the spring, and the left and right arrow
-						keys to twist left and right respectively
-					</p>
-				</div>
-				
-				<div id="settings">
-					<button class="circlebuttoni backbutton" onclick="back()"><i class="fa fa-arrow-left"></i></button>
-					<h1>Settings</h1>
-					<p>Controls</p>
-					<button id="fixedjoy" onclick="togglefixedjoy()">Fix joystick location</button>
-					<p>Colors</p>
-					<button id="coltoggle" onclick="toggleColor()">Disable colors</button>
-					<button onclick="resetcolors()">Reset colors</button><br>
-					<span>Sky: </span><input id="skyCP" class="jscolor {onFineChange:'updateSky()'}" value="4d79ff"><br>
-					<span>Ground: </span><input id="groundCP" class="jscolor {onFineChange:'updateGround()'}" value="00b300"><br>
-					<span>Pogo *Body*: </span><input id="bodyCP" class="jscolor {onFineChange:'updateBody()'}" value="ed00ed"><br>
-					<span>Pogo *Stick*: </span><input id="stickCP" class="jscolor {onFineChange:'updateStick()'}" value="ff66ff"><br>
-				</div>
-				
-				</div>
-				
-				<div class="comp">
-				<h1>
-					<a id="instructions" class="anchor" href="#instructions"
-						aria-hidden="true"><span aria-hidden="true"
-						class="octicon octicon-link"></span></a>Instructions
-				</h1>
-
-				<p>Try to jump as long as possible!</p>
-				<p>
-					Press the up arrow or spacebar to expand spring, and the left and right arrow
-					keys to twist left and right respectively<br> Alternatively,
-					click/tap to compress spring, drag like controlling a joystick,
-					then release to expand spring
-				</p>
-				<p>Suggest changes & star on github!</p>
-				<a class="github-button" href="https://github.com/Aaronduino/pogo"
-					data-icon="octicon-star" data-style="mega"
-					data-count-href="/Aaronduino/pogo/stargazers"
-					data-count-api="/repos/Aaronduino/pogo#stargazers_count"
-					data-count-aria-label="# stargazers on GitHub"
-					aria-label="Star Aaronduino/pogo on GitHub">Star</a>
-
-				</div>
-			</section>
-
-			<aside id="sidebar" class="comp">
-				<a href="https://github.com/Aaronduino/pogo/zipball/master"
-					class="button"> <small>Download</small> .zip file
-				</a> <a href="https://github.com/Aaronduino/pogo/tarball/master"
-					class="button"> <small>Download</small> .tar.gz file
-				</a>
-
-				<p class="repo-owner">
-					<a href="https://github.com/Aaronduino/pogo"></a> is maintained by
-					<a href="https://github.com/Aaronduino">Aaronduino</a>.
-				</p>
-
-				<p>
-					This page was generated by <a href="https://pages.github.com">GitHub
-						Pages</a> using the Architect theme by <a
-						href="https://twitter.com/jasonlong">Jason Long</a>.
-				</p>
-			</aside>
-
-
-
+		<div id="helparea">
+			<button class="circlebuttoni backbutton" onclick="back()">
+				<i class="fa fa-arrow-left"></i>
+			</button>
+			<h1>Help</h1>
+			<p>
+				Try to jump as far as possible!<br> You lose if the pogostick
+				frame touches anything but the stick (such as terrain or obstacles)
+			</p>
+			<p>Recommended controls:</p>
+			<p id="unfixjoyhelp">Click/tap to compress spring and set the
+				center of a joystick, drag to twist like controlling a joystick,
+				then release to expand the spring</p>
+			<p id="fixjoyhelp" style="display: none">The grey circle is the
+				joystick, with the center marked. Tap/click to compress the spring,
+				optionally drag to change the angle of the joystick, then let go to
+				let the spring expand.</p>
+			<p>
+				Alternate controls: <br> Press the up arrow or spacebar to
+				expand the spring, and the left and right arrow keys to twist left
+				and right respectively
+			</p>
 		</div>
+
+		<div id="settings">
+			<button class="circlebuttoni backbutton" onclick="back()">
+				<i class="fa fa-arrow-left"></i>
+			</button>
+			<h1>Settings</h1>
+			<p>Controls</p>
+			<button id="fixedjoy" onclick="togglefixedjoy()">Fix
+				joystick location</button>
+			<p>Colors</p>
+			<button id="coltoggle" onclick="toggleColor()">Disable
+				colors</button>
+			<button onclick="resetcolors()">Reset colors</button>
+			<br> <span>Sky: </span><input id="skyCP"
+				class="jscolor {onFineChange:'updateSky()'}" value="4d79ff"><br>
+			<span>Ground: </span><input id="groundCP"
+				class="jscolor {onFineChange:'updateGround()'}" value="00b300"><br>
+			<span>Pogo *Body*: </span><input id="bodyCP"
+				class="jscolor {onFineChange:'updateBody()'}" value="ed00ed"><br>
+			<span>Pogo *Stick*: </span><input id="stickCP"
+				class="jscolor {onFineChange:'updateStick()'}" value="ff66ff"><br>
+		</div>
+
 	</div>
-
-
-
-	<script async defer src="https://buttons.github.io/buttons.js" class="comp"></script>
-
 </body>
 </html>
