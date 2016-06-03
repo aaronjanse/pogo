@@ -93,6 +93,10 @@ button {
 	left: 10px;
 }
 
+#tutnextb {
+	display: block;
+}
+
 #homebutton {
 	display: none;
 	left: 20px;
@@ -110,6 +114,16 @@ button {
 #settingsbutton {
 	top: 100px;
 	display: none;
+}
+
+#tuthelp {
+	opacity: 1;
+	display: none;
+	position: absolute;
+	z-index: 2;
+	top: 0px;
+	left: 10px;
+	color: white;
 }
 
 #helparea {

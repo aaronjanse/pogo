@@ -24,6 +24,7 @@
 <script src="javascripts/main.js"></script>
 <script src="javascripts/control.js"></script>
 <script src="javascripts/render.js"></script>
+<script src="javascripts/tutorial.js"></script>
 
 <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -37,6 +38,7 @@
 			<span style="font-size: 2em">Pogo Run</span>
 			<span>By Aaronduino</span>
 			<span><button onclick="play()">Play</button></span>
+			<span><button onclick="tutorial()">Tutorial</button></span>
 			<span><button onclick="settings1()">Settings</button></span>
 			<span><button onclick="help1()">Help</button></span>
 			<div align="right"><a href="https://github.com/Aaronduino/pogo">View on Github</a></div>
@@ -99,6 +101,27 @@
 				class="jscolor {onFineChange:'updateBody()'}" value="ed00ed"><br>
 			<span>Pogo *Stick*: </span><input id="stickCP"
 				class="jscolor {onFineChange:'updateStick()'}" value="ff66ff"><br>
+		</div>
+		
+		<div id="tuthelp">
+		<div><button id="tutnextb" class="circlebuttoni" onclick="tutnext()"><i class="fa fa-arrow-right"></i></button></div>
+		<br>
+		<div id="lvl0">
+		Welcome to the tutorial.<br> This will cover how to use the recommended controls.<br>
+		The grey circle is the joystick, with the center marked. Tap/click to compress the spring,
+		optionally drag to change the angle of the joystick, then let go to let the spring expand.
+		</div>
+		<div id="lvl1" style="display: none">
+		Now try to use what you learned to get as far as possible without letting the pogostick frame touch the ground
+		or fall off the cliff at the beginning. <br>
+		Your score is the distance you get before losing (by hitting object).
+		</div>
+		<div id="lvl2" style="display: none">
+		Now do the same thing, but don't let the pogostick's frame hit the obstacles (the circles). <br>
+		You restart if you hit them.<br>
+		Click to end the tutorial! Have fun!
+		</div>
+		<div id="nexttxt">Click the next arrow when you are ready to move on.</div>
 		</div>
 
 	</div>

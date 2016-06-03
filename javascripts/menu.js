@@ -40,6 +40,9 @@ function play() {
 }
 
 function pausegame() {
+	if(tutorialm) {
+		return;
+	}
 	if(!pause) {
 		pause = true;
 	//	document.getElementById("myCanvas").style.display = 'none'
@@ -80,6 +83,24 @@ function mainbpprep() {
 	document.getElementById("pausebutton").className = 'circlebuttoni'
 	document.getElementById("helpbutton").className = 'circlebuttoni'
 	document.getElementById("settingsbutton").className = 'circlebuttoni'
+}
+
+function tutorial() {
+	document.getElementById("mainmenu").style.display = 'none'
+	document.getElementById("mainmenu").style.opacity = '0'
+	document.getElementById("myCanvas").style.display = 'inline'
+	document.getElementById("myCanvas").style.opacity = '1'
+		
+	document.getElementById("tuthelp").style.display = 'block'
+	document.getElementById("tuthelp").style.opacity = '1'
+	
+	document.getElementById("homebutton").style.display = 'none'
+		
+	document.getElementById("gamearea").style.backgroundColor = 'black'
+		
+	tutorialm=true
+	init()
+	requestAnimationFrame(animate);
 }
 
 function help() {

@@ -36,7 +36,11 @@ function animate(time) {
 	// Move physics bodies forward in time
 	world.step(fixedDeltaTime, deltaTime, maxSubSteps);
 	// Render scene
+	if(!tutorialm) {
 	render();
+	} else {
+		rendertut()
+	}
 }
 
 var xscroll = 0

@@ -2,6 +2,8 @@ var gameOver = false
 var pendingquit = false
 var pause = false;
 
+var tutorialm = false
+
 var score = null
 
 var world, pogo;
@@ -63,7 +65,11 @@ function init() {
 		data.push(value * 1.75)
 	}
 	
-	initgame()
+	if(!tutorialm) {
+		initgame()
+	} else {
+		inittut()
+	}
 	initControls()
 }
 
