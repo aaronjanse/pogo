@@ -128,6 +128,7 @@ button {
     -moz-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 	font-size: 50px;
+	animation: fadeinout 4s linear forwards;
 }
 
 @-webkit-keyframes fadeinout {

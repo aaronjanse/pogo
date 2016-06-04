@@ -169,7 +169,7 @@ function rendertut() {
 				inittut();
 			}, 1000*3);
 		}
-		ctx.fillText("Score: "+score, canvas.width/2, canvas.height/2); 
+		ctx.fillText("Score: "+score, canvas.width/2, canvas.height/2-40); 
 	} else {
 		ctx.font = "16px Comic Sans MS";
 		ctx.fillStyle = "black";
@@ -222,6 +222,7 @@ function tutnext() {
 
 function inittut() {
 	lives = 3
+	resetHealth()
 	gameOver = false
 	pendingquit = false
 		world = new p2.World({
@@ -264,8 +265,11 @@ function inittut() {
 				if(event.bodyA == pogo.frame.body || event.bodyB == pogo.frame.body) {
 					var h = event.bodyA == heightfield.body || event.bodyB == heightfield.body
 					if(!h) {
-					lives-=1
-					loseHeart()
+						lives-=1
+						loseHeart()
+					} else {
+						lives=0
+						loseHeart()
 					}
 					if(lives<=0||h) {
 						gameOver = true;

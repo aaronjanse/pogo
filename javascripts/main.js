@@ -13,6 +13,8 @@ var score = null
 var world, pogo;
 var obstacles = [];
 
+var firstrh = true
+
 var numDataPoints = 500;
 var data = [];
 var heightfield = new Object();
@@ -34,6 +36,13 @@ function fullscreen() {
 }
 
 function resetHealth() {
+	document.getElementById("health").style.animation='fadeinout 4s linear forwards';
+	
+	var elm = document.getElementById("health")
+	elm.style.display='block'
+	var newone = elm.cloneNode(true);
+	elm.parentNode.replaceChild(newone, elm);
+	
 	document.getElementById("health").innerHTML=
 	  '<i class="fa fa-heart" aria-hidden="true"></i>'
 	+ '<i id="h2" class="fa fa-heart" aria-hidden="true"></i>'
@@ -41,13 +50,12 @@ function resetHealth() {
 }
 
 function loseHeart() {
-//	document.getElementById("health").style.display='block'
-//		document.getElementById("health").style.animation='none'
+	document.getElementById("health").style.animation='fadeinout 4s linear forwards';
+	var elm = document.getElementById("health")
+	elm.style.display='block'
+	var newone = elm.cloneNode(true);
+	elm.parentNode.replaceChild(newone, elm);
 	if(lives==2) {
-		document.getElementById("health").style.display='block'
-//		document.getElementById("health").style.display='block'
-		document.getElementById("health").style.animation='fadeinout 4s linear forwards';
-//		document.getElementById("health").style.opacity='1'
 		document.getElementById("health").innerHTML=
 			  '<i class="fa fa-heart" aria-hidden="true"></i>'
 			+ '<i id="h2" class="fa fa-heart" aria-hidden="true"></i>'
@@ -55,11 +63,6 @@ function loseHeart() {
 	}
 	
 	if(lives==1) {
-		var elm = document.getElementById("health")
-		var newone = elm.cloneNode(true);
-		elm.parentNode.replaceChild(newone, elm);
-		
-		document.getElementById("health").style.animation='fadeinout 4s linear forwards';
 		document.getElementById("health").innerHTML=
 			  '<i class="fa fa-heart" aria-hidden="true"></i>'
 			+ '<i id="h2" class="fa fa-heart-o" aria-hidden="true"></i>'
@@ -67,7 +70,10 @@ function loseHeart() {
 	}
 	
 	if(lives<=0) {
-//		document.getElementById("health").style.display='none'
+		document.getElementById("health").innerHTML=
+			  '<i class="fa fa-heart-o" aria-hidden="true"></i>'
+			+ '<i id="h2" class="fa fa-heart-o" aria-hidden="true"></i>'
+			+ '<i id="h3" class="fa fa-heart-o" aria-hidden="true"></i>';
 	}
 }
 
@@ -121,6 +127,7 @@ function init() {
 
 function initgame() {
 	lives = 3
+	resetHealth()
 	gameOver = false
 	pendingquit = false
 	world = new p2.World({
@@ -241,8 +248,11 @@ function initgame() {
 		if(event.bodyA == pogo.frame.body || event.bodyB == pogo.frame.body) {
 			var h = event.bodyA == heightfield.body || event.bodyB == heightfield.body
 			if(!h) {
-			lives-=1
-			loseHeart()
+				lives-=1
+				loseHeart()
+			} else {
+				lives=0
+				loseHeart()
 			}
 			if(lives<=0||h) {
 				gameOver = true;

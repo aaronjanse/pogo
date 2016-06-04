@@ -206,7 +206,7 @@ function render() {
 				initgame();
 			}, 1000*3);
 		}
-		ctx.fillText("Score: "+score, canvas.width/2, canvas.height/2); 
+		ctx.fillText("Score: "+score, canvas.width/2, canvas.height/2-40); 
 	} else {
 		ctx.font = "16px Comic Sans MS";
 		ctx.fillStyle = "black";
