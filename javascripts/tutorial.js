@@ -189,7 +189,7 @@ function tutnext() {
 	}
 	if(lvl==1) {
 		document.getElementById("lvl0").style.display = 'none'
-		document.getElementById("lvl1").style.display = 'inline'
+		document.getElementById("lvl1").style.display = 'block'
 	}
 	
 	if(lvl==2) {

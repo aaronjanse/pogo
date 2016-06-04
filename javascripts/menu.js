@@ -109,6 +109,8 @@ function tutorial() {
 		
 	document.getElementById("tuthelp").style.display = 'block'
 	document.getElementById("tuthelp").style.opacity = '1'
+		
+	document.getElementById("lvl0").style.display = 'block'
 	document.getElementById("lvl2").style.display = 'none'
 	
 	document.getElementById("homebutton").style.display = 'none'
