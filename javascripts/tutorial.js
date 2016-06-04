@@ -3,7 +3,11 @@ var lvl = 0;
 function rendertut() {
 	if(pogo.frame.body.position[0]<0) {
 		gameOver = true;
+		leftplay = false;
+		pogo.frame.body.position[0]=Math.max(pogo.frame.body.position[0], -2)
+		pogo.frame.body.position[1]=Math.max(pogo.frame.body.position[1], -5)
 	}
+	
 	// Clear the canvas
 	ctx.clearRect(0, 0, w, h);
 	
