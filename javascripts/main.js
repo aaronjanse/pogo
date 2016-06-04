@@ -248,8 +248,8 @@ function initgame() {
 		if(event.bodyA == pogo.frame.body || event.bodyB == pogo.frame.body) {
 			var h = event.bodyA == heightfield.body || event.bodyB == heightfield.body
 			if(!h) {
-				lives-=1
-				loseHeart()
+			lives-=1
+			loseHeart()
 			} else {
 				lives=0
 				loseHeart()

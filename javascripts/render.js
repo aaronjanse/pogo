@@ -37,7 +37,7 @@ function animate(time) {
 	world.step(fixedDeltaTime, deltaTime, maxSubSteps);
 	// Render scene
 	if(!tutorialm) {
-	render();
+		render();
 	} else {
 		rendertut()
 	}
