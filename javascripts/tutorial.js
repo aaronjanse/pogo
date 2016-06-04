@@ -223,7 +223,9 @@ function tutnext() {
 function inittut() {
 	document.getElementById("tutnextb").style.display = 'inline'
 	lives = 3
-	resetHealth()
+	if(lvl>1) {
+		resetHealth()
+	}
 	gameOver = false
 	pendingquit = false
 		world = new p2.World({

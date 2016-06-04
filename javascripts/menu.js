@@ -15,12 +15,14 @@ function gohome() {
 		
 	document.getElementById("tutnextb").style.display = 'none'
 	
+	document.getElementById("health").style.display = 'none'
+	
 	if(gameOver) {
 		leftplay=true;
 	}
 	
 	tutorialm=false
-	pause=false;
+	pause=true;
 }
 
 function play() {
