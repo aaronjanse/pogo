@@ -221,6 +221,7 @@ function tutnext() {
 }
 
 function inittut() {
+	document.getElementById("tutnextb").style.display = 'inline'
 	lives = 3
 	resetHealth()
 	gameOver = false

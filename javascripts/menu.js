@@ -12,6 +12,8 @@ function gohome() {
 	document.getElementById("gamearea").style.backgroundColor = 'white'
 	
 	document.getElementById("homebutton").style.display = 'none'
+		
+	document.getElementById("tutnextb").style.display = 'none'
 	
 	if(gameOver) {
 		leftplay=true;
@@ -105,6 +107,7 @@ function tutorial() {
 		
 	document.getElementById("tuthelp").style.display = 'block'
 	document.getElementById("tuthelp").style.opacity = '1'
+	document.getElementById("lvl2").style.display = 'none'
 	
 	document.getElementById("homebutton").style.display = 'none'
 		

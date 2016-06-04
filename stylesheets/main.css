@@ -93,10 +93,6 @@ button {
 	left: 10px;
 }
 
-#tutnextb {
-	display: block;
-}
-
 #homebutton {
 	display: none;
 	left: 20px;
@@ -219,6 +215,14 @@ body {
 	min-height: 100%;
 	margin: 0px;
 	font-family: "Comic Sans MS", cursive, sans-serif;
+}
+
+.th {
+	display: block;
+}
+
+#tutnextb {
+	display: none;
 }
 
 #mainmenu {
