@@ -2,6 +2,8 @@ var gameOver = false
 var pendingquit = false
 var pause = false;
 
+var lives = 3;
+
 var tutorialm = false
 
 var leftplay = false;
@@ -29,6 +31,44 @@ function fullscreen() {
 	document.getElementById("myCanvas").style.height = '100%';
 	document.getElementById("myCanvas").width = window.innerWidth
 	document.getElementById("myCanvas").height = window.innerHeight
+}
+
+function resetHealth() {
+	document.getElementById("health").innerHTML=
+	  '<i class="fa fa-heart" aria-hidden="true"></i>'
+	+ '<i id="h2" class="fa fa-heart" aria-hidden="true"></i>'
+	+ '<i id="h3" class="fa fa-heart" aria-hidden="true"></i>';
+}
+
+function loseHeart() {
+//	document.getElementById("health").style.display='block'
+//		document.getElementById("health").style.animation='none'
+	if(lives==2) {
+		document.getElementById("health").style.display='block'
+//		document.getElementById("health").style.display='block'
+		document.getElementById("health").style.animation='fadeinout 4s linear forwards';
+//		document.getElementById("health").style.opacity='1'
+		document.getElementById("health").innerHTML=
+			  '<i class="fa fa-heart" aria-hidden="true"></i>'
+			+ '<i id="h2" class="fa fa-heart" aria-hidden="true"></i>'
+			+ '<i id="h3" class="fa fa-heart-o" aria-hidden="true"></i>';
+	}
+	
+	if(lives==1) {
+		var elm = document.getElementById("health")
+		var newone = elm.cloneNode(true);
+		elm.parentNode.replaceChild(newone, elm);
+		
+		document.getElementById("health").style.animation='fadeinout 4s linear forwards';
+		document.getElementById("health").innerHTML=
+			  '<i class="fa fa-heart" aria-hidden="true"></i>'
+			+ '<i id="h2" class="fa fa-heart-o" aria-hidden="true"></i>'
+			+ '<i id="h3" class="fa fa-heart-o" aria-hidden="true"></i>';
+	}
+	
+	if(lives<=0) {
+//		document.getElementById("health").style.display='none'
+	}
 }
 
 function init() {
@@ -80,6 +120,7 @@ function init() {
 }
 
 function initgame() {
+	lives = 3
 	gameOver = false
 	pendingquit = false
 	world = new p2.World({
@@ -179,7 +220,7 @@ function initgame() {
 	        var circleBody = new p2.Body({ mass:1, position:[i*2,y], fixedX: true, fixedY: true});
 	        circleBody.addShape(circleShape);
 	        circleShape.collisionGroup = OBSTACLE;
-	        circleShape.collisionMask = -1
+//	        circleShape.collisionMask = -1
 	        obstacles.push(circleBody);
 	        world.addBody(circleBody);
 		}
@@ -198,8 +239,15 @@ function initgame() {
 	
 	world.on("beginContact",function(event){
 		if(event.bodyA == pogo.frame.body || event.bodyB == pogo.frame.body) {
-			leftplay = false;
-			gameOver = true;
+			var h = event.bodyA == heightfield.body || event.bodyB == heightfield.body
+			if(!h) {
+			lives-=1
+			loseHeart()
+			}
+			if(lives<=0||h) {
+				gameOver = true;
+				leftplay = false;
+			}
 		}
 	});
 }

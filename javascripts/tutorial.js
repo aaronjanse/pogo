@@ -221,6 +221,7 @@ function tutnext() {
 }
 
 function inittut() {
+	lives = 3
 	gameOver = false
 	pendingquit = false
 		world = new p2.World({
@@ -261,9 +262,16 @@ function inittut() {
 		if(lvl>0) {
 			world.on("beginContact", function(event){
 				if(event.bodyA == pogo.frame.body || event.bodyB == pogo.frame.body) {
-					gameOver = true;
-					return true;
-					leftplay = false;
+					var h = event.bodyA == heightfield.body || event.bodyB == heightfield.body
+					if(!h) {
+					lives-=1
+					loseHeart()
+					}
+					if(lives<=0||h) {
+						gameOver = true;
+						leftplay = false;
+					}
+					
 				}
 			});
 		} else {
@@ -376,11 +384,12 @@ var tut = {
 				} else {
 					y = data[i]+5-Math.random()*2
 				}
+				
 		        var circleShape = new p2.Circle({ radius: 0.5 });
 		        var circleBody = new p2.Body({ mass:1, position:[i*2,y], fixedX: true, fixedY: true});
 		        circleBody.addShape(circleShape);
 		        circleShape.collisionGroup = OBSTACLE;
-		        circleShape.collisionMask = -1
+//		        circleShape.collisionMask = -1
 		        obstacles.push(circleBody);
 		        world.addBody(circleBody);
 			}

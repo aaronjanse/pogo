@@ -116,6 +116,30 @@ button {
 	display: none;
 }
 
+#health {
+	pointer-events: none;
+	display: none;
+	opacity: 0.8;
+	position: absolute; 
+	z-index: 2;
+	left:50%;
+    top:50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+	font-size: 50px;
+}
+
+@-webkit-keyframes fadeinout {
+  0%,100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+@keyframes fadeinout {
+  0%,100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
 #tuthelp {
 	opacity: 1;
 	display: none;

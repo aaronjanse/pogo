@@ -44,6 +44,12 @@
 			<div align="right"><a href="https://github.com/Aaronduino/pogo">View on Github</a></div>
 		</div>
 		<canvas id="myCanvas"></canvas>
+		<div id="health">
+			<i class="fa fa-heart" aria-hidden="true"></i>
+			<i id="h2" class="fa fa-heart" aria-hidden="true"></i>
+			<i id="h3" class="fa fa-heart" aria-hidden="true"></i>
+		</div>
+		
 		<button id="pausebutton" class="circlebutton" onclick="pausegame()">
 			<i class="fa fa-pause"></i>
 		</button>
@@ -118,8 +124,8 @@
 		</div>
 		<div id="lvl2" style="display: none">
 		Now do the same thing, but don't let the pogostick's frame hit the obstacles (the circles). <br>
-		You restart if you hit them.<br>
-		Click to end the tutorial! Have fun!
+		You lose one heart (out of 3) if you hit them.<br>
+		Click the next button to end the tutorial! Have fun!
 		</div>
 		<div id="nexttxt">Click the next arrow when you are ready to move on.</div>
 		</div>
