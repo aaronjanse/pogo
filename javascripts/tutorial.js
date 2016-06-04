@@ -367,7 +367,11 @@ var tut = {
 		obstacles = []
 		for(var i = 5; i < 200; i++) {
 			if(i%r==0) {
-				y = data[i]+Math.random()*5
+				if(Math.random()>0.5) {
+					y = data[i]+Math.random()*2
+				} else {
+					y = data[i]+5-Math.random()*2
+				}
 		        var circleShape = new p2.Circle({ radius: 0.5 });
 		        var circleBody = new p2.Body({ mass:1, position:[i*2,y], fixedX: true, fixedY: true});
 		        circleBody.addShape(circleShape);
