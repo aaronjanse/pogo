@@ -216,7 +216,7 @@ function initgame() {
 	var OBSTACLE = 8;
 	
 	obstacles = []
-	for(var i = 5; i < 200; i++) {
+	for(var i = 5; i < 400; i++) {
 		if(i%r==0) {
 			if(Math.random()>0.5) {
 				y = data[i]+Math.random()*2
