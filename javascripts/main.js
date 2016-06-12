@@ -44,9 +44,9 @@ function resetHealth() {
 	elm.parentNode.replaceChild(newone, elm);
 	
 	document.getElementById("health").innerHTML=
-	  '<i class="fa fa-heart" aria-hidden="true"></i>&nbsp;'
-	+ '<i id="h2" class="fa fa-heart" aria-hidden="true"></i>&nbsp;'
-	+ '<i id="h3" class="fa fa-heart" aria-hidden="true"></i>&nbsp;';
+	  '<i class="fa fa-heart" aria-hidden="true"></i> '
+	+ '<i id="h2" class="fa fa-heart" aria-hidden="true"></i> '
+	+ '<i id="h3" class="fa fa-heart" aria-hidden="true"></i>';
 }
 
 function loseHeart() {
@@ -57,23 +57,23 @@ function loseHeart() {
 	elm.parentNode.replaceChild(newone, elm);
 	if(lives==2) {
 		document.getElementById("health").innerHTML=
-			  '<i class="fa fa-heart" aria-hidden="true"></i>&nbsp;'
-			+ '<i id="h2" class="fa fa-heart" aria-hidden="true"></i>&nbsp;'
-			+ '<i id="h3" class="fa fa-heart-o" aria-hidden="true"></i>&nbsp;';
+			  '<i class="fa fa-heart" aria-hidden="true"></i> '
+			+ '<i id="h2" class="fa fa-heart" aria-hidden="true"></i> '
+			+ '<i id="h3" class="fa fa-heart-o" aria-hidden="true"></i>';
 	}
 	
 	if(lives==1) {
 		document.getElementById("health").innerHTML=
-			  '<i class="fa fa-heart" aria-hidden="true"></i>&nbsp;'
-			+ '<i id="h2" class="fa fa-heart-o" aria-hidden="true"></i>&nbsp;'
-			+ '<i id="h3" class="fa fa-heart-o" aria-hidden="true"></i>&nbsp;';
+			  '<i class="fa fa-heart" aria-hidden="true"></i> '
+			+ '<i id="h2" class="fa fa-heart-o" aria-hidden="true"></i> '
+			+ '<i id="h3" class="fa fa-heart-o" aria-hidden="true"></i>';
 	}
 	
 	if(lives<=0) {
 		document.getElementById("health").innerHTML=
-			  '<i class="fa fa-heart-o" aria-hidden="true"></i>&nbsp;'
-			+ '<i id="h2" class="fa fa-heart-o" aria-hidden="true"></i>&nbsp;'
-			+ '<i id="h3" class="fa fa-heart-o" aria-hidden="true"></i>&nbsp;';
+			  '<i class="fa fa-heart-o" aria-hidden="true"></i> '
+			+ '<i id="h2" class="fa fa-heart-o" aria-hidden="true"></i>'
+			+ '<i id="h3" class="fa fa-heart-o" aria-hidden="true"></i>';
 	}
 }
 
