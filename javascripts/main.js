@@ -160,8 +160,7 @@ function initgame() {
 	
 	pogo.frame.shape = new p2.Box({
 		width : 0.5,
-		height : 1.5,
-		sensor: true
+		height : 1.5
 	});
 	
 	pogo.frame.body = new p2.Body({
@@ -213,7 +212,12 @@ function initgame() {
 	heightfield.body.addShape(heightfield.shape);
 	world.addBody(heightfield.body);
 	
-	var OBSTACLE = 8;
+	// Setup Collisions
+	var FRAME = 1, STICK = 2, GROUND = 4, OBSTACLE = 8;
+	
+	pogo.frame.shape.collisionGroup = FRAME;
+	pogo.stick.shape.collisionGroup = STICK;
+	heightfield.shape.collisionGroup = GROUND;
 	
 	obstacles = []
 	for(var i = 5; i < 400; i++) {
@@ -223,25 +227,18 @@ function initgame() {
 			} else {
 				y = data[i]+5-Math.random()*2
 			}
-	        var circleShape = new p2.Circle({ radius: 0.5 });
+	        var circleShape = new p2.Circle({ radius: 0.5, sensor: true });
 	        var circleBody = new p2.Body({ mass:1, position:[i*2,y], fixedX: true, fixedY: true});
 	        circleBody.addShape(circleShape);
 	        circleShape.collisionGroup = OBSTACLE;
-//	        circleShape.collisionMask = -1
+	        circleShape.collisionMask = FRAME|STICK;
 	        obstacles.push(circleBody);
 	        world.addBody(circleBody);
 		}
 	}
 	
-	// Setup Collisions
-	var FRAME = 1, STICK = 2, GROUND = 4;
-	
-	pogo.frame.shape.collisionGroup = FRAME;
-	pogo.stick.shape.collisionGroup = STICK;
-	heightfield.shape.collisionGroup = GROUND;
-	
-	pogo.frame.shape.collisionMask = ~STICK;
-	pogo.stick.shape.collisionMask = ~FRAME;
+	pogo.frame.shape.collisionMask = GROUND|OBSTACLE;
+	pogo.stick.shape.collisionMask = GROUND|OBSTACLE;
 	heightfield.shape.collisionMask = -1;
 	
 	world.on("beginContact",function(event){
