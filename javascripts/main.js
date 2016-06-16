@@ -72,7 +72,7 @@ function loseHeart() {
 	if(lives<=0) {
 		document.getElementById("health").innerHTML=
 			  '<i class="fa fa-heart-o" aria-hidden="true"></i> '
-			+ '<i id="h2" class="fa fa-heart-o" aria-hidden="true"></i>'
+			+ '<i id="h2" class="fa fa-heart-o" aria-hidden="true"></i> '
 			+ '<i id="h3" class="fa fa-heart-o" aria-hidden="true"></i>';
 	}
 }
