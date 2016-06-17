@@ -253,7 +253,7 @@ function render() {
 				initgame();
 			}, 1000*3);
 		}
-		console.log(endscore+" - "+topscore)
+		
 		var msg = "";
 		if(newtopscore) {
 			msg = "New High Score!\n"
