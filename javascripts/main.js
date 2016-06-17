@@ -8,6 +8,8 @@ var tutorialm = false
 
 var leftplay = false;
 
+var topscore = 0
+
 var score = 0
 
 var world, pogo;
@@ -262,7 +264,20 @@ console.log(x)
 	return x;
 }
 
+//from http://stackoverflow.com/a/3261380
+function isEmpty(str) {
+    return (!str || 0 === str.length);
+}
+
 function initgame() {
+	
+	cookie = getCookie("topscore")
+	if(isEmpty(cookie)) {
+		document.cookie = "topscore=0; expires=Tue, 19 Jan 2038 03:14:07 UTC;";
+	} else {
+		topscore=parseInt(cookie)
+	}
+	
 	score=0
 	secnum = 0
 	lives = 3

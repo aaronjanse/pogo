@@ -51,7 +51,7 @@ var endscore = 0
 function render() {
 	var px = pogo.frame.body.position[0]
 	if(px>secwidth) {
-		console.log("Sec #2")
+//		console.log("Sec #2")
 	}
 	
 	if(px-w/50/2>secwidth) {
@@ -59,11 +59,11 @@ function render() {
 		removeSection(sectionB)
 		sectionA=changenum(sectionB, 0, 1)
 		sectionB=changenum(generateSection(), 1, 0);
-		console.log(pogo.frame.body.position[0]/secwidth)
+//		console.log(pogo.frame.body.position[0]/secwidth)
 		pogo.frame.body.position[0]-=secwidth
 		pogo.stick.body.position[0]-=secwidth
-		console.log(pogo.frame.body.position[0]/secwidth)
-		console.log("Sec #1")
+//		console.log(pogo.frame.body.position[0]/secwidth)
+//		console.log("Sec #1")
 		addSection(sectionA)
 		addSection(sectionB)
 		score+=secwidth
@@ -233,6 +233,14 @@ function render() {
 		ctx.textAlign = "center";
 		if (!pendingquit) {
 			endscore = score + Math.round(pogo.frame.body.position[0]);
+			newtopscore=false
+//			console.log("TOP: "+topscore)
+			if(endscore>topscore) {
+				topscore=endscore
+				newtopscore=true
+				document.cookie = "topscore="+endscore+"; expires=Tue, 19 Jan 2038 03:14:07 UTC";
+			}
+			
 			pendingquit = true
 			setTimeout(function() {
 //				return;
@@ -245,14 +253,37 @@ function render() {
 				initgame();
 			}, 1000*3);
 		}
-		ctx.fillText("Score: "+endscore, canvas.width/2, canvas.height/2-40); 
+		console.log(endscore+" - "+topscore)
+		var msg = "";
+		if(newtopscore) {
+			msg = "New High Score!\n"
+		}
+		ctx.fillText(msg+"Score: "+endscore, canvas.width/2, canvas.height/2-40); 
 	} else {
 		ctx.font = "16px Comic Sans MS";
 		ctx.fillStyle = "black";
 		ctx.textAlign = "left";
-		
-		ctx.fillText("Score: "+(score+Math.round(pogo.frame.body.position[0])), 10, 20); 
+		ctx.fillText("High Score: "+topscore, 10, 20); 
+		ctx.fillText("Score: "+(score+Math.round(pogo.frame.body.position[0])), 10, 36); 
 	}
+}
+
+var newtopscore = false
+
+// from w3schools
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length,c.length);
+        }
+    }
+    return "";
 }
 
 function drawObstacles() {
