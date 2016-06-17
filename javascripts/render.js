@@ -94,7 +94,9 @@ function render() {
 	
 	
 	ctx.save();
-	xscroll = -pogo.frame.body.position[0]
+	if(px>=w/50/2) {
+		xscroll = -pogo.frame.body.position[0]
+	}
 	v = pogo.frame.body.position[1]-yscroll
 	
 	if (Math.abs(v)>0.35) {
@@ -232,7 +234,7 @@ function render() {
 		ctx.fillStyle = "red";
 		ctx.textAlign = "center";
 		if (!pendingquit) {
-			endscore = score + Math.round(pogo.frame.body.position[0]);
+			endscore = score + Math.round(pogo.frame.body.position[0])-Math.floor(w/50/2);
 			newtopscore=false
 //			console.log("TOP: "+topscore)
 			if(endscore>topscore) {
@@ -264,7 +266,7 @@ function render() {
 		ctx.fillStyle = "black";
 		ctx.textAlign = "left";
 		ctx.fillText("High Score: "+topscore, 10, 20); 
-		ctx.fillText("Score: "+(score+Math.round(pogo.frame.body.position[0])), 10, 36); 
+		ctx.fillText("Score: "+(score-Math.floor(w/50/2)+Math.round(pogo.frame.body.position[0])), 10, 36); 
 	}
 }
 
@@ -289,7 +291,7 @@ function getCookie(cname) {
 function drawObstacles() {
 	var m = w/50/2
 	var d = m-1
-	var px = pogo.frame.body.position[0]
+	var px = -xscroll
 	var i1 = Math.floor((px+d)/(r*2))
 	
 	for(var i = 0; i < obstacles.length; i++) {
@@ -351,7 +353,7 @@ function drawObstacles1(s) {
 	var b = s.h.body.position[0]!=-1
 	var m = w/50/2
 	var d = m-1
-	var px = pogo.frame.body.position[0]
+	var px = -xscroll//pogo.frame.body.position[0]
 	var i1 = Math.floor(((px)+d)/(r*2))
 	
 	for(var i = 0; i < s.o.length; i++) {
