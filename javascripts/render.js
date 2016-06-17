@@ -141,7 +141,7 @@ function render() {
 	ctx.beginPath();
 	ctx.moveTo(x, -h/50);
 	
-	var px = pogo.frame.body.position[0]
+	var px = -xscroll//pogo.frame.body.position[0]
 	
 	var cdata = sectionA.d.slice(0, -1).concat(sectionB.d)
 	
