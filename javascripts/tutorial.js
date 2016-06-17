@@ -1,5 +1,12 @@
 var lvl = 0;
 
+var numDataPoints = 500
+var heightfield = new Object()
+var data = [];
+
+var obstacles = []
+
+
 function rendertut() {
 	if(pogo.frame.body.position[0]<0) {
 		gameOver = true;

@@ -46,6 +46,25 @@ function animate(time) {
 var xscroll = 0
 var yscroll = 0
 function render() {
+	var px = pogo.frame.body.position[0]
+	if(px>secwidth) {
+		console.log("Sec #2")
+	}
+	
+	if(px-w/50/2>secwidth) {
+		removeSection(sectionA)
+		removeSection(sectionB)
+		sectionA=changenum(sectionB, 0, 1)
+		sectionB=changenum(generateSection(), 1, 0);
+		console.log(pogo.frame.body.position[0]/secwidth)
+		pogo.frame.body.position[0]-=secwidth
+		pogo.stick.body.position[0]-=secwidth
+		console.log(pogo.frame.body.position[0]/secwidth)
+		console.log("Sec #1")
+		addSection(sectionA)
+		addSection(sectionB)
+	}
+	
 	if(pogo.frame.body.position[0]<0) {
 		gameOver = true;
 		leftplay = false;
@@ -100,31 +119,43 @@ function render() {
 	
 	// drawBox(pogo.frame)
 	// drawPlane();
-	var y = heightfield.body.position[1]
-	// y = -1
-	var x = heightfield.body.position[0]
+//	var y = heightfield.body.position[1]
+//	// y = -1
+//	var x = heightfield.body.position[0]
 	
 	
 //	x+=xscroll
 	// x = 0
+	
+//	var x = sectionA.h.body.position[0]
+//	var y = sectionA.h.body.position[1]
+	var x = -1;
+	var y = -1;
 	
 	ctx.beginPath();
 	ctx.moveTo(x, -h/50);
 	
 	var px = pogo.frame.body.position[0]
 	
-	var i = 0;
-	for ( var d in data) {
-		var x1 = i * heightfield.shape.elementWidth
+	var cdata = sectionA.d.slice(0, -1).concat(sectionB.d)
+	
+	for (var i = 0; i < cdata.length; i++) {
+		var x1 = i * 2//sectionA.h.shape.elementWidth
 		if(x1>=px-w/50/2-1) {
-			ctx.lineTo(x + x1, y + data[i]);
+			ctx.lineTo(x + x1, y + cdata[i]);
 		}
+		
+//		if(i==sectionA.d.length-1){
+//			ctx.lineTo(x+x1, -h/50)
+//		}
 		if(x1>px+w/50/2+2) {
 			break;
 		}
-		i += 1;
+//		i += 1;
 	}
-	ctx.lineTo(x+data.length-1*heightfield.shape.elementWidth, -h/50)
+	
+	
+	ctx.lineTo(x+cdata.length*2-2, -h/50)
 	// ctx.lineTo(gameWidth/2,gameHeight/2);
 	// ctx.lineTo(-gameWidth/2,gameHeight/2);
 	// ctx.lineTo(-gameWidth/2,-gameHeight/2);
@@ -135,7 +166,11 @@ function render() {
 	}
 	ctx.stroke();
 	
-	drawObstacles();
+//	console.log(px/secwidth)
+	
+	drawObstacles1(sectionA)
+	drawObstacles1(sectionB)
+//	drawSection(sectionB)
 	
 	// Restore transform
 	
@@ -218,6 +253,34 @@ function render() {
 	}
 }
 
+function drawObstacles() {
+	var m = w/50/2
+	var d = m-1
+	var px = pogo.frame.body.position[0]
+	var i1 = Math.floor((px+d)/(r*2))
+	
+	for(var i = 0; i < obstacles.length; i++) {
+		o = obstacles[i]
+		if(Math.abs(o.position[0]-px)<=m) {
+			ctx.beginPath();
+			ctx.arc(o.position[0], o.position[1], 0.5, 0, 2 * Math.PI, false);
+			ctx.stroke()
+		}
+	}
+	
+	
+	
+	
+//	if(px+d<obstacles[i].position[0]) {
+//		ctx.beginPath();
+//		ctx.arc(px+d, obstacles[i].position[1], 0.5, 0, 2 * Math.PI, false);
+//		ctx.strokeStyle = "#555555"
+//		ctx.stroke()
+	canvas_arrow(px+d-0.3, obstacles[i1].position[1], px+d+0.5, obstacles[i1].position[1])
+//	}
+	ctx.strokeStyle = "#000000"
+}
+
 function drawpogo() {
 	ctx.fillStyle = color.stick;
 	drawbox(pogo.stick)
@@ -251,14 +314,15 @@ function drawbox(obj) {
 	ctx.restore();
 }
 
-function drawObstacles() {
+function drawObstacles1(s) {
+	var b = s.h.body.position[0]!=-1
 	var m = w/50/2
 	var d = m-1
 	var px = pogo.frame.body.position[0]
-	var i1 = Math.floor((px+d)/(r*2))
+	var i1 = Math.floor(((px)+d)/(r*2))
 	
-	for(var i = 0; i < obstacles.length; i++) {
-		o = obstacles[i]
+	for(var i = 0; i < s.o.length; i++) {
+		o = s.o[i]
 		if(Math.abs(o.position[0]-px)<=m) {
 			ctx.beginPath();
 			ctx.arc(o.position[0], o.position[1], 0.5, 0, 2 * Math.PI, false);
@@ -274,9 +338,18 @@ function drawObstacles() {
 //		ctx.arc(px+d, obstacles[i].position[1], 0.5, 0, 2 * Math.PI, false);
 //		ctx.strokeStyle = "#555555"
 //		ctx.stroke()
-	canvas_arrow(px+d-0.3, obstacles[i1].position[1], px+d+0.5, obstacles[i1].position[1])
+//	console.log(s.o[i1])
+	try {
+	if(!b) {
+		var co = sectionA.o.concat(sectionB.o)
+	
+	canvas_arrow(px+d-0.3, co[i1].position[1], px+d+0.5, co[i1].position[1])
 //	}
 	ctx.strokeStyle = "#000000"
+	}
+	} catch (e) {
+		return;
+	}
 }
 
 // from http://stackoverflow.com/a/6333775

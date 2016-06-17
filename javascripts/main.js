@@ -11,19 +11,28 @@ var leftplay = false;
 var score = null
 
 var world, pogo;
-var obstacles = [];
 
 var firstrh = true
-
-var numDataPoints = 500;
-var data = [];
-var heightfield = new Object();
 
 var angularVelocity = -0.25
 
 var stiffness = 350, damping = 0.5, restLength = 0.25
 
-var r = 10 //obstacle rarity
+var FRAME = 1, STICK = 2, GROUND = 4, OBSTACLE = 8;
+
+var r = 10 //obstacle rarity (must be even)
+
+var sectionA = {
+	d: null,
+	h: null,
+	o: null
+}
+
+var sectionB = {
+	d: null,
+	h: null,
+	o: null
+}
 
 function fullscreen() {
 //	var check = false; //from detectmobilebrowsers.com
@@ -101,21 +110,9 @@ function init() {
 	h = canvas.height;
 	ctx = canvas.getContext("2d");
 	ctx.lineWidth = 0.05;
-	// Init p2.js
 	
 	noise.seed(Math.random()*10);
-	data=[]
-	data.push(0)
-	
-	for (var i = 0; i < numDataPoints; i++) {
-		v = i / 10
-		
-		var value = noise.simplex2(v, 0);
-		var value1 = noise.perlin2(v, 0);
-		// data.push(0.5*Math.cos(0.2*i) * Math.sin(0.5*i) + 0.6*Math.sin(0.1*i)
-		// * Math.sin(0.05*i));
-		data.push(value * 1.75)
-	}
+	// Init p2.js
 	
 	if(!tutorialm) {
 		initgame()
@@ -125,7 +122,148 @@ function init() {
 	initControls()
 }
 
+var secnum = 0;
+var secwidth = null;
+var padding = 2;
+
+function copysec(s) {
+//	return {
+//		d: s.d,
+//		h: {body: s.h.body, shape: s.h.shape},
+//		o: s.o
+//	};
+	
+//	return Object.assign({},object)
+//	return JSON.parse(JSON.stringify(s));
+//	console.log(s)
+//	return jQuery.extend(true, {}, s)
+	
+	var obstacles = []
+	var idx = 0
+	for(var i = 1; i < s.d.length; i++) {
+		if(i%r==0) {
+//			y = s.od[idx]
+			
+	        var circleShape = new p2.Circle({ radius: 0.5, sensor: true });
+	        var circleBody = new p2.Body({ mass:1, position:s.o[idx].position, fixedX: true, fixedY: true});
+	        circleBody.addShape(circleShape);
+	        circleShape.collisionGroup = OBSTACLE;
+	        circleShape.collisionMask = FRAME|STICK;
+	        obstacles.push(circleBody);
+	        idx+=1
+		}
+	}
+	
+	var heightfield = new Object();
+	heightfield.shape = new p2.Heightfield({
+		heights : s.d,
+		elementWidth : 2
+	});
+	heightfield.body = new p2.Body({
+		position : s.h.body.position
+	});
+	heightfield.shape.collisionGroup = GROUND;
+	heightfield.shape.collisionMask = FRAME|STICK;
+	
+	heightfield.body.addShape(heightfield.shape);
+	
+	return {
+		d: s.d,
+		h: heightfield,
+		o: obstacles,
+		od: s.od
+	}
+}
+
+function changenum(s1, num, oldnum) {
+	var s = copysec(s1)
+	s.h.body.position[0] += (num-oldnum)*secwidth
+	for(var i = 0; i < s.o.length; i++) {
+		s.o[i].position[0]+=(num-oldnum)*secwidth
+	}
+	return s;
+}
+
+function generateSection() {
+	var data = [];
+//	data.push(0)
+	
+	for (var i = 0; i <= secwidth/2; i++) {
+		var v = (i+secnum*secwidth/2) / 10
+		
+		var value = noise.simplex2(v, 0);
+//		var value1 = noise.perlin2(v, 0);
+		// data.push(0.5*Math.cos(0.2*i) * Math.sin(0.5*i) + 0.6*Math.sin(0.1*i)
+		// * Math.sin(0.05*i));
+		data.push(value * 1.75)
+	}
+	
+	var heightfield = new Object();
+	heightfield.shape = new p2.Heightfield({
+		heights : data,
+		elementWidth : 2
+	});
+	heightfield.body = new p2.Body({
+		position : [ -1, -1 ]
+	});
+	heightfield.shape.collisionGroup = GROUND;
+	heightfield.shape.collisionMask = FRAME|STICK;
+	
+	heightfield.body.addShape(heightfield.shape);
+	
+	var od = []
+	var y = null;
+	var obstacles = [];
+	for(var i = 1; i < data.length; i++) {
+		if(i%r==0) {
+			if(Math.random()>0.5) {
+				y = data[i]+Math.random()*2
+			} else {
+				y = data[i]+5-Math.random()*2
+			}
+			od.push(y)
+	        var circleShape = new p2.Circle({ radius: 0.5, sensor: true });
+	        var circleBody = new p2.Body({ mass:1, position:[i*2,y], fixedX: true, fixedY: true});
+	        circleBody.addShape(circleShape);
+	        circleShape.collisionGroup = OBSTACLE;
+	        circleShape.collisionMask = FRAME|STICK;
+	        obstacles.push(circleBody);
+		}
+	}
+	
+	secnum+=1
+	
+	return {
+		d: data,
+		h: heightfield,
+		o: obstacles,
+		od: od
+	};
+}
+
+function addSection(s) {
+	world.addBody(s.h.body)
+	for(var i = 0; i < s.o.length; i++) {
+		world.addBody(s.o[i])
+	}
+}
+
+function removeSection(s) {
+	world.removeBody(s.h.body)
+	for(var i = 0; i < s.o.length; i++) {
+		world.removeBody(s.o[i])
+	}
+}
+
+function getsecwidth() {
+	var canvaswidth = Math.ceil(w/50+padding) //Get the ceil of the canvas width (along with extra padding) in game units
+	var x = Math.ceil(canvaswidth/r)*r // round so that distance between obstacles is consistent between sections
+console.log(x)
+	return x;
+}
+
 function initgame() {
+	secnum = 0
 	lives = 3
 	resetHealth()
 	gameOver = false
@@ -142,8 +280,6 @@ function initgame() {
 		frame : new Object(),
 		spring : null
 	};
-	
-	
 
 	pogo.stick.shape = new p2.Box({
 		width : 0.25,
@@ -202,48 +338,28 @@ function initgame() {
 	
 	world.addSpring(pogo.spring);
 	
-	heightfield.shape = new p2.Heightfield({
-		heights : data,
-		elementWidth : 2
-	});
-	heightfield.body = new p2.Body({
-		position : [ -1, -1 ]
-	});
-	heightfield.body.addShape(heightfield.shape);
-	world.addBody(heightfield.body);
+	secwidth = getsecwidth()
+	
+	sectionA = generateSection();
+//	sectionB = changenum(copysec(sectionA), 1);
+	sectionB = changenum(generateSection(), 1, 0);
+	
+	addSection(sectionA)
+	addSection(sectionB)
 	
 	// Setup Collisions
-	var FRAME = 1, STICK = 2, GROUND = 4, OBSTACLE = 8;
 	
 	pogo.frame.shape.collisionGroup = FRAME;
 	pogo.stick.shape.collisionGroup = STICK;
-	heightfield.shape.collisionGroup = GROUND;
-	
-	obstacles = []
-	for(var i = 5; i < 400; i++) {
-		if(i%r==0) {
-			if(Math.random()>0.5) {
-				y = data[i]+Math.random()*2
-			} else {
-				y = data[i]+5-Math.random()*2
-			}
-	        var circleShape = new p2.Circle({ radius: 0.5, sensor: true });
-	        var circleBody = new p2.Body({ mass:1, position:[i*2,y], fixedX: true, fixedY: true});
-	        circleBody.addShape(circleShape);
-	        circleShape.collisionGroup = OBSTACLE;
-	        circleShape.collisionMask = FRAME|STICK;
-	        obstacles.push(circleBody);
-	        world.addBody(circleBody);
-		}
-	}
 	
 	pogo.frame.shape.collisionMask = GROUND|OBSTACLE;
 	pogo.stick.shape.collisionMask = GROUND|OBSTACLE;
-	heightfield.shape.collisionMask = -1;
 	
 	world.on("beginContact",function(event){
 		if(event.bodyA == pogo.frame.body || event.bodyB == pogo.frame.body) {
-			var h = event.bodyA == heightfield.body || event.bodyB == heightfield.body
+//			return;
+			var h = event.bodyA == sectionA.h.body || event.bodyB == sectionA.h.body
+			h = h || event.bodyA == sectionB.h.body || event.bodyB == sectionB.h.body
 			if(!h) {
 			lives-=1
 			loseHeart()
