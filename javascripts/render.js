@@ -45,6 +45,9 @@ function animate(time) {
 
 var xscroll = 0
 var yscroll = 0
+
+var endscore = 0
+
 function render() {
 	var px = pogo.frame.body.position[0]
 	if(px>secwidth) {
@@ -63,6 +66,7 @@ function render() {
 		console.log("Sec #1")
 		addSection(sectionA)
 		addSection(sectionB)
+		score+=secwidth
 	}
 	
 	if(pogo.frame.body.position[0]<0) {
@@ -228,7 +232,7 @@ function render() {
 		ctx.fillStyle = "red";
 		ctx.textAlign = "center";
 		if (!pendingquit) {
-			score = Math.round(pogo.frame.body.position[0]);
+			endscore = score + Math.round(pogo.frame.body.position[0]);
 			pendingquit = true
 			setTimeout(function() {
 //				return;
@@ -241,15 +245,13 @@ function render() {
 				initgame();
 			}, 1000*3);
 		}
-		ctx.fillText("Score: "+score, canvas.width/2, canvas.height/2-40); 
+		ctx.fillText("Score: "+endscore, canvas.width/2, canvas.height/2-40); 
 	} else {
 		ctx.font = "16px Comic Sans MS";
 		ctx.fillStyle = "black";
 		ctx.textAlign = "left";
-
-		score = Math.round(pogo.frame.body.position[0]);
 		
-		ctx.fillText("Score: "+score, 10, 20); 
+		ctx.fillText("Score: "+(score+Math.round(pogo.frame.body.position[0])), 10, 20); 
 	}
 }
 

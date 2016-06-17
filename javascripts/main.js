@@ -8,7 +8,7 @@ var tutorialm = false
 
 var leftplay = false;
 
-var score = null
+var score = 0
 
 var world, pogo;
 
@@ -263,6 +263,7 @@ console.log(x)
 }
 
 function initgame() {
+	score=0
 	secnum = 0
 	lives = 3
 	resetHealth()
