@@ -291,6 +291,8 @@ function initgame() {
 	world.defaultContactMaterial.friction = 100;
 	world.defaultContactMaterial.restitution = 0.1;
 	
+	var pogox = w/50/2;
+	
 	pogo = {
 		stick : new Object(),
 		frame : new Object(),
@@ -305,7 +307,7 @@ function initgame() {
 	pogo.stick.body = new p2.Body({
 		mass : 0.25,
 //		damping: 0.2,
-		position : [ 0, 2.75],
+		position : [ pogox, 2.75],
 		angularVelocity : angularVelocity,
 		velocity : [ 5, 0 ]
 	});
@@ -317,7 +319,7 @@ function initgame() {
 	
 	pogo.frame.body = new p2.Body({
 		mass : 3,
-		position : [ 0, 3 ],
+		position : [ pogox, 3 ],
 		angularVelocity : angularVelocity,
 		velocity : [ 5, 0 ]
 	});
