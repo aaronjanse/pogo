@@ -218,10 +218,13 @@ function generateSection() {
 	var obstacles = [];
 	for(var i = 1; i < data.length; i++) {
 		if(i%r==0) {
-			if(Math.random()>0.5) {
+			if(Math.random()>0.5&&secnum!=0) {
 				y = data[i]+Math.random()*2
 			} else {
 				y = data[i]+5-Math.random()*2
+			}
+			if(secnum==0) {
+				y+=4
 			}
 			od.push(y)
 	        var circleShape = new p2.Circle({ radius: 0.5, sensor: true });
