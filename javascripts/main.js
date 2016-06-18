@@ -272,6 +272,14 @@ function isEmpty(str) {
     return (!str || 0 === str.length);
 }
 
+var lvlCnt = 5;
+
+var lvl1length = 50;
+
+function distToTime(dist) {
+	return lvlCnt*(1-Math.pow(1-1/lvlCnt, dist/lvl1length));
+}
+
 function initgame() {
 	initRender();
 	cookie = getCookie("topscore")

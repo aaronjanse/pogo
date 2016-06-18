@@ -4,6 +4,8 @@ var colorful = true;
 
 var colordef = {
 		sky: "#4d79ff",
+		skyday: "#4d79ff",
+		skynight: "#241c52",
 		ground: "#00b300",
 		body: "#ed00ed",
 		stick: "#ff66ff"
@@ -11,6 +13,8 @@ var colordef = {
 
 var color = {
 		sky: "#4d79ff",
+		skyday: "#4d79ff",
+		skynight: "#241c52",
 		ground: "#00b300",
 		body: "#ed00ed",
 		stick: "#ff66ff"
@@ -104,6 +108,32 @@ var yscroll = 0
 
 var endscore = 0
 
+
+//from http://stackoverflow.com/a/11293378
+function lerp(a, b, u) {
+    return (1 - u) * a + u * b;
+};
+
+
+//from http://stackoverflow.com/a/5624139
+function componentToHex(c) {
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+}
+
+function rgbToHex(r, g, b) {
+    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+
+function hexToRgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+}
+
 function render() {
 	var px = pogo.frame.body.position[0]
 	if(px>secwidth) {
@@ -154,7 +184,9 @@ function render() {
 	
 	var ysold = yscroll;
 	
-	ctx.save();
+	
+	
+	
 	if(px>=w/50/2) {
 		xscroll = -pogo.frame.body.position[0]
 	}
@@ -170,6 +202,42 @@ function render() {
 		lerpval = 0.0325
 	}
 	yscroll = v*lerpval+yscroll
+	
+	var progress = distToTime(score+pogo.frame.body.position[0]-w/50/2) // half days
+	
+	var angle = progress/2*2*Math.PI-Math.PI/2
+	
+	ctx.font = "100px FontAwesome";
+	ctx.fillStyle = "#ffff00";
+	ctx.textAlign = "center";
+	ctx.fillText("\uf185", Math.cos(angle)*h/2+w/2, Math.sin(angle)*h/2+yscroll*50+5*h/9)
+	
+	ctx.fillStyle = "#ddddff";
+	ctx.textAlign = "center";
+	ctx.fillText("\uf186", Math.cos(angle+Math.PI)*h/2+w/2, Math.sin(angle+Math.PI)*h/2+yscroll*50+5*h/9)
+	
+	var nightCol = hexToRgb(color.skynight)
+	var dayCol = hexToRgb(color.skyday)
+	
+	var t = progress%2
+	
+	var a = dayCol
+	var b = nightCol
+	
+	if(t>1) {
+		var tmp = a;
+		a = b;
+		b = tmp;
+	}
+	var r = Math.round(lerp(a.r, b.r, t%1));
+    var g = Math.round(lerp(a.g, b.g, t%1));
+    var b = Math.round(lerp(a.b, b.b, t%1));
+	
+    
+    color.sky = rgbToHex(r, g, b)
+
+	
+	ctx.save();
 //	yscroll = Math.max(yscroll, 0)
 //	yscroll = Math.min(yscroll, 1)
 	
