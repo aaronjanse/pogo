@@ -16,6 +16,62 @@ var color = {
 		stick: "#ff66ff"
 }
 
+var cloudSpeed = 1;
+var cloudSize = 100;
+var cloudSpeedDef = 1.5;
+var cloudSpeedMin = 0.2;
+var cloudCnt = 5;
+
+function moveCloud() {
+	var left = this.x<-cloudSize
+	var right = this.x>this.w*2+cloudSize
+	if(left||right) {
+		this.y = (this.h/2-20-this.h/(1.75*50)-10)*Math.random()-10
+		this.speed = Math.random()*(cloudSpeedDef-cloudSpeedMin)+cloudSpeedMin
+		if(left) {
+			this.x = this.w+cloudSize // to right
+		} else {
+			this.x = -cloudSize; // to left
+		}
+//		this.x = (this.x+this.w)%this.w;
+	}
+	
+	this.x+=this.speed*cloudSpeed;
+}
+
+function renderCloud() {
+	ctx.shadowBlur=7;
+	ctx.shadowColor="black";
+	ctx.font = cloudSize+"px FontAwesome";
+	ctx.globalAlpha="0.7"
+	ctx.fillStyle = "#ffffff";
+	ctx.textAlign = "center";
+	ctx.fillText("\uf0c2", this.x-cloudSize/2, this.y)
+	ctx.shadowBlur=0;
+	ctx.globalAlpha="1"
+}
+
+function Cloud(x, y, speed, w, h) {
+	this.x = x;
+	this.y = y;
+	this.w = w;
+	this.h = h;
+	this.speed = speed;
+	this.update = moveCloud;
+	this.render = renderCloud;
+}
+
+var clouds = [];
+
+function initRender() {
+	clouds = [];
+	for(var i = 0; i < cloudCnt; i++) {
+		clouds.push(new Cloud(Math.random()*w, (h/2-20-h/(1.75*50)-10)*Math.random()-10, Math.random()*(cloudSpeedDef-cloudSpeedMin)+cloudSpeedMin, w, h))
+	}
+	
+	lastpx = w/50/2;
+}
+
 // Animation loop
 
 speed = 60*5
@@ -91,7 +147,12 @@ function render() {
 	// Transform the canvas
 	// Note that we need to flip the y axis since Canvas pixel coordinates
 	// goes from top to bottom, while physics does the opposite.
+	var xdelta = (pogo.frame.body.position[0]+xscroll)*50%secwidth
+	for(var i = 0; i < clouds.length; i++) {
+		clouds[i].x-=xdelta;
+	}
 	
+	var ysold = yscroll;
 	
 	ctx.save();
 	if(px>=w/50/2) {
@@ -116,6 +177,10 @@ function render() {
 	
 	ctx.translate(w / 2, h / 2); // Translate to the center
 	ctx.scale(50, -50); // Zoom in and flip y axis
+	
+	for(var i = 0; i < clouds.length; i++) {
+		clouds[i].y+=(yscroll-ysold)*50;
+	}
 	
 	ctx.translate(xscroll, -yscroll)
 	// Draw all bodies
@@ -173,7 +238,19 @@ function render() {
 	ctx.stroke();
 	
 //	console.log(px/secwidth)
+//	
+	ctx.restore();
+	for(var i = 0; i < clouds.length; i++) {
+		clouds[i].update();
+		clouds[i].render();
+	}
+	ctx.save();
 	
+	ctx.translate(w / 2, h / 2); // Translate to the center
+	ctx.scale(50, -50); // Zoom in and flip y axis
+	
+	ctx.translate(xscroll, -yscroll)
+	ctx.strokeStyle="#000000"
 	drawObstacles1(sectionA)
 	drawObstacles1(sectionB)
 //	drawSection(sectionB)
