@@ -48,18 +48,7 @@ var yscroll = 0
 
 var endscore = 0
 
-var cx = null;
-
 function render() {
-//	var elms = document.getElementsByClassName("cloud")
-//	for(var i = 0; i < elms.length; i++) {
-//		elms[i].style.right=(parseInt(elms[i].style.right.slice(0, -2))+50)+"px"
-//	}
-	
-//	cx+=(xscroll-pogo.frame.body.position[0])/10;
-//	document.getElementById("x1").style.right=-cx+"px"
-//	cx=(cx+w)%w
-	
 	var px = pogo.frame.body.position[0]
 	if(px>secwidth) {
 //		console.log("Sec #2")
@@ -120,8 +109,6 @@ function render() {
 		lerpval = 0.0325
 	}
 	yscroll = v*lerpval+yscroll
-	
-	document.getElementById("clouds").style.top=""+(yscroll*50-10)+"px"
 //	yscroll = Math.max(yscroll, 0)
 //	yscroll = Math.min(yscroll, 1)
 	
