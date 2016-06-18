@@ -273,7 +273,7 @@ function isEmpty(str) {
 }
 
 function initgame() {
-	
+	cx=w
 	cookie = getCookie("topscore")
 	if(isEmpty(cookie)) {
 		document.cookie = "topscore=0; expires=Tue, 19 Jan 2038 03:14:07 UTC;";

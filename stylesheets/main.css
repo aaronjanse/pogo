@@ -1,3 +1,11 @@
+:root {
+  --cloud-speed: 1;
+}
+
+body {
+	overflow: hidden;
+}
+
 #gamearea {
 	position: relative;
 	border-style: solid;
@@ -231,4 +239,148 @@ body {
 
 #mainmenu h1 {
 	color: #353535;
+}
+
+/* from thecodeplayer */
+#clouds{
+	pointer-events: none;
+	visibility: hidden;
+	position: absolute;
+	top: 0;
+	right: 0;
+	z-index: 5;
+	width: 100%;
+	padding: 100px 0;
+	background-color:rgba(0, 0, 0, 0);
+	background: -webkit-linear-gradient(top, #c9dbe9 0%, #fff 100%);
+	background: -linear-gradient(top, #c9dbe9 0%, #fff 100%);
+	background: -moz-linear-gradient(top, #c9dbe9 0%, #fff 100%);
+}
+
+/*Time to finalize the cloud shape*/
+.cloud {
+	visibility: visible;
+	width: 200px; height: 60px;
+	background: #fff;
+	
+	border-radius: 200px;
+	-moz-border-radius: 200px;
+	-webkit-border-radius: 200px;
+	
+	position: relative; 
+}
+
+#x1 {
+	background-color: red;
+	right: 0px;
+}
+
+.cloud:before, .cloud:after {
+	content: '';
+	position: absolute; 
+	background: #fff;
+	width: 100px; height: 80px;
+	position: absolute; top: -15px; left: 10px;
+	
+	border-radius: 100px;
+	-moz-border-radius: 100px;
+	-webkit-border-radius: 100px;
+	
+	-webkit-transform: rotate(30deg);
+	transform: rotate(30deg);
+	-moz-transform: rotate(30deg);
+}
+
+.cloud:after {
+	width: 120px; height: 120px;
+	top: -55px; left: auto; right: 15px;
+}
+
+/*Time to animate*/
+.x1 {
+	right: -410px;
+	-webkit-animation: moveclouds calc(15s*var(--cloud-speed)) linear infinite;
+	-moz-animation: moveclouds calc(15s*var(--cloud-speed)) linear infinite;
+	-o-animation: moveclouds calc(15s*var(--cloud-speed)) linear infinite;
+}
+
+/*variable speed, opacity, and position of clouds for realistic effect*/
+.x2 {
+	right: -400px;
+	
+	-webkit-transform: scale(0.6);
+	-moz-transform: scale(0.6);
+	transform: scale(0.6);
+	opacity: 0.6; /*opacity proportional to the size*/
+	
+	/*Speed will also be proportional to the size and opacity*/
+	/*More the speed. Less the time in 's' = seconds*/
+	-webkit-animation: moveclouds calc(25s*var(--cloud-speed)) linear infinite;
+	-moz-animation: moveclouds calc(25s*var(--cloud-speed)) linear infinite;
+	-o-animation: moveclouds calc(25s*var(--cloud-speed)) linear infinite;
+}
+
+.x3 {
+	right: -900px; top: -200px;
+	
+	-webkit-transform: scale(0.8);
+	-moz-transform: scale(0.8);
+	transform: scale(0.8);
+	opacity: 0.8; /*opacity proportional to the size*/
+	
+	-webkit-animation: moveclouds calc(20s*var(--cloud-speed)) linear infinite;
+	-moz-animation: moveclouds calc(20s*var(--cloud-speed)) linear infinite;
+	-o-animation: moveclouds calc(20s*var(--cloud-speed)) linear infinite;
+}
+
+.x4 {
+	right: -500px; top: -250px;
+	
+	-webkit-transform: scale(0.75);
+	-moz-transform: scale(0.75);
+	transform: scale(0.75);
+	opacity: 0.75; /*opacity proportional to the size*/
+	
+	-webkit-animation: moveclouds calc(18s*var(--cloud-speed)) linear infinite;
+	-moz-animation: moveclouds calc(18s*var(--cloud-speed)) linear infinite;
+	-o-animation: moveclouds calc(18s*var(--cloud-speed)) linear infinite;
+}
+
+.x5 {
+	right: -1400px; top: -150px;
+	
+	-webkit-transform: scale(0.8);
+	-moz-transform: scale(0.8);
+	transform: scale(0.8);
+	opacity: 0.8; /*opacity proportional to the size*/
+	
+	-webkit-animation: moveclouds1 calc(20s*var(--cloud-speed)) linear infinite;
+	-moz-animation: moveclouds1 calc(20s*var(--cloud-speed)) linear infinite;
+	-o-animation: moveclouds1 calc(20s*var(--cloud-speed)) linear infinite;
+}
+
+@-webkit-keyframes moveclouds {
+	0% {margin-left: 100%;}
+	100% {margin-left: -100%;}
+}
+@-moz-keyframes moveclouds {
+	0% {margin-left: 100%;}
+	100% {margin-left: -100%;}
+}
+@-o-keyframes moveclouds {
+	0% {margin-left: 100%;}
+	100% {margin-left: -100%;}
+}
+
+@-webkit-keyframes moveclouds1 {
+	0% {margin-left: 100%;}
+	100% {margin-left: calc(-500px - 100%);}
+}
+@-moz-keyframes moveclouds1 {
+	0% {margin-left: 100%;}
+	100% {margin-left: calc(-500px - 100%);}
+}
+@-o-keyframes moveclouds1 {
+	0% {margin-left: 100%;}
+	100% {margin-left: calc(-500px - 100%);}
 }
