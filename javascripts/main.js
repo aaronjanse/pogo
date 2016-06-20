@@ -291,7 +291,7 @@ function generateSection() {
 							value += Math.random()*2
 						} else {
 //							ceilverts.pop();
-							ceilverts.push([i*2-ceilx, y-ceily-Math.random()*1.5+1])
+							ceilverts.push([i*2-ceilx, y-ceily-Math.random()*1.5-1])
 						}
 					}
 				} 
