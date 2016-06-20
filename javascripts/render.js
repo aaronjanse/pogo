@@ -235,16 +235,19 @@ function render() {
     var b = Math.round(lerp(a.b, b.b, 1-t%1));
     
     color.sky = rgbToHex(r, g, b)
+    var skyold = color.sky
     
-    if(progress>2&&progress%2<=1) {
+    var caveFade = 0.025
+    
+    if(progress>2&&progress%2<1-caveFade) {
     	color.sky="#222222"
     }
     
-    if(progress%2>1.9) {
+    if(progress%2>2-caveFade) {
     	a = hexToRgb(color.sky)
 		b = hexToRgb("#222222")
 		
-		var val = 1-(2-progress%2)*10
+		var val = 1-(2-progress%2)*1/caveFade
 		
 		var r = Math.round(lerp(a.r, b.r, val));
         var g = Math.round(lerp(a.g, b.g, val));
@@ -253,17 +256,21 @@ function render() {
         color.sky = rgbToHex(r, g, b)
 	}
 	
-	if(progress>2&&progress%2>0.9) {
+	if(progress>2&&progress%2>1-caveFade) {
 		b = hexToRgb(color.sky)
 		a = hexToRgb("#222222")
 		
-		var val = 1-(1-progress%2)*10
+		var val = 1-(1-progress%2)*1/caveFade
 		
 		var r = Math.round(lerp(a.r, b.r, val));
         var g = Math.round(lerp(a.g, b.g, val));
         var b = Math.round(lerp(a.b, b.b, val));
         
         color.sky = rgbToHex(r, g, b)
+	}
+	
+	if(progress>2&&progress%2>1&&progress%2<2-caveFade) {
+		color.sky = skyold
 	}
 	
 	// Ground
@@ -272,11 +279,11 @@ function render() {
     	color.ground="#222222"
     }
     
-    if(progress%2>1.9) {
+    if(progress%2>2-caveFade) {
     	a = hexToRgb(colordef.ground)
 		b = hexToRgb("#222222")
 		
-		var val = 1-(2-progress%2)*10
+		var val = 1-(2-progress%2)*1/caveFade
 		
 		var r = Math.round(lerp(a.r, b.r, val));
         var g = Math.round(lerp(a.g, b.g, val));
@@ -285,11 +292,11 @@ function render() {
         color.ground = rgbToHex(r, g, b)
 	}
 	
-	if(progress>2&&progress%2>0.9) {
+	if(progress>2&&progress%2>1-caveFade) {
 		b = hexToRgb(colordef.ground)
 		a = hexToRgb("#555555")
 		
-		var val = 1-(1-(progress%2))*10
+		var val = 1-(1-(progress%2))*1/caveFade
 		
 		var r = Math.round(lerp(a.r, b.r, val));
         var g = Math.round(lerp(a.g, b.g, val));
@@ -298,7 +305,7 @@ function render() {
         color.ground = rgbToHex(r, g, b)
 	}
 	
-	if(progress>2&&progress%2>1) {
+	if(progress>2&&progress%2>1&&progress%2<2-caveFade) {
 		color.ground=colordef.ground
 	}
 
