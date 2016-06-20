@@ -155,6 +155,22 @@ function render() {
 		score+=secwidth
 	}
 	
+	if(px<w/50/2&&secnum>2) {
+		removeSection(sectionA)
+		removeSection(sectionB)
+		secnum-=2
+		sectionB=changenum(sectionA, 1, 0)
+		sectionA=generateSection()
+//		console.log(pogo.frame.body.position[0]/secwidth)
+		pogo.frame.body.position[0]+=secwidth
+		pogo.stick.body.position[0]+=secwidth
+//		console.log(pogo.frame.body.position[0]/secwidth)
+//		console.log("Sec #1")
+		addSection(sectionA)
+		addSection(sectionB)
+		score-=secwidth
+	}
+	
 	if(pogo.frame.body.position[0]<0) {
 		gameOver = true;
 		leftplay = false;
