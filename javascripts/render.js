@@ -269,8 +269,9 @@ function render() {
         color.sky = rgbToHex(r, g, b)
 	}
 	
-	if(progress>2&&progress%2>1&&progress%2<2-caveFade) {
+	if(((progress>2&&progress%2>1)||(progress<2))&&progress%2<2-caveFade) {
 		color.sky = skyold
+		color.ground=colordef.ground
 	}
 	
 	// Ground
