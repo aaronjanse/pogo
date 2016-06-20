@@ -46,15 +46,22 @@ function ontouchstart(e) {
 		clientX: e.touches[0].clientX,
 		clientY: e.touches[0].clientY
 	}
+	
+	var angle = Math.atan2(currentmouse.clientX-lastmouse.x, currentmouse.clientY-lastmouse.y)
+	pogo.frame.body.angularVelocity = 3*((angle-pogo.frame.body.angle));
 }
 
 function ontouchmove(e) {
+	currentmouse = {
+			clientX: e.touches[0].clientX,
+			clientY: e.touches[0].clientY
+	}
 	e.preventDefault();
 	if(lastmouse.x!=null) {
     	if (lastmouse.x!=e.touches[0].clientX||true) {
     		a = lastmouse.x-e.touches[0].clientX;
     		b = lastmouse.y-e.touches[0].clientY;
-    		pogo.frame.body.angularVelocity = 3*((Math.atan(a/b)-pogo.frame.body.angle));
+    		reacttocontrols()
     	} else {
     		pogo.frame.body.angularVelocity = 0;
     	}
@@ -71,10 +78,6 @@ function ontouchmove(e) {
 	    	}
     	}
     }
-	currentmouse = {
-			clientX: e.touches[0].clientX,
-			clientY: e.touches[0].clientY
-	}
     mousedrag = true
 }
 
@@ -95,7 +98,7 @@ function onmousedown() {
 	pogo.spring.applyForce();
 	
 		  document.onmousemove = function(e) {
-			  
+			  currentmouse = e
 //		    e = e || event
 //		    fixPageXY(e)  
 		    // put ball center under mouse pointer. 25 is half of width/height
@@ -105,7 +108,7 @@ function onmousedown() {
 		    	if (lastmouse.x!=e.clientX||true) {
 		    		a = lastmouse.x-e.clientX;
 		    		b = lastmouse.y-e.clientY;
-		    		pogo.frame.body.angularVelocity = 3*((Math.atan(a/b)-pogo.frame.body.angle));
+		    		reacttocontrols()
 		    	} else {
 		    		pogo.frame.body.angularVelocity = 0;
 		    	}
@@ -122,7 +125,6 @@ function onmousedown() {
 			    	}
 		    	}
 		    }
-		    currentmouse = e
 		    mousedrag = true
 		  }
 		  this.onmouseup = function() {
@@ -137,6 +139,23 @@ function onmousedown() {
 		    pogo.spring.restLength = 1.25;
 		    pogo.spring.applyForce();
 		  }
+}
+
+function reacttocontrols() {
+	var angle = Math.atan2(currentmouse.clientX-lastmouse.x, currentmouse.clientY-lastmouse.y)
+	var diff = getDifference(angle, pogo.frame.body.angle)
+	
+	pogo.frame.body.angularVelocity = 3*diff;
+//	console.log(pogo.frame.body.angle)
+}
+
+// Extremely useful!
+// from https://gist.github.com/Aaronduino/4068b058f8dbc34b4d3a9eedc8b2cbe0
+function getDifference(x, y) {
+	  var a = x-y;
+	  a = (function(i, j) {return i-Math.floor(i/j)*j})(a+Math.PI, Math.PI*2); // (a+180) % 360; this ensures the correct sign
+	  a -= Math.PI;
+	  return a;
 }
 
 function keydown(evt) {
