@@ -205,7 +205,7 @@ function render() {
 	
 	var progress = distToTime(score+pogo.frame.body.position[0]-w/50/2) // half days
 	
-	var angle = progress/2*2*Math.PI-Math.PI/2
+	var angle = progress*Math.PI-Math.PI
 	
 	ctx.font = "100px FontAwesome";
 	ctx.fillStyle = "#ffff00";
@@ -219,7 +219,7 @@ function render() {
 	var nightCol = hexToRgb(color.skynight)
 	var dayCol = hexToRgb(color.skyday)
 	
-	var t = progress%2
+	var t = (progress+0.5)%2 // shift left a quarter day and make it between 0 and 2 for a full day
 	
 	var a = dayCol
 	var b = nightCol
@@ -229,12 +229,78 @@ function render() {
 		a = b;
 		b = tmp;
 	}
-	var r = Math.round(lerp(a.r, b.r, t%1));
-    var g = Math.round(lerp(a.g, b.g, t%1));
-    var b = Math.round(lerp(a.b, b.b, t%1));
 	
+	var r = Math.round(lerp(a.r, b.r, 1-t%1));
+    var g = Math.round(lerp(a.g, b.g, 1-t%1));
+    var b = Math.round(lerp(a.b, b.b, 1-t%1));
     
     color.sky = rgbToHex(r, g, b)
+    
+    if(progress>2&&progress%2<=1) {
+    	color.sky="#222222"
+    }
+    
+    if(progress%2>1.9) {
+    	a = hexToRgb(color.sky)
+		b = hexToRgb("#222222")
+		
+		var val = 1-(2-progress%2)*10
+		
+		var r = Math.round(lerp(a.r, b.r, val));
+        var g = Math.round(lerp(a.g, b.g, val));
+        var b = Math.round(lerp(a.b, b.b, val));
+        
+        color.sky = rgbToHex(r, g, b)
+	}
+	
+	if(progress>2&&progress%2>0.9) {
+		b = hexToRgb(color.sky)
+		a = hexToRgb("#222222")
+		
+		var val = 1-(1-progress%2)*10
+		
+		var r = Math.round(lerp(a.r, b.r, val));
+        var g = Math.round(lerp(a.g, b.g, val));
+        var b = Math.round(lerp(a.b, b.b, val));
+        
+        color.sky = rgbToHex(r, g, b)
+	}
+	
+	// Ground
+	
+	if(progress>2&&progress%2<=1) {
+    	color.ground="#222222"
+    }
+    
+    if(progress%2>1.9) {
+    	a = hexToRgb(colordef.ground)
+		b = hexToRgb("#222222")
+		
+		var val = 1-(2-progress%2)*10
+		
+		var r = Math.round(lerp(a.r, b.r, val));
+        var g = Math.round(lerp(a.g, b.g, val));
+        var b = Math.round(lerp(a.b, b.b, val));
+        
+        color.ground = rgbToHex(r, g, b)
+	}
+	
+	if(progress>2&&progress%2>0.9) {
+		b = hexToRgb(colordef.ground)
+		a = hexToRgb("#555555")
+		
+		var val = 1-(1-(progress%2))*10
+		
+		var r = Math.round(lerp(a.r, b.r, val));
+        var g = Math.round(lerp(a.g, b.g, val));
+        var b = Math.round(lerp(a.b, b.b, val));
+        
+        color.ground = rgbToHex(r, g, b)
+	}
+	
+	if(progress>2&&progress%2>1) {
+		color.ground=colordef.ground
+	}
 
 	
 	ctx.save();
@@ -305,6 +371,89 @@ function render() {
 	}
 	ctx.stroke();
 	
+	///////////////////////////////////////////////
+	var ah1 = sectionA.h1!=null
+	var bh1 = sectionB.h1!=null
+	
+	ctx.fillStyle="#555555"
+	
+	if(ah1) {
+		ctx.beginPath();
+		
+		var startpos = sectionA.h1.body.position
+		var dat = sectionA.h1verts
+		
+//		console.log(xstart)
+//		console.log("")
+//		console.log(dat.length)
+		ctx.moveTo(dat[0][0]+startpos[0], dat[0][1]+startpos[1]);
+		for (var i = 1; i < dat.length-1; i++) {
+			var x1 = i * 2//sectionA.h.shape.elementWidth
+//			if(startpos[0] + x1>=px-w/50/2-1) {
+				ctx.lineTo(startpos[0] + dat[i][0], startpos[1]+dat[i][1]);
+//			}
+			
+//			if(i==sectionA.d.length-1){
+//				ctx.lineTo(x+x1, -h/50)
+//			}
+//			if(startpos[0] + x1>px+w/50/2+2) {
+//				break;
+//			}
+//			i += 1;
+		}
+		
+		
+		ctx.lineTo(dat[dat.length-1][0]+startpos[0], dat[dat.length-1][1]+startpos[1])
+		// ctx.lineTo(gameWidth/2,gameHeight/2);
+		// ctx.lineTo(-gameWidth/2,gameHeight/2);
+		// ctx.lineTo(-gameWidth/2,-gameHeight/2);
+		ctx.closePath()
+		if(colorful) {
+			ctx.fill();
+		}
+		ctx.stroke();
+		}
+	
+	if(bh1) {
+		ctx.beginPath();
+		
+		
+		var startpos = sectionB.h1.body.position
+		var dat = sectionB.h1verts
+		
+//		console.log(xstart)
+//		console.log("")
+//		console.log(dat.length)
+		ctx.moveTo(dat[0][0]+startpos[0], dat[0][1]+startpos[1]);
+		for (var i = 1; i < dat.length-1; i++) {
+			var x1 = i * 2//sectionA.h.shape.elementWidth
+//			if(startpos[0] + x1>=px-w/50/2-1) {
+				ctx.lineTo(startpos[0] + dat[i][0], startpos[1]+dat[i][1]);
+//			}
+			
+//			if(i==sectionA.d.length-1){
+//				ctx.lineTo(x+x1, -h/50)
+//			}
+//			if(startpos[0] + x1>px+w/50/2+2) {
+//				break;
+//			}
+//			i += 1;
+		}
+		
+		
+		ctx.lineTo(dat[dat.length-1][0]+startpos[0], dat[dat.length-1][1]+startpos[1])
+		// ctx.lineTo(gameWidth/2,gameHeight/2);
+		// ctx.lineTo(-gameWidth/2,gameHeight/2);
+		// ctx.lineTo(-gameWidth/2,-gameHeight/2);
+		ctx.closePath()
+
+		if(colorful) {
+			ctx.fill();
+		}
+		ctx.stroke();
+		}
+	///////////////////////////////////
+	
 //	console.log(px/secwidth)
 //	
 	ctx.restore();
@@ -373,6 +522,11 @@ function render() {
 	ctx.fillStyle = "#555555";
 	ctx.textAlign = "center";
 	ctx.fillText("Next obstacle: "+Math.floor((r*2)-pogo.frame.body.position[0]%(r*2)), w-100, h-20);
+	
+	ctx.font = "20px Comic Sans MS";
+	ctx.fillStyle = "#000000";
+	ctx.textAlign = "left";
+	ctx.fillText("Level/Half-Days: "+progress, 0, 60);
 	
 	if(gameOver) {
 		ctx.font = "30px Comic Sans MS";

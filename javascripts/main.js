@@ -137,7 +137,7 @@ function copysec(s) {
 	
 //	return Object.assign({},object)
 //	return JSON.parse(JSON.stringify(s));
-//	console.log(s)
+//	//console.log(s)
 //	return jQuery.extend(true, {}, s)
 	
 	var obstacles = []
@@ -169,35 +169,144 @@ function copysec(s) {
 	
 	heightfield.body.addShape(heightfield.shape);
 	
+	var h1 = null
+	if(s.h1!=null) {
+		h1 = new Object();
+		h1.body = new p2.Body({
+			position : s.h1.body.position
+		});
+		h1.body.fromPolygon(JSON.parse(JSON.stringify(s.h1verts)))
+//			//console.log("ALERT")
+//		}
+		for(var i = 0; i < h1.body.shapes.length; i++) {
+			h1.body.shapes[i].collisionGroup = GROUND;
+			h1.body.shapes[i].collisionMask = FRAME|STICK;
+		}
+	}
+	
 	return {
 		d: s.d,
 		h: heightfield,
+		h1: h1,
+		h1verts: s.h1verts,
 		o: obstacles,
 		od: s.od
 	}
 }
 
 function changenum(s1, num, oldnum) {
+	//console.log(s1.h1verts)
 	var s = copysec(s1)
+	if(s.h1verts.length<1&&s.h1!=null) {
+		//console.log("NO VERTS!")
+	}
 	s.h.body.position[0] += (num-oldnum)*secwidth
 	for(var i = 0; i < s.o.length; i++) {
-		s.o[i].position[0]+=(num-oldnum)*secwidth
+		s.o[i].position[0] += (num-oldnum)*secwidth
+	}
+	
+	if(s.h1!=null) {
+		s.h1.body.position[0] += (num-oldnum)*secwidth
+//		s.h1.body.shapes = []
+//		s.h1.body.fromPolygon(s.h1verts)
+//		for(var i = 0; i < s.h1.body.shapes.length; i++) {
+//			s.h1.body.shapes[i].collisionGroup = GROUND;
+//			s.h1.body.shapes[i].collisionMask = FRAME|STICK;
+//		}
 	}
 	return s;
 }
+
+function caveMouthSigmoid(x) {
+	return -2*(x/(1+Math.abs(x)))-1;
+}
+
+var caveDepth = 4;
+var caveHeight = 5;
 
 function generateSection() {
 	var data = [];
 //	data.push(0)
 	
+	var ceilverts = []
+	var startedceil=false
+	var endceil = false
+	var ceilx = null
+	var ceily = null
 	for (var i = 0; i <= secwidth/2; i++) {
 		var v = (i+secnum*secwidth/2) / 10
 		
-		var value = noise.simplex2(v, 0);
+		var value = noise.simplex2(v, 0)*1.75;
+		var lvl=distToTime(secnum*secwidth+i*2)
+		if(lvl>2) {
+			if(lvl%2<1) { // Cave
+				value=value/1.75; //Make terrain smoother
+				var ychange=null;
+				if(lvl%1<=0.5) {
+					var x = (lvl%1)*4-1
+					ychange=caveMouthSigmoid(x)*caveDepth
+				}
+				
+				if(lvl%1>0.5) {
+					var x = ((lvl-0.5)%1)*4-1
+					ychange=caveMouthSigmoid(-x)*caveDepth
+				}
+				
+				value+=ychange;
+				
+				if(ychange<-caveDepth/2||startedceil) {
+					var y = value+caveHeight
+					if(!startedceil) {
+//						//console.log(y)
+						ceilx=i*2
+						ceily=y
+						startedceil=true
+//						ceilverts = []
+						
+						ceilverts.push([5, 2+3])
+						ceilverts.push([0, 5+3])
+						
+//						ceilverts.push([5, 1])
+//						ceilverts.push([5, 3])
+						
+//						ceilverts.push([-1, 5])
+//						ceilverts.push([-1, 4])
+//						ceilverts.push([-1, 3])
+						
+//						ceilverts.push([0, 0])
+//						ceilverts.push([1, 0])
+//						ceilverts.push([2, 1])
+//						ceilverts.push([3, 2])
+//						ceilverts.push([4, 1])
+//						ceilverts.push([5, 3])
+//						ceilverts.push([6, 2])
+//						ceilverts.push([6, 6])
+					}
+					ceilverts.push([i*2-ceilx, y-ceily])
+//					ceilverts.push([y-ceily, i*2-ceilx])
+//					ceilverts.push([i*2-ceilx, 0])
+					
+					if((i*2)%r==2&&i!=0) {
+						if(Math.random()>0.5) {
+							value += Math.random()*2
+						} else {
+//							ceilverts.pop();
+							ceilverts.push([i*2-ceilx, y-ceily-Math.random()*1.5+1])
+						}
+					}
+				} 
+//				else {
+//					if(lvl%1>0.5) {
+//						
+//					}
+//				}
+			}
+		}
+		
 //		var value1 = noise.perlin2(v, 0);
 		// data.push(0.5*Math.cos(0.2*i) * Math.sin(0.5*i) + 0.6*Math.sin(0.1*i)
 		// * Math.sin(0.05*i));
-		data.push(value * 1.75)
+		data.push(value)
 	}
 	
 	var heightfield = new Object();
@@ -213,17 +322,50 @@ function generateSection() {
 	
 	heightfield.body.addShape(heightfield.shape);
 	
+//	var h1 = null
+	
+	if(startedceil) {
+		//console.log(ceilverts)
+		ceilverts.push([ceilverts[ceilverts.length-1][0], ceilverts[ceilverts.length-1][1]+5+3])
+//		ceilverts.push([4, 2+3])
+//				ceilverts = [[-1, 1],
+//                     [-1, 0],
+//                     [1, 0],
+//                     [1, 1],
+//                     [0.5, 0.5]];
+//		ceilverts.push(ceilverts[0])
+//		var newv = ceilverts.map(function(arr) {
+//		    return arr.slice();
+//		});
+//		//console.log(newv)
+		var h1 = new Object();
+//		h1.shape = new p2.Convex({ vertices: ceilverts });
+		h1.body = new p2.Body({
+			position : [ceilx-1, ceily-1]
+		});
+		//console.log(ceilverts)
+		console.log(h1.body.fromPolygon(JSON.parse(JSON.stringify(ceilverts))))
+		console.log(h1.body)
+		for(var i = 0; i < h1.body.shapes.length; i++) {
+			h1.body.shapes[i].collisionGroup = GROUND;
+			h1.body.shapes[i].collisionMask = FRAME|STICK;
+		}
+		//console.log(ceilverts)
+//		h1.body.addShape(h1.shape);
+	}
+	
 	var od = []
 	var y = null;
 	var obstacles = [];
 	for(var i = 1; i < data.length; i++) {
 		if(i%r==0) {
-			if(Math.random()>0.5&&secnum!=0) {
+			var lvl = Math.floor(distToTime(secnum*secwidth+i*2))
+			if(Math.random()>0.5&&lvl!=0) {
 				y = data[i]+Math.random()*2
 			} else {
 				y = data[i]+5-Math.random()*2
 			}
-			if(secnum==0) {
+			if(lvl==0) {
 				y+=4
 			}
 			od.push(y)
@@ -238,9 +380,22 @@ function generateSection() {
 	
 	secnum+=1
 	
+	//console.log(ceilverts)
+	//console.log(h1)
+	
+	if(h1!=null&&ceilverts.length<1) {
+		ceilverts = [[-1, 1],
+                   [-1, 0],
+                   [1, 0],
+                   [1, 1],
+                   [0.5, 0.5]];
+	}
+	
 	return {
 		d: data,
 		h: heightfield,
+		h1: h1,
+		h1verts: ceilverts,
 		o: obstacles,
 		od: od
 	};
@@ -251,6 +406,11 @@ function addSection(s) {
 	for(var i = 0; i < s.o.length; i++) {
 		world.addBody(s.o[i])
 	}
+	
+	if(s.h1!=null) {
+//	alert("HI")
+		world.addBody(s.h1.body)
+	}
 }
 
 function removeSection(s) {
@@ -258,12 +418,17 @@ function removeSection(s) {
 	for(var i = 0; i < s.o.length; i++) {
 		world.removeBody(s.o[i])
 	}
+	
+	if(s.h1!=null) {
+//		alert("BYE")
+			world.removeBody(s.h1.body)
+	}
 }
 
 function getsecwidth() {
 	var canvaswidth = Math.ceil(w/50+padding) //Get the ceil of the canvas width (along with extra padding) in game units
 	var x = Math.ceil(canvaswidth/r)*r // round so that distance between obstacles is consistent between sections
-console.log(x)
+//console.log(x)
 	return x;
 }
 
@@ -276,7 +441,7 @@ var lvlCnt = 5;
 
 var lvl1length = 50;
 
-function distToTime(dist) {
+function distToTime(dist) { // in half days
 	return lvlCnt*(1-Math.pow(1-1/lvlCnt, dist/lvl1length));
 }
 
@@ -386,7 +551,7 @@ function initgame() {
 	
 	world.on("beginContact",function(event){
 		if(event.bodyA == pogo.frame.body || event.bodyB == pogo.frame.body) {
-//			return;
+			return;
 			var h = event.bodyA == sectionA.h.body || event.bodyB == sectionA.h.body
 			h = h || event.bodyA == sectionB.h.body || event.bodyB == sectionB.h.body
 			if(!h) {

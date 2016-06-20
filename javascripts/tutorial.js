@@ -1,4 +1,4 @@
-var lvl = 0;
+var tutlvl = 0;
 
 var numDataPoints = 500
 var heightfield = new Object()
@@ -63,7 +63,7 @@ function rendertut() {
 	
 	// drawBox(pogo.frame)
 	// drawPlane();
-	if(lvl>0) {
+	if(tutlvl>0) {
 	var y = heightfield.body.position[1]
 	// y = -1
 	var x = heightfield.body.position[0]
@@ -99,7 +99,7 @@ function rendertut() {
 	}
 	ctx.stroke();
 	
-	if(lvl>1) {
+	if(tutlvl>1) {
 		drawObstacles();
 	}
 	}
@@ -150,14 +150,14 @@ function rendertut() {
 		ctx.lineWidth = origw
 	}
 	
-	if(lvl>1) {
+	if(tutlvl>1) {
 	ctx.font = "20px Comic Sans MS";
 	ctx.fillStyle = "#555555";
 	ctx.textAlign = "center";
 	ctx.fillText("Next obstacle: "+Math.floor((r*2)-pogo.frame.body.position[0]%(r*2)), w-100, h-20);
 	}
 	
-	if(lvl>0) {
+	if(tutlvl>0) {
 	if(gameOver) {
 		ctx.font = "30px Comic Sans MS";
 		ctx.fillStyle = "red";
@@ -190,22 +190,22 @@ function rendertut() {
 }
 
 function tutnext() {
-	lvl++
+	tutlvl++
 	if(gameOver) {
 		leftplay=true;
 	}
-	if(lvl==1) {
-		document.getElementById("lvl0").style.display = 'none'
-		document.getElementById("lvl1").style.display = 'block'
+	if(tutlvl==1) {
+		document.getElementById("tutlvl0").style.display = 'none'
+		document.getElementById("tutlvl1").style.display = 'block'
 	}
 	
-	if(lvl==2) {
+	if(tutlvl==2) {
 		document.getElementById("nexttxt").style.display = 'none'
-		document.getElementById("lvl1").style.display = 'none'
-		document.getElementById("lvl2").style.display = 'block'
+		document.getElementById("tutlvl1").style.display = 'none'
+		document.getElementById("tutlvl2").style.display = 'block'
 	}
 	
-	if(lvl>2) {
+	if(tutlvl>2) {
 		document.getElementById("tuthelp").style.display = 'none'
 		data=[]
 		noise.seed(Math.random()*10);
@@ -230,7 +230,7 @@ function tutnext() {
 function inittut() {
 	document.getElementById("tutnextb").style.display = 'inline'
 	lives = 3
-	if(lvl>1) {
+	if(tutlvl>1) {
 		resetHealth()
 	}
 	gameOver = false
@@ -239,7 +239,7 @@ function inittut() {
 			gravity : [ 0, -7 ]
 		});
 		
-		if(lvl==0) {
+		if(tutlvl==0) {
 			world.gravity = [0, 0]
 		}
 		
@@ -261,16 +261,16 @@ function inittut() {
 		world.defaultContactMaterial.restitution = 0.1;
 		
 		
-		tut.lvl0()
-		if(lvl>0) {
-			tut.lvl1()
+		tut.tutlvl0()
+		if(tutlvl>0) {
+			tut.tutlvl1()
 			
-			if (lvl>1) {
-				tut.lvl2()
+			if (tutlvl>1) {
+				tut.tutlvl2()
 			}
 		}
 		
-		if(lvl>0) {
+		if(tutlvl>0) {
 			world.on("beginContact", function(event){
 				if(event.bodyA == pogo.frame.body || event.bodyB == pogo.frame.body) {
 					var h = event.bodyA == heightfield.body || event.bodyB == heightfield.body
@@ -298,7 +298,7 @@ function inittut() {
 }
 
 var tut = {
-	lvl0: function () {
+	tutlvl0: function () {
 		pogo = {
 				stick : new Object(),
 				frame : new Object(),
@@ -372,7 +372,7 @@ var tut = {
 			pogo.frame.shape.collisionMask = ~STICK;
 			pogo.stick.shape.collisionMask = ~FRAME;
 	},
-	lvl1: function() {
+	tutlvl1: function() {
 		heightfield.shape = new p2.Heightfield({
 			heights : data,
 			elementWidth : 2
@@ -387,7 +387,7 @@ var tut = {
 		heightfield.shape.collisionGroup = GROUND;
 		heightfield.shape.collisionMask = -1;
 	},
-	lvl2: function() {
+	tutlvl2: function() {
 		var OBSTACLE = 8;
 		
 		obstacles = []
