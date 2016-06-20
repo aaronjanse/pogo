@@ -22,7 +22,7 @@ var stiffness = 350, damping = 0.5, restLength = 0.25
 
 var FRAME = 1, STICK = 2, GROUND = 4, OBSTACLE = 8;
 
-var r = 10 //obstacle rarity (must be even)
+var rarity = 10 //obstacle rarity (must be even)
 
 var sectionA = {
 	d: null,
@@ -143,7 +143,7 @@ function copysec(s) {
 	var obstacles = []
 	var idx = 0
 	for(var i = 1; i < s.d.length; i++) {
-		if(i%r==0) {
+		if(i%rarity==0) {
 //			y = s.od[idx]
 			
 	        var circleShape = new p2.Circle({ radius: 0.5, sensor: true });
@@ -286,7 +286,7 @@ function generateSection() {
 //					ceilverts.push([y-ceily, i*2-ceilx])
 //					ceilverts.push([i*2-ceilx, 0])
 					
-					if((i*2)%r==2&&i!=0) {
+					if((i%rarity==0||i==0)&&i!=secwidth/2) {
 						if(Math.random()>0.5) {
 							value += Math.random()*2
 						} else {
@@ -358,16 +358,21 @@ function generateSection() {
 	var y = null;
 	var obstacles = [];
 	for(var i = 1; i < data.length; i++) {
-		if(i%r==0) {
+		if(i%rarity==0) {
 			var lvl = Math.floor(distToTime(secnum*secwidth+i*2))
-			if(Math.random()>0.5&&lvl!=0) {
+			if(Math.random()>0.5&&lvl!=0&&(lvl>2&&lvl%2<1)) {
 				y = data[i]+Math.random()*2
 			} else {
 				y = data[i]+5-Math.random()*2
 			}
+			
 			if(lvl==0) {
 				y+=4
 			}
+			if(lvl>2&&lvl%2<1) {
+				y+=8
+			}
+			
 			od.push(y)
 	        var circleShape = new p2.Circle({ radius: 0.5, sensor: true });
 	        var circleBody = new p2.Body({ mass:1, position:[i*2,y], fixedX: true, fixedY: true});
@@ -427,7 +432,7 @@ function removeSection(s) {
 
 function getsecwidth() {
 	var canvaswidth = Math.ceil(w/50+padding) //Get the ceil of the canvas width (along with extra padding) in game units
-	var x = Math.ceil(canvaswidth/r)*r // round so that distance between obstacles is consistent between sections
+	var x = Math.ceil(canvaswidth/rarity)*rarity // round so that distance between obstacles is consistent between sections
 //console.log(x)
 	return x;
 }

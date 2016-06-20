@@ -528,7 +528,8 @@ function render() {
 	ctx.font = "20px Comic Sans MS";
 	ctx.fillStyle = "#555555";
 	ctx.textAlign = "center";
-	ctx.fillText("Next obstacle: "+Math.floor((r*2)-pogo.frame.body.position[0]%(r*2)), w-100, h-20);
+	var dist = (Math.floor((-xscroll%secwidth)%(rarity*2)))
+	ctx.fillText("Next obstacle: "+((rarity*2)-dist), 100, h-20);
 	
 	ctx.font = "20px Comic Sans MS";
 	ctx.fillStyle = "#000000";
@@ -598,7 +599,7 @@ function drawObstacles() {
 	var m = w/50/2
 	var d = m-1
 	var px = -xscroll
-	var i1 = Math.floor((px+d)/(r*2))
+	var i1 = Math.floor((px+d)/(rarity*2))
 	
 	for(var i = 0; i < obstacles.length; i++) {
 		o = obstacles[i]
@@ -660,7 +661,7 @@ function drawObstacles1(s) {
 	var m = w/50/2
 	var d = m-1
 	var px = -xscroll//pogo.frame.body.position[0]
-	var i1 = Math.floor(((px)+d)/(r*2))
+	var i1 = Math.floor(((px)+d)/(rarity*2))
 	
 	for(var i = 0; i < s.o.length; i++) {
 		o = s.o[i]
