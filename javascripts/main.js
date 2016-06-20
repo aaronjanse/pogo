@@ -551,7 +551,7 @@ function initgame() {
 	
 	world.on("beginContact",function(event){
 		if(event.bodyA == pogo.frame.body || event.bodyB == pogo.frame.body) {
-			return;
+//			return;
 			var h = event.bodyA == sectionA.h.body || event.bodyB == sectionA.h.body
 			h = h || event.bodyA == sectionB.h.body || event.bodyB == sectionB.h.body
 			if(!h) {
