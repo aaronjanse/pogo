@@ -195,14 +195,14 @@ function tutnext() {
 		leftplay=true;
 	}
 	if(tutlvl==1) {
-		document.getElementById("tutlvl0").style.display = 'none'
-		document.getElementById("tutlvl1").style.display = 'block'
+		document.getElementById("lvl0").style.display = 'none'
+		document.getElementById("lvl1").style.display = 'block'
 	}
 	
 	if(tutlvl==2) {
 		document.getElementById("nexttxt").style.display = 'none'
-		document.getElementById("tutlvl1").style.display = 'none'
-		document.getElementById("tutlvl2").style.display = 'block'
+		document.getElementById("lvl1").style.display = 'none'
+		document.getElementById("lvl2").style.display = 'block'
 	}
 	
 	if(tutlvl>2) {

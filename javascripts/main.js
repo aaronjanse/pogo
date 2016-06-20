@@ -24,6 +24,8 @@ var FRAME = 1, STICK = 2, GROUND = 4, OBSTACLE = 8;
 
 var rarity = 10 //obstacle rarity (must be even)
 
+var heightfield;
+
 var sectionA = {
 	d: null,
 	h: null,
