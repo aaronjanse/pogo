@@ -193,7 +193,7 @@ function render() {
 	// Transform the canvas
 	// Note that we need to flip the y axis since Canvas pixel coordinates
 	// goes from top to bottom, while physics does the opposite.
-	var xdelta = (pogo.frame.body.position[0]+xscroll)*50%secwidth
+	var xdelta = (Math.max(pogo.frame.body.position[0], w/50/2)+xscroll)*50%secwidth
 	for(var i = 0; i < clouds.length; i++) {
 		clouds[i].x-=xdelta;
 	}
