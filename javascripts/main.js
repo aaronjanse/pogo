@@ -439,7 +439,7 @@ function isEmpty(str) {
 
 var lvlCnt = 5;
 
-var lvl1length = 50;
+var lvl1length = 100;
 
 function distToTime(dist) { // in half days
 	return lvlCnt*(1-Math.pow(1-1/lvlCnt, dist/lvl1length));
