@@ -27,8 +27,12 @@ function initControls() {
 	canvas.addEventListener('touchmove', ontouchmove, false);
 	canvas.addEventListener('touchend', ontouchend, false);
 	
-	window.addEventListener('deviceorientation', handleOrientation);
+//	if(mobile&&nojoystick) {
+//		window.addEventListener('deviceorientation', handleOrientation);
+//	}
 }
+
+// Go to joysticktoggle for when the tilt event is added/removed
 
 var mousedrag = false
 
@@ -40,6 +44,9 @@ var lastmouse = {
 }
 
 function handleOrientation(event) {
+//	if(!nojoystick) {
+//		window.removeEventListener('deviceorientation', handleOrientation);
+//	}
 	var y = -event.gamma; // In degree in the range [-90,90]
 	y = Math.PI * 2 * y / 360 // Convert to radians
 	

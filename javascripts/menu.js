@@ -176,6 +176,20 @@ function togglefixedjoy() {
 	}
 }
 
+function joysticktoggle() {
+	if(mobile) {
+	nojoystick=!nojoystick
+	if(!nojoystick) {
+		window.removeEventListener('deviceorientation', handleOrientation);
+	} else {
+		window.addEventListener('deviceorientation', handleOrientation);
+	}
+	document.getElementById("joysticktoggle").innerHTML = (!nojoystick ? "Disable" : "Enable") + " joystick";
+	} else {
+		document.getElementById("joysticktoggle").className="future"
+	}
+}
+
 function toggleColor() {
 	colorful=!colorful;
 	document.getElementById("coltoggle").innerHTML = (colorful ? "Disable" : "Enable") + " colors";
