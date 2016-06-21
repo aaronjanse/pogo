@@ -8,16 +8,6 @@
 	transition-duration: 0.5s;
 }
 
-#debug {
-	position: fixed;
-	top: 0;
-	bottom: 0;
-	width: 50%;
-	height: 50%;
-	z-index: 15;
-	font-size: 5em;
-}
-
 #mainmenu {
 	position: absolute;
 	height: 50%;

@@ -49,13 +49,22 @@ function initControls() {
 			  // DeviceOrientation updated
 
 //			  var matrix = orientationData.getScreenAdjustedMatrix();
-			var angles = orientationData.getScreenAdjustedEuler();
-//			console.log("Alpha: "+angles.alpha)
+			var angle = orientationData.getScreenAdjustedEuler().alpha;
+			if(angle>180) {
+				angle=360-angle
+			}
+//			angle-=180
+			angle=Math.PI*angle/180
+			console.log("Alpha: "+angle)
+			
+			var diff = getDifference(angle, pogo.frame.body.angle)
+			
+			pogo.frame.body.angularVelocity = 3*diff;
 //			console.log("Beta: "+angles.beta)
 //			console.log("Gamma: "+angles.gamma)
-			document.getElementById("alpha").innerHTML=""+angles.alpha
-			document.getElementById("beta").innerHTML=""+angles.beta
-			document.getElementById("gamma").innerHTML=""+angles.gamma
+//			document.getElementById("alpha").innerHTML=""+angles.alpha
+//			document.getElementById("beta").innerHTML=""+angles.beta
+//			document.getElementById("gamma").innerHTML=""+angles.gamma
 			  // Do something with rotation matrix `matrix`...
 			});
 	}
