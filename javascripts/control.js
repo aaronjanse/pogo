@@ -50,6 +50,7 @@ function initControls() {
 
 //			  var matrix = orientationData.getScreenAdjustedMatrix();
 			var angle = orientationData.getScreenAdjustedEuler().alpha;
+			console.log("AlphaBefore: "+angle)
 			if(angle>180) {
 				angle=angle-360
 			}
