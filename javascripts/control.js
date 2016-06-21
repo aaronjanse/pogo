@@ -36,7 +36,24 @@ function initControls() {
 	tiltoffset = window.screen.orientation.angle;
 	
 	console.log("Offset: ")
-	console.log(window.screen.orientation.angle)
+	console.log(window.screen.orientation)
+	
+//	tiltoffset=90
+//	
+//	document.getElementById("myCanvas").webkitRequestFullscreen();
+////	screen.lockOrientationUniversal = screen.lockOrientation || screen.mozLockOrientation || screen.msLockOrientation;
+//
+//	var lockFunction =  window.screen.orientation.lock;
+//	if (lockFunction.call(window.screen.orientation, 'landscape')) {
+//	           console.log('Orientation locked')
+//	        } else {
+//	            console.error('There was a problem in locking the orientation')
+//	        }
+	
+//	screen.lockOrientation("landscape-primary")
+//	screen.orientation.lock('landscape-primary').then(null, function(error) {
+//		document.exitFullscreen();
+//	});
 }
 
 // Go to joysticktoggle for when the tilt event is added/removed
@@ -54,7 +71,7 @@ function handleOrientation(event) {
 //	if(!nojoystick) {
 //		window.removeEventListener('deviceorientation', handleOrientation);
 //	}
-	var y = -event.alpha-tiltoffset; // In degree in the range [-90,90]
+	var y = -event.alpha+tiltoffset; // In degree in the range [-90,90]
 	console.log(y)
 	y = Math.PI * 2 * y / 360 // Convert to radians
 	var diff = getDifference(y, pogo.frame.body.angle)
