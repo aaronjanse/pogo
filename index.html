@@ -5,84 +5,38 @@
 <meta http-equiv="X-UA-Compatible" content="chrome=1">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1">
-<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
-<link href='https://fonts.googleapis.com/css?family=Architects+Daughter'
-	rel='stylesheet' type='text/css'>
-<link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css"
-	media="screen">
-<link rel="stylesheet" type="text/css"
-	href="stylesheets/github-light.css" media="screen">
-<link rel="stylesheet" type="text/css" href="stylesheets/print.css"
-	media="print">
+<meta name="keywords"
+	content="aaronduino, pogo, pogorun, pogo run, run, github">
+<meta name="description" content="Pogostick runner">
+<meta name="author" content="Aaronduino">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
 
-<script src="https://rawgit.com/schteppe/p2.js/master/build/p2.min.js"></script>
+<!-- <script src="https://rawgit.com/schteppe/p2.js/master/build/p2.min.js"></script> -->
+<script src="javascripts/p2.min.js"></script>
 <script src="https://rawgit.com/josephg/noisejs/master/perlin.js"></script>
+<script src="javascripts/jscolor.min.js"></script>
 
-<style>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-#menu {
-display: flex;
-justify-content: center;
-flex-direction: column;
-}
+  ga('create', 'UA-79457306-1', 'auto');
+  ga('send', 'pageview');
 
+</script>
 
-.menubutton {
-	background-color: white;
-    color: black;
-    border: 2px solid #555555;
-    padding: 16px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    -webkit-transition-duration: 0.4s; /* Safari */
-    transition-duration: 0.4s;
-    cursor: pointer;
-}
+<link rel="stylesheet" type="text/css" href="stylesheets/main.css">
 
-.future {
-	opacity: 0.6;
-    cursor: not-allowed;
-}
-
-#pause {
-	display: none;
-	position: absolute;
-	z-index: 2;
-	border-radius: 50%;
-	padding: 6px 11px;
-	left: 440px;
-	top: 80px;
-}
-
-#menu span {
-	align-content: center;
-	display: flex;
-	justify-content: center;
-}
-
-#myCanvas {
-	position: relative;
-	z-index: 1;
-	top: 0px;
-	right: 0px;
-}
-
-#gamearea {
-	border-style: solid;
-	width: 500px;
-	height: 400px;
-}
-
-.menubutton:hover {
-    background-color: #555555;
-    color: white;
-}
-</style>
-
-<script src="a.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="javascripts/menu.min.js"></script>
+<script src="javascripts/main.min.js"></script>
+<script src="javascripts/control.min.js"></script>
+<script src="javascripts/render.min.js"></script>
+<script src="javascripts/tutorial.min.js"></script>
 
 <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -90,92 +44,108 @@ flex-direction: column;
 
 <title>Pogo by Aaronduino</title>
 </head>
-
-<body>
-	<header>
-		<div class="inner">
-			<h1>Pogo</h1>
-			<h2>A javascript pogo stick game.</h2>
-			<a href="https://github.com/Aaronduino/pogo" class="button"><small>View
-					project on</small> GitHub</a>
+<body onload="fullscreen()">
+	<div id="gamearea">
+		<div id="mainmenu">
+			<span style="font-size: 2em">Pogo Run</span>
+			<span>By Aaronduino</span>
+			<span><button onclick="play()">Play</button></span>
+			<span><button class="future" onclick="">Tutorial</button></span>
+			<span><button onclick="settings1()">Settings</button></span>
+			<span><button onclick="help1()">Help</button></span>
+			<div align="right"><a href="https://github.com/Aaronduino/pogo">View on Github</a></div>
 		</div>
-	</header>
-
-	<div id="content-wrapper">
-		<div class="inner clearfix">
-			<section id="main-content">
-				<h1>
-					<a id="game" class="anchor" href="#game" aria-hidden="true"><span
-						aria-hidden="true" class="octicon octicon-link"></span></a>Game
-				</h1>
-				
-				<div id="gamearea">
-				<div id="menu">
-					<span><button class="menubutton" onclick="play()">Play</button></span>
-					<span><button class="future menubutton">Settings</button><br></span>
-					<span><button class="future menubutton">Help</button></span>
-				</div>
-				<canvas width="500" height="400" id="myCanvas"></canvas>
-				<button id="pause" class="menubutton" onclick="pausegame()"><i class="fa fa-pause"></i></button>
-				</div>
-				
-				<h1>
-					<a id="instructions" class="anchor" href="#instructions"
-						aria-hidden="true"><span aria-hidden="true"
-						class="octicon octicon-link"></span></a>Instructions
-				</h1>
-
-				<input type="button" id="1" value="Toggle color" style="color: blue"
-					onclick="toggleColor();">
-
-				<p>Try to jump as long as possible!</p>
-				<p>
-					Press the up arrow or spacebar to expand spring, and the left and right arrow
-					keys to twist left and right respectively<br> Alternatively,
-					click/tap to compress spring, drag like controlling a joystick,
-					then release to expand spring
-				</p>
-				<p>Suggest changes & star on github!</p>
-				<a class="github-button" href="https://github.com/Aaronduino/pogo"
-					data-icon="octicon-star" data-style="mega"
-					data-count-href="/Aaronduino/pogo/stargazers"
-					data-count-api="/repos/Aaronduino/pogo#stargazers_count"
-					data-count-aria-label="# stargazers on GitHub"
-					aria-label="Star Aaronduino/pogo on GitHub">Star</a>
-
-
-				<h1></h1>
-				<!--<a id="moved-go-here-to-play" class="anchor" href="#moved-go-here-to-play" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Moved! Go <a href="aaronduino.github.io/pogo/game.html">here</a> to play</h1>-->
-				<!-- Place this tag where you want the button to render. -->
-			</section>
-
-			<aside id="sidebar">
-				<a href="https://github.com/Aaronduino/pogo/zipball/master"
-					class="button"> <small>Download</small> .zip file
-				</a> <a href="https://github.com/Aaronduino/pogo/tarball/master"
-					class="button"> <small>Download</small> .tar.gz file
-				</a>
-
-				<p class="repo-owner">
-					<a href="https://github.com/Aaronduino/pogo"></a> is maintained by
-					<a href="https://github.com/Aaronduino">Aaronduino</a>.
-				</p>
-
-				<p>
-					This page was generated by <a href="https://pages.github.com">GitHub
-						Pages</a> using the Architect theme by <a
-						href="https://twitter.com/jasonlong">Jason Long</a>.
-				</p>
-			</aside>
-
-
-
+		<canvas id="myCanvas"></canvas>
+		<div id="health">
+			<i class="fa fa-heart" aria-hidden="true"></i> 
+			<i id="h2" class="fa fa-heart" aria-hidden="true"></i> 
+			<i id="h3" class="fa fa-heart" aria-hidden="true"></i>
 		</div>
+		
+		<button id="pausebutton" class="circlebutton" onclick="pausegame()">
+			<i class="fa fa-pause"></i>
+		</button>
+		<button id="helpbutton" class="circlebutton" onclick="help()">
+			<i class="fa fa-question" aria-hidden="true"></i>
+		</button>
+		<button id="settingsbutton" class="circlebutton" onclick="settings()">
+			<i class="fa fa-cog" aria-hidden="true"></i>
+		</button>
+		
+		<button id="homebutton" class="circlebuttoni" onclick="gohome()">
+				<i class="fa fa-home"></i></button>
+
+		<div id="helparea">
+			<button class="circlebuttoni backbutton" onclick="back()">
+				<i class="fa fa-arrow-left"></i>
+			</button>
+			<h1>Help</h1>
+			<p>
+				Try to jump as far as possible!<br> You lose if the pogostick
+				frame touches anything but the stick (such as terrain or obstacles)
+			</p>
+			<p>
+			Mobile/Tablet:<br> Tap to expand the spring and let go to recompress. Tilt the device to tilt the pogostick
+			</p>
+			<p>Recommended controls:</p>
+			<p id="unfixjoyhelp">Click/tap to compress spring and set the
+				center of a joystick, drag to twist like controlling a joystick,
+				then release to expand the spring</p>
+			<p id="fixjoyhelp" style="display: none;">The grey circle is the
+				joystick, with the center marked. Tap/click to compress the spring,
+				optionally drag to change the angle of the joystick, then let go to
+				let the spring expand.</p>
+			<p>
+				Alternate controls: <br> Press the up arrow or spacebar to
+				expand the spring, and the left and right arrow keys to twist left
+				and right respectively
+			</p>
+		</div>
+
+		<div id="settings">
+			<button class="circlebuttoni backbutton" onclick="back()">
+				<i class="fa fa-arrow-left"></i>
+			</button>
+			<h1>Settings</h1>
+			<p class="dtop">Controls</p>
+			<button id="fixedjoy" onclick="togglefixedjoy()">Fix
+				joystick location</button>
+			<p class="dtop">Colors</p>
+			<button id="coltoggle" onclick="toggleColor()">Disable
+				colors</button>
+			<button id="joysticktoggle" onclick="joysticktoggle()">Disable joystick</button>
+			<button onclick="resetcolors()">Reset colors</button>
+			<br> <span>Sky: </span><input readonly="true" id="skyCP"
+				class="jscolor {onFineChange:'updateSky()'}" value="4d79ff"><br>
+			<span>Ground: </span><input readonly="true" id="groundCP"
+				class="jscolor {onFineChange:'updateGround()'}" value="00b300"><br>
+			<span>Pogo *Body*: </span><input readonly="true" id="bodyCP"
+				class="jscolor {onFineChange:'updateBody()'}" value="ed00ed"><br>
+			<span>Pogo *Stick*: </span><input readonly="true" id="stickCP"
+				class="jscolor {onFineChange:'updateStick()'}" value="ff66ff"><br>
+		</div>
+		
+		<button id="tutnextb" class="circlebuttoni" onclick="tutnext()"><i class="fa fa-arrow-right"></i></button>
+		<div id="tuthelp">
+		<br>
+		<div id="lvl0" class="th">
+		Welcome to the tutorial.<br>
+		The grey circle is the joystick, with the center marked. Tap/click to compress the spring,
+		optionally drag to change the angle of the joystick, then let go to let the spring expand.
+		</div>
+		<div id="lvl1" class="th" style="display: none;">
+		Now, try to get as far as possible without letting the pogostick frame touch the ground
+		or fall off the cliff at the beginning. <br>
+		Your score is how far you get.
+		</div>
+		<div id="lvl2" class="th" style="display: none;">
+		Now do the same thing, but don't let the pogostick's frame hit the obstacles (the circles). <br>
+		You lose one heart (out of 3) if you hit them.<br>
+		Click the next button to end the tutorial! Have fun!
+		</div>
+		<div id="nexttxt">Click the next arrow when you are ready to move on.</div>
+		</div>
+
 	</div>
-
-
-
-	<script async defer src="https://buttons.github.io/buttons.js"></script>
-
 </body>
 </html>
