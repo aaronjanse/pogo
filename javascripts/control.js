@@ -26,6 +26,8 @@ function initControls() {
 	canvas.addEventListener('touchstart', ontouchstart, false);        
 	canvas.addEventListener('touchmove', ontouchmove, false);
 	canvas.addEventListener('touchend', ontouchend, false);
+	
+	window.addEventListener('deviceorientation', handleOrientation);
 }
 
 var mousedrag = false
@@ -37,10 +39,22 @@ var lastmouse = {
 	y: null
 }
 
+function handleOrientation(event) {
+	var y = event.gamma; // In degree in the range [-90,90]
+	y = Math.PI * 2 * y / 360 // Convert to radians
+	
+	var diff = getDifference(y, pogo.frame.body.angle)
+	pogo.frame.body.angularVelocity = 3*diff;
+}
+
 function ontouchstart(e) {
 	e.preventDefault();
 	pogo.spring.restLength = 0.25;
 	pogo.spring.applyForce();
+	
+	if(mobile&&nojoystick) {
+		return;
+	}
 	
 	currentmouse = {
 		clientX: e.touches[0].clientX,
@@ -52,6 +66,9 @@ function ontouchstart(e) {
 }
 
 function ontouchmove(e) {
+	if(mobile&&nojoystick) {
+		return;
+	}
 	currentmouse = {
 			clientX: e.touches[0].clientX,
 			clientY: e.touches[0].clientY
@@ -150,6 +167,7 @@ function reacttocontrols() {
 }
 
 // Extremely useful!
+// finds the smallest distance between two angles
 // from https://gist.github.com/Aaronduino/4068b058f8dbc34b4d3a9eedc8b2cbe0
 function getDifference(x, y) {
 	  var a = x-y;

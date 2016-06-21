@@ -24,6 +24,8 @@ var FRAME = 1, STICK = 2, GROUND = 4, OBSTACLE = 8;
 
 var rarity = 10 //obstacle rarity (must be even)
 
+var mobile = false
+
 var heightfield;
 
 var sectionA = {
@@ -100,6 +102,9 @@ function init() {
 	if(check&&!fixedjoy) {
 		togglefixedjoy() //fix the joystick location on mobile in case not by default
 	}
+	
+	mobile=check
+	nojoystick=mobile
 	
 	if(check) {
 		elems = document.getElementsByClassName("dtop")
