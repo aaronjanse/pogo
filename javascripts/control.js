@@ -6,6 +6,8 @@ var jloc = new Object();
 
 var tiltoffset = 0
 
+var orientationData;
+
 var keys = {
 	left: 37,
 	right: 39,
@@ -37,6 +39,23 @@ function initControls() {
 	
 	console.log("Offset: ")
 	console.log(window.screen.orientation)
+	
+	if(nojoystick) {
+	   orientationData = new FULLTILT.DeviceOrientation( { 'type': 'game' } );
+		orientationData.start(function() {
+			if(!nojoystick) {
+				return;
+			}
+			  // DeviceOrientation updated
+
+//			  var matrix = orientationData.getScreenAdjustedMatrix();
+			var angles = orientationData.getScreenAdjustedEuler();
+			console.log("Alpha: "+angles.alpha)
+			console.log("Beta: "+angles.beta)
+			console.log("Gamma: "+angles.gamma)
+			  // Do something with rotation matrix `matrix`...
+			});
+	}
 	
 //	tiltoffset=90
 //	
