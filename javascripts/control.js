@@ -51,7 +51,7 @@ function initControls() {
 //			  var matrix = orientationData.getScreenAdjustedMatrix();
 			var angle = orientationData.getScreenAdjustedEuler().alpha;
 			if(angle>180) {
-				angle=360-angle
+				angle=angle-360
 			}
 //			angle-=180
 			angle=Math.PI*angle/180
