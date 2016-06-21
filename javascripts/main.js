@@ -312,7 +312,7 @@ function generateSection() {
 //					ceilverts.push([y-ceily, i*2-ceilx])
 //					ceilverts.push([i*2-ceilx, 0])
 					
-					if((i%rarity==0||i==0)&&i!=secwidth/2) {
+					if((i%rarity==rarity-2)&&i!=secwidth/2) {
 						if(Math.random()>0.5) {
 							value += Math.random()*2
 						} else {
@@ -396,7 +396,7 @@ function generateSection() {
 				y+=4
 			}
 			if(lvl>2&&lvl%2<1) {
-				y+=8
+				y-=10
 			}
 			
 			od.push(y)

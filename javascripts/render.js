@@ -545,8 +545,8 @@ function render() {
 	ctx.font = "20px Comic Sans MS";
 	ctx.fillStyle = "#555555";
 	ctx.textAlign = "center";
-	var dist = (Math.floor((-xscroll%secwidth)%(rarity*2)))
-	ctx.fillText("Next obstacle: "+((rarity*2)-dist), 100, h-20);
+	var dist = (Math.floor(((-xscroll-((progress>2&&progress%2<=1)?4:0))%secwidth)%(rarity*2)))
+	ctx.fillText("Next obstacle: "+(((rarity*2)-dist)), 100, h-20);
 	
 	ctx.font = "20px Comic Sans MS";
 	ctx.fillStyle = "#000000";
