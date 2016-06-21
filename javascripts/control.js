@@ -56,12 +56,15 @@ function handleOrientation(event) {
 
 function ontouchstart(e) {
 	e.preventDefault();
-	pogo.spring.restLength = 0.25;
-	pogo.spring.applyForce();
 	
 	if(nojoystick) {
+		pogo.spring.restLength = 1.25;
+	    pogo.spring.applyForce();
 		return;
 	}
+	
+	pogo.spring.restLength = 0.25;
+	pogo.spring.applyForce();
 	
 	currentmouse = {
 		clientX: e.touches[0].clientX,
@@ -106,6 +109,11 @@ function ontouchmove(e) {
 }
 
 function ontouchend(e) {
+	if(nojoystick) {
+		pogo.spring.restLength = 0.25;
+		pogo.spring.applyForce();
+		return;
+	}
 	currentmouse = null
     mousedrag = false
     lastmouse = {
