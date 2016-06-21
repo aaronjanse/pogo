@@ -50,9 +50,12 @@ function initControls() {
 
 //			  var matrix = orientationData.getScreenAdjustedMatrix();
 			var angles = orientationData.getScreenAdjustedEuler();
-			console.log("Alpha: "+angles.alpha)
-			console.log("Beta: "+angles.beta)
-			console.log("Gamma: "+angles.gamma)
+//			console.log("Alpha: "+angles.alpha)
+//			console.log("Beta: "+angles.beta)
+//			console.log("Gamma: "+angles.gamma)
+			document.getElementById("alpha").innerHTML=""+angles.alpha
+			document.getElementById("beta").innerHTML=""+angles.beta
+			document.getElementById("gamma").innerHTML=""+angles.gamma
 			  // Do something with rotation matrix `matrix`...
 			});
 	}
