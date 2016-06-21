@@ -71,7 +71,7 @@ function handleOrientation(event) {
 //	if(!nojoystick) {
 //		window.removeEventListener('deviceorientation', handleOrientation);
 //	}
-	var y = -event.alpha+tiltoffset; // In degree in the range [-90,90]
+	var y = -event.gamma+tiltoffset; // In degree in the range [-90,90]
 	console.log(y)
 	y = Math.PI * 2 * y / 360 // Convert to radians
 	var diff = getDifference(y, pogo.frame.body.angle)
