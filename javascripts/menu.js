@@ -180,9 +180,9 @@ function joysticktoggle() {
 	if(mobile) {
 	nojoystick=!nojoystick
 	if(!nojoystick) {
-		window.removeEventListener('deviceorientation', handleOrientation);
+//		window.removeEventListener('deviceorientation', handleOrientation);
 	} else {
-		window.addEventListener('deviceorientation', handleOrientation);
+//		window.addEventListener('deviceorientation', handleOrientation);
 	}
 	document.getElementById("joysticktoggle").innerHTML = (!nojoystick ? "Disable" : "Enable") + " joystick";
 	} else {

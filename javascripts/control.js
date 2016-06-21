@@ -6,6 +6,8 @@ var jloc = new Object();
 
 var tiltoffset = 0
 
+var orientationData;
+
 var keys = {
 	left: 37,
 	right: 39,
@@ -37,6 +39,36 @@ function initControls() {
 	
 	console.log("Offset: ")
 	console.log(window.screen.orientation)
+	
+	if(nojoystick) {
+	   orientationData = new FULLTILT.DeviceOrientation( { 'type': 'game' } );
+		orientationData.start(function() {
+			if(!nojoystick) {
+				return;
+			}
+			  // DeviceOrientation updated
+
+//			  var matrix = orientationData.getScreenAdjustedMatrix();
+			var angle = orientationData.getScreenAdjustedEuler().alpha;
+//			console.log("AlphaBefore: "+angle)
+			if(angle>180) {
+				angle=angle-360
+			}
+//			angle-=180
+			angle=Math.PI*angle/180
+//			console.log("Alpha: "+angle)
+			
+			var diff = getDifference(angle, pogo.frame.body.angle)
+			
+			pogo.frame.body.angularVelocity = 3*diff;
+//			console.log("Beta: "+angles.beta)
+//			console.log("Gamma: "+angles.gamma)
+//			document.getElementById("alpha").innerHTML=""+angles.alpha
+//			document.getElementById("beta").innerHTML=""+angles.beta
+//			document.getElementById("gamma").innerHTML=""+angles.gamma
+			  // Do something with rotation matrix `matrix`...
+			});
+	}
 	
 //	tiltoffset=90
 //	
