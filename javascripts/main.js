@@ -116,7 +116,7 @@ function init() {
 	}
 	
 	mobile=check
-	if(mobile) {
+	if(mobile&&false) {
 		if(!nojoystick) {
 			joysticktoggle()
 		}
