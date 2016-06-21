@@ -52,7 +52,7 @@ function ontouchstart(e) {
 	pogo.spring.restLength = 0.25;
 	pogo.spring.applyForce();
 	
-	if(mobile&&nojoystick) {
+	if(nojoystick) {
 		return;
 	}
 	
@@ -66,7 +66,7 @@ function ontouchstart(e) {
 }
 
 function ontouchmove(e) {
-	if(mobile&&nojoystick) {
+	if(nojoystick) {
 		return;
 	}
 	currentmouse = {
@@ -113,7 +113,7 @@ function ontouchend(e) {
 function onmousedown() {
 	pogo.spring.restLength = 0.25;
 	pogo.spring.applyForce();
-	
+	if(!nojoystick) {
 		  document.onmousemove = function(e) {
 			  currentmouse = e
 //		    e = e || event
@@ -143,6 +143,7 @@ function onmousedown() {
 		    	}
 		    }
 		    mousedrag = true
+		  }
 		  }
 		  this.onmouseup = function() {
 		    document.onmousemove = null

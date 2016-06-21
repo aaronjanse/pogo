@@ -503,7 +503,7 @@ function render() {
 	var rect = canvas.getBoundingClientRect();
 	
 	ctx.save()
-	if(fixedjoy) {
+	if(fixedjoy&&!nojoystick) {
 		var jx = Math.round((jloc.x-rect.left)/(rect.right-rect.left)*canvas.width)
 		var jy = Math.round((jloc.y-rect.top)/(rect.bottom-rect.top)*canvas.height);
 		ctx.beginPath();
@@ -522,7 +522,7 @@ function render() {
 	}
 	ctx.restore()
 	
-	if(mousedrag) {
+	if(mousedrag&&!nojoystick) {
 		var mx1 = Math.round((lastmouse.x-rect.left)/(rect.right-rect.left)*canvas.width);
 		var my1 = Math.round((lastmouse.y-rect.top)/(rect.bottom-rect.top)*canvas.height);
 		var mx2 = Math.round((currentmouse.clientX-rect.left)/(rect.right-rect.left)*canvas.width);

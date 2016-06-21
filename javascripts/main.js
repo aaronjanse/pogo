@@ -26,6 +26,8 @@ var rarity = 10 //obstacle rarity (must be even)
 
 var mobile = false
 
+var nojoystick = false
+
 var heightfield;
 
 var sectionA = {
