@@ -4,6 +4,8 @@ var fixedjoy = true; //fixed joystick
 
 var jloc = new Object();
 
+var tiltoffset = 0
+
 var keys = {
 	left: 37,
 	right: 39,
@@ -30,6 +32,11 @@ function initControls() {
 //	if(mobile&&nojoystick) {
 //		window.addEventListener('deviceorientation', handleOrientation);
 //	}
+	
+	tiltoffset = window.screen.orientation.angle;
+	
+	console.log("Offset: ")
+	console.log(window.screen.orientation.angle)
 }
 
 // Go to joysticktoggle for when the tilt event is added/removed
@@ -47,7 +54,8 @@ function handleOrientation(event) {
 //	if(!nojoystick) {
 //		window.removeEventListener('deviceorientation', handleOrientation);
 //	}
-	var y = -event.gamma; // In degree in the range [-90,90]
+	var y = -event.alpha+tiltoffset; // In degree in the range [-90,90]
+//	console.log(y)
 	y = Math.PI * 2 * y / 360 // Convert to radians
 	
 	var diff = getDifference(y, pogo.frame.body.angle)
