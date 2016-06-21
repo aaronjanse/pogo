@@ -50,13 +50,13 @@ function initControls() {
 
 //			  var matrix = orientationData.getScreenAdjustedMatrix();
 			var angle = orientationData.getScreenAdjustedEuler().alpha;
-			console.log("AlphaBefore: "+angle)
+//			console.log("AlphaBefore: "+angle)
 			if(angle>180) {
 				angle=angle-360
 			}
 //			angle-=180
 			angle=Math.PI*angle/180
-			console.log("Alpha: "+angle)
+//			console.log("Alpha: "+angle)
 			
 			var diff = getDifference(angle, pogo.frame.body.angle)
 			

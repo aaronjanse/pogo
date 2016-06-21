@@ -477,6 +477,7 @@ function distToTime(dist) { // in half days
 }
 
 function initgame() {
+	orientationData = new FULLTILT.DeviceOrientation( { 'type': 'game' } );
 	initRender();
 	cookie = getCookie("topscore")
 	if(isEmpty(cookie)) {
