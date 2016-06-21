@@ -44,7 +44,7 @@ function handleOrientation(event) {
 	y = Math.PI * 2 * y / 360 // Convert to radians
 	
 	var diff = getDifference(y, pogo.frame.body.angle)
-	pogo.frame.body.angularVelocity = 3*diff;
+	pogo.frame.body.angularVelocity = -3*diff;
 }
 
 function ontouchstart(e) {
