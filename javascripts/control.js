@@ -39,7 +39,7 @@ function initControls() {
 	
 	if (!window.DeviceOrientationEvent) {
 		console.log("DeviceOrientation is not supported");
-		nojoystick=false
+		nojoystick=true
 		setupjoy()
 	}
 	
@@ -54,6 +54,14 @@ function initControls() {
 
 //			  var matrix = orientationData.getScreenAdjustedMatrix();
 			var angle = orientationData.getScreenAdjustedEuler().alpha;
+			if(angle) {
+				
+			} else {
+					console.log("DeviceOrientation is not supported");
+					nojoystick=true
+					setupjoy()
+					return
+			}
 //			console.log("AlphaBefore: "+angle)
 			if(angle>180) {
 				angle=angle-360
