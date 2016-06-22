@@ -16,10 +16,7 @@ var keys = {
 }
 
 function initControls() {
-	jloc = {
-		x: w*3/4,
-		y: h*3/4
-	};
+	setupjoy()
 	
 	window.addEventListener("keydown", keydown, false);
 	window.addEventListener("keyup", keyup, false);
@@ -86,6 +83,20 @@ function initControls() {
 //	screen.orientation.lock('landscape-primary').then(null, function(error) {
 //		document.exitFullscreen();
 //	});
+}
+
+function setupjoy() {
+	if(fixedjoy) {
+		jloc = {
+				x: w*3/4,
+				y: h*3/4
+		};
+		
+		lastmouse = {
+    			x: jloc.x,
+    			y: jloc.y
+    	}
+	}
 }
 
 // Go to joysticktoggle for when the tilt event is added/removed

@@ -170,6 +170,7 @@ function togglefixedjoy() {
 	if(fixedjoy) {
 		document.getElementById("unfixjoyhelp").display = 'none'
 		document.getElementById("fixjoyhelp"). display = 'inherit'
+		setupjoy()
 	} else {
 		document.getElementById("unfixjoyhelp").display = 'inherit'
 		document.getElementById("fixjoyhelp"). display = 'none'
