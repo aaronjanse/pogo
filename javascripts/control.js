@@ -37,6 +37,12 @@ function initControls() {
 	console.log("Offset: ")
 	console.log(window.screen.orientation)
 	
+	if (!window.DeviceOrientationEvent) {
+		console.log("DeviceOrientation is not supported");
+		nojoystick=false
+		setupjoystick()
+	}
+	
 	if(nojoystick) {
 	   orientationData = new FULLTILT.DeviceOrientation( { 'type': 'game' } );
 		orientationData.start(function() {
