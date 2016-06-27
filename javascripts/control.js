@@ -39,13 +39,13 @@ function initControls() {
 	
 	if (!window.DeviceOrientationEvent) {
 		console.log("DeviceOrientation is not supported");
-		nojoystick=true
+		nojoystick=false
 		setupjoy()
 	}
 	
 	try {
 	if(nojoystick) {
-	   orientationData = new FULLTILT.DeviceOrientation( { 'type': 'game' } );
+	   var orientationData = new FULLTILT.DeviceOrientation( { 'type': 'game' } );
 		orientationData.start(function() {
 			if(!nojoystick) {
 				return;
@@ -58,7 +58,7 @@ function initControls() {
 				
 			} else {
 					console.log("DeviceOrientation is not supported");
-					nojoystick=true
+					nojoystick=false
 					setupjoy()
 					return
 			}
@@ -82,7 +82,8 @@ function initControls() {
 			});
 	}
 	} catch(e) {
-		nojoystick=true;
+		console.log("DeviceOrientation library is not supported");
+		nojoystick=false;
 		setupjoy()
 	}
 	
