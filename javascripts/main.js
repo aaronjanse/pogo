@@ -422,8 +422,8 @@ function generateSection() {
 			if(lvl==0) {
 				y+=4
 			}
-			if(lvl>2&&lvl%2<1) {
-				y-=10
+			if(lvl>2&&lvl<3) {
+				y-=20
 			}
 			
 			od.push(y)
@@ -607,6 +607,25 @@ function initgame() {
 	
 	pogo.frame.shape.collisionMask = GROUND|OBSTACLE;
 	pogo.stick.shape.collisionMask = GROUND|OBSTACLE;
+	
+	world.on("postStep", function(){
+		var t = distToTime((secnum-1)*secwidth)
+		if(t>3) {
+			if(sectionA.h1===null||true) {
+				for(var i = 0; i < sectionA.o.length; i++) {
+					sectionA.o[i].fixedY = false;
+					sectionA.o[i].velocity[1] = 2.5 * Math.sin(world.time*3);
+				}
+			}
+		
+			if(sectionB.h1===null||true) {
+				for(var i = 0; i < sectionB.o.length; i++) {
+					sectionB.o[i].fixedY = false;
+					sectionB.o[i].velocity[1] = 2.5 * Math.sin(world.time*3);
+				}
+			}
+		}
+    });
 	
 	world.on("beginContact",function(event){
 		if(event.bodyA == pogo.frame.body || event.bodyB == pogo.frame.body) {
