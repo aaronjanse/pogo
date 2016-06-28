@@ -47,7 +47,7 @@ function initControls() {
 	if(nojoystick) {
 	   var orientationData = new FULLTILT.DeviceOrientation( { 'type': 'game' } );
 		orientationData.start(function() {
-			if(!nojoystick) {
+			if(!nojoystick||!orientationData.isAvailable(orientationData.ALPHA)) {
 				return;
 			}
 			  // DeviceOrientation updated
