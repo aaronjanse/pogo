@@ -22,7 +22,7 @@ var color = {
 
 var currentRainAmnt = 0
 
-var rainAmnt = 2;
+var rainAmnt = 4;
 
 var addedClouds=false
 
@@ -119,7 +119,11 @@ function updateCloud() {
 
 	var i = currentRainAmnt;
 	while (i--) {
-		this.rain.addRaindrops(Math.floor(this.x-cloudSize+(Math.random()*cloudSize)), this.y-15);
+		if(this.idx!=0) {
+			i=0
+			break;
+		}
+		this.rain.addRaindrops(Math.floor(Math.random()*this.w), -500); //this.x-cloudSize*2+(Math.random()*cloudSize*2)...this.y-15
 	}
 	
 	var left = this.x<-cloudSize
@@ -204,7 +208,8 @@ function renderCloud() {
 	ctx.globalAlpha="1"
 }
 
-function Cloud(x, y, speed, w, h) {
+function Cloud(x, y, speed, w, h, idx) {
+	this.idx = idx
 	this.x = x;
 	this.y = y;
 	this.xoffset = 0;
@@ -229,7 +234,7 @@ var clouds = [];
 function initRender() {
 	clouds = [];
 	for(var i = 0; i < cloudCnt; i++) {
-		clouds.push(new Cloud(Math.random()*w, (h/2-20-h/(1.75*50)-10)*Math.random()-10, Math.random()*(cloudSpeedDef-cloudSpeedMin)+cloudSpeedMin, w, h))
+		clouds.push(new Cloud(Math.random()*w, (h/2-20-h/(1.75*50)-10)*Math.random()-10, Math.random()*(cloudSpeedDef-cloudSpeedMin)+cloudSpeedMin, w, h, i))
 	}
 	
 	lastpx = w/50/2;
@@ -489,7 +494,7 @@ function render() {
 	
 	if(!addedClouds&&progress>3) {
 		for(var i = 0; i < cloudCnt; i++) {
-			clouds.push(new Cloud(Math.random()*w, (h/2-20-h/(1.75*50)-10)*Math.random()-10, Math.random()*(cloudSpeedDef-cloudSpeedMin)+cloudSpeedMin, w, h))
+			clouds.push(new Cloud(Math.random()*w, (h/2-20-h/(1.75*50)-10)*Math.random()-10, Math.random()*(cloudSpeedDef-cloudSpeedMin)+cloudSpeedMin, w, h, i+cloudCnt))
 		}
 		addedClouds=true
 	}
