@@ -20,13 +20,108 @@ var color = {
 		stick: "#ff66ff"
 }
 
+var currentRainAmnt = 0
+
+var rainAmnt = 2;
+
+var addedClouds=false
+
 var cloudSpeed = 1;
 var cloudSize = 100;
 var cloudSpeedDef = 1.5;
 var cloudSpeedMin = 0.2;
 var cloudCnt = 5;
 
-function moveCloud() {
+function updateCloud() {
+	this.x-=this.xoffset
+	this.y-=this.yoffset
+	
+	for(var i = 0; i < this.rain.particles.length; i++) {
+		this.rain.particles[i].x-=this.xoffset
+		this.rain.particles[i].y-=this.yoffset
+	}
+	
+	for(var i = 0; i < this.rain.drops.length; i++) {
+		this.rain.drops[i].x-=this.xoffset
+		this.rain.drops[i].y-=this.yoffset
+	}
+	
+	var localparticles = this.rain.particles;
+	var localdrops = this.rain.drops;
+	
+	for (var i = 0, activeparticles; activeparticles = localparticles[i]; i++) {
+		activeparticles.x += activeparticles.velX;
+		activeparticles.y += activeparticles.velY+5;
+		var gh = 0;
+		var worldX = activeparticles.x/50-xscroll-w/50/2
+		if(worldX<w/50/2+1) {
+//			console.log(worldX)
+		}
+		var idx;
+		if(worldX>sectionB.h.body.position[0]) { // in sectionB
+			 var real = (worldX-sectionB.h.body.position[0])/2
+			 idx = Math.floor(real)
+			var amnt = (real%2)/2
+			var diff = (sectionB.d[idx+1]-sectionB.d[idx])||0
+			gh = -(sectionB.d[idx]+diff*amnt)*50
+//			gh = -sectionB.d[idx]*50
+		} else { // in sectionA
+			
+			var real = (worldX-sectionA.h.body.position[0])/2
+			idx = Math.floor(real)
+			var amnt = ((real*2)%2)/2
+			var diff = (sectionA.d[idx+1]-sectionA.d[idx])||0
+			gh = -(sectionA.d[idx]+diff*amnt)*50
+//			gh = -sectionA.d[idx]*50
+		}
+		gh+=h/2
+		gh+=yscroll*50
+		gh+=50
+//		this.worldX = Math.floor(worldX)
+		if (activeparticles.y > gh) {//height-15) {
+			localparticles.splice(i--, 1);
+			this.rain.splash(activeparticles.x, activeparticles.y, activeparticles.col);
+		}
+		/*var umbrella = (activeparticles.X - mouse.X)*(activeparticles.X - mouse.X) + (activeparticles.Y - mouse.Y)*(activeparticles.Y - mouse.Y);
+			if (controls.Object == "Umbrella") {
+				if (umbrella < 20000 && umbrella > 10000 && activeparticles.Y < mouse.Y) {
+					explosion(activeparticles.X, activeparticles.Y, activeparticles.col);
+					localparticles.splice(i--, 1);
+				}
+			}
+			if (controls.Object == "Cup") {
+				if (umbrella > 20000 && umbrella < 30000 && activeparticles.X+138 > mouse.X && activeparticles.X-138 < mouse.X && activeparticles.Y > mouse.Y) {
+					explosion(activeparticles.X, activeparticles.Y, activeparticles.col);
+					localparticles.splice(i--, 1);
+				}
+			}
+			if (controls.Object == "Circle") {
+				if (umbrella < 20000) {
+					explosion(activeparticles.X, activeparticles.Y, activeparticles.col);
+					localparticles.splice(i--, 1);
+				}
+			}*/
+	}
+
+	for (var i = 0, activedrops; activedrops = localdrops[i]; i++) {
+		activedrops.x += activedrops.velX;
+		activedrops.y += activedrops.velY;
+		activedrops.radius -= 0.075;
+		if (activedrops.alpha > 0) {
+			activedrops.alpha -= 0.005;
+		} else {
+			activedrops.alpha = 0;
+		}
+		if (activedrops.radius < 0) {
+			localdrops.splice(i--, 1);
+		}
+	}
+
+	var i = currentRainAmnt;
+	while (i--) {
+		this.rain.addRaindrops(Math.floor(this.x-cloudSize+(Math.random()*cloudSize)), this.y-15);
+	}
+	
 	var left = this.x<-cloudSize
 	var right = this.x>this.w*2+cloudSize
 	if(left||right) {
@@ -43,7 +138,61 @@ function moveCloud() {
 	this.x+=this.speed*cloudSpeed;
 }
 
+//based off of https://codepen.io/Sheepeuh/pen/cFazd?editors=0010
+function addRaindrops(x, y, pieces) {
+	pieces=pieces||2
+	
+	while (pieces--) {
+		this.particles.push( 
+		{
+			velX : (Math.random() * 0.25),
+			velY : (Math.random() * 9) + 1,
+			x: x,
+			y: y,
+			alpha : 1,
+			col : "hsla(200, 100%, 50%, 0.8)",
+		})
+	}
+}
+
+var splashSize = 5
+
+function splash(x, y, col, cnt) {
+	cnt=cnt||splashSize
+	while(cnt--) {
+		this.drops.push( 
+				{
+					velX : (Math.random() * 4-2	),
+					velY : (Math.random() * -4 ),
+					x: x,
+					y: y,
+					radius : 0.65 + Math.floor(Math.random() *1.6),
+					alpha : 1,
+					col : col
+				})
+	}
+}
+
 function renderCloud() {
+	var tau = Math.PI * 2;
+	var localparticles = this.rain.particles
+	var localdrops = this.rain.drops
+	for (var i = 0, activeparticles; activeparticles = localparticles[i]; i++) {
+		ctx.globalAlpha = activeparticles.alpha;
+		ctx.fillStyle = activeparticles.col;
+		ctx.fillRect(activeparticles.x, activeparticles.y, activeparticles.velY/4, activeparticles.velY);
+	}
+	
+	for (var i = 0, activedrops; activedrops = localdrops[i]; i++) {
+		
+		ctx.globalAlpha = activedrops.alpha;
+		ctx.fillStyle = activedrops.col;
+		
+		ctx.beginPath();
+		ctx.arc(activedrops.x, activedrops.y, activedrops.radius, 0, tau);
+		ctx.fill();
+	}
+	
 	ctx.shadowBlur=7;
 	ctx.shadowColor="black";
 	ctx.font = cloudSize+"px FontAwesome";
@@ -58,11 +207,21 @@ function renderCloud() {
 function Cloud(x, y, speed, w, h) {
 	this.x = x;
 	this.y = y;
+	this.xoffset = 0;
+	this.yoffset = 0;
+	this.worldX = 0;
 	this.w = w;
 	this.h = h;
 	this.speed = speed;
-	this.update = moveCloud;
+	this.update = updateCloud;
 	this.render = renderCloud;
+	this.rain = {
+		pieces: 2,
+		particles: [],
+		drops: [],
+		addRaindrops: addRaindrops,
+		splash: splash
+	};
 }
 
 var clouds = [];
@@ -135,6 +294,8 @@ function hexToRgb(hex) {
 }
 
 function render() {
+//	console.log(pogo.stick.body.position[0])
+	
 	var px = pogo.frame.body.position[0]
 	if(px>secwidth) {
 //		console.log("Sec #2")
@@ -195,7 +356,7 @@ function render() {
 	// goes from top to bottom, while physics does the opposite.
 	var xdelta = (Math.max(pogo.frame.body.position[0], w/50/2)+xscroll)*50%secwidth
 	for(var i = 0; i < clouds.length; i++) {
-		clouds[i].x-=xdelta;
+		clouds[i].xoffset=xdelta;
 	}
 	
 	var ysold = yscroll;
@@ -325,6 +486,17 @@ function render() {
 	if(progress>2&&progress%2>1&&progress%2<2-caveFade) {
 		color.ground=colordef.ground
 	}
+	
+	if(!addedClouds&&progress>3) {
+		for(var i = 0; i < cloudCnt; i++) {
+			clouds.push(new Cloud(Math.random()*w, (h/2-20-h/(1.75*50)-10)*Math.random()-10, Math.random()*(cloudSpeedDef-cloudSpeedMin)+cloudSpeedMin, w, h))
+		}
+		addedClouds=true
+	}
+	
+	if(progress>3) {
+		currentRainAmnt = (progress%2>1)?rainAmnt:0;
+	}
 
 	
 	ctx.save();
@@ -337,7 +509,7 @@ function render() {
 	ctx.scale(50, -50); // Zoom in and flip y axis
 	
 	for(var i = 0; i < clouds.length; i++) {
-		clouds[i].y+=(yscroll-ysold)*50;
+		clouds[i].yoffset=-(yscroll-ysold)*50
 	}
 	
 	ctx.translate(xscroll, -yscroll)
