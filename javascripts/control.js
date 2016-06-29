@@ -218,11 +218,6 @@ function onmousedown() {
 	if(!nojoystick) {
 		  document.onmousemove = function(e) {
 			  currentmouse = e
-//		    e = e || event
-//		    fixPageXY(e)  
-		    // put ball center under mouse pointer. 25 is half of width/height
-//		    self.style.left = e.pageX-25+'px' 
-//		    self.style.top = e.pageY-25+'px' 
 		    if(lastmouse.x!=null) {
 		    	if (lastmouse.x!=e.clientX||true) {
 		    		a = lastmouse.x-e.clientX;
@@ -266,7 +261,6 @@ function reacttocontrols() {
 	var diff = getDifference(angle, pogo.frame.body.angle)
 	
 	pogo.frame.body.angularVelocity = 3*diff;
-//	console.log(pogo.frame.body.angle)
 }
 
 // Extremely useful!
@@ -280,51 +274,27 @@ function getDifference(x, y) {
 }
 
 function keydown(evt) {
-	// t = 5;
-	// switch(evt.keyCode){
-	// case 39: // right
-	// torque = -t;
-	// break;
-	// case 37: // left
-	// torque = t;
-	// break;
-	// }
-	
 	if([32, 37, 38, 39, 40].indexOf(evt.keyCode) > -1) {
         evt.preventDefault();
     }
 	
-//	alert(evt.keyCode)
 	if (evt.keyCode == keys.up || evt.keyCode == keys.space) {
 		pogo.spring.restLength = 1.25;
 		pogo.spring.applyForce();
 	}
 	
 	if (evt.keyCode == keys.left) {
-		// alert("Hi")
 		pogo.frame.body.angularVelocity = +twistval
-		// pogo.stick.body.angularVelocity+=twistval
 	}
+	
 	if (evt.keyCode == keys.right) {
-		// alert("Hi")
 		pogo.frame.body.angularVelocity = -twistval
-		// pogo.stick.body.angularVelocity+=twistval
 	}
 	
 //	return !(evt.keyCode == 32 && (evt.target.type != 'text' && evt.target.type != 'textarea'));
 }
 
 function keyup(evt) {
-	// t = 5;
-	// switch(evt.keyCode){
-	// case 39: // right
-	// torque = -t;
-	// break;
-	// case 37: // left
-	// torque = t;
-	// break;
-	// }
-	
 //	if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
 //        e.preventDefault();
 //    }
@@ -335,32 +305,21 @@ function keyup(evt) {
 	}
 	
 	if (evt.keyCode == keys.left || evt.keyCode == keys.right) {
-		// alert("Hi")
 		pogo.frame.body.angularVelocity = 0
-		// pogo.stick.body.angularVelocity+=twistval
 	}
-//	if (evt.keyCode == 100) {
-//		// alert("Hi")
-//		pogo.frame.body.angularVelocity = -twistval
-//		// pogo.stick.body.angularVelocity+=twistval
-//	}
 	
 }
 
 function keypress(evt) {
-	// alert(evt.keyCode)
 	if([32, 37, 38, 39, 40].indexOf(evt.keyCode) > -1) {
 		evt.preventDefault();
     }
 	
 	 if (evt.keyCode == keys.left) {
-	 // alert("Hi")
 	 pogo.frame.body.angularVelocity=twistval
-	 // pogo.stick.body.angularVelocity+=twistval
 	 }
+	 
 	 if (evt.keyCode == keys.right) {
-	 // alert("Hi")
 	 pogo.frame.body.angularVelocity=-twistval
-	 // pogo.stick.body.angularVelocity+=twistval
 	 }
 }

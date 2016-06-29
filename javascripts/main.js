@@ -18,17 +18,20 @@ var firstrh = true
 
 var angularVelocity = -0.25
 
-var stiffness = 350, damping = 0.5, restLength = 0.25
-
 var FRAME = 1, STICK = 2, GROUND = 4, OBSTACLE = 8;
-
-var rarity = 10 //obstacle rarity (must be even)
 
 var mobile = false
 
 var nojoystick = false
 
 var heightfield;
+
+/* Start of options */
+var stiffness = 350, damping = 0.5, restLength = 0.25 // Options for spring
+
+var rarity = 10 // obstacle rarity (must be even)
+
+/* End of options */
 
 var sectionA = {
 	d: null,
@@ -190,23 +193,10 @@ var secwidth = null;
 var padding = 2;
 
 function copysec(s) {
-//	return {
-//		d: s.d,
-//		h: {body: s.h.body, shape: s.h.shape},
-//		o: s.o
-//	};
-	
-//	return Object.assign({},object)
-//	return JSON.parse(JSON.stringify(s));
-//	//console.log(s)
-//	return jQuery.extend(true, {}, s)
-	
 	var obstacles = []
 	var idx = 0
 	for(var i = 1; i < s.d.length; i++) {
 		if(i%rarity==0) {
-//			y = s.od[idx]
-			
 	        var circleShape = new p2.Circle({ radius: 0.5, sensor: true });
 	        var circleBody = new p2.Body({ mass:1, position:s.o[idx].position, fixedX: true, fixedY: true});
 	        circleBody.addShape(circleShape);
@@ -237,8 +227,6 @@ function copysec(s) {
 			position : s.h1.body.position
 		});
 		h1.body.fromPolygon(JSON.parse(JSON.stringify(s.h1verts)))
-//			//console.log("ALERT")
-//		}
 		for(var i = 0; i < h1.body.shapes.length; i++) {
 			h1.body.shapes[i].collisionGroup = GROUND;
 			h1.body.shapes[i].collisionMask = FRAME|STICK;
@@ -256,11 +244,7 @@ function copysec(s) {
 }
 
 function changenum(s1, num, oldnum) {
-	//console.log(s1.h1verts)
 	var s = copysec(s1)
-	if(s.h1verts.length<1&&s.h1!=null) {
-		//console.log("NO VERTS!")
-	}
 	s.h.body.position[0] += (num-oldnum)*secwidth
 	for(var i = 0; i < s.o.length; i++) {
 		s.o[i].position[0] += (num-oldnum)*secwidth
@@ -268,12 +252,6 @@ function changenum(s1, num, oldnum) {
 	
 	if(s.h1!=null) {
 		s.h1.body.position[0] += (num-oldnum)*secwidth
-//		s.h1.body.shapes = []
-//		s.h1.body.fromPolygon(s.h1verts)
-//		for(var i = 0; i < s.h1.body.shapes.length; i++) {
-//			s.h1.body.shapes[i].collisionGroup = GROUND;
-//			s.h1.body.shapes[i].collisionMask = FRAME|STICK;
-//		}
 	}
 	return s;
 }
@@ -287,7 +265,6 @@ var caveHeight = 5;
 
 function generateSection() {
 	var data = [];
-//	data.push(0)
 	
 	var ceilverts = []
 	var startedceil=false
@@ -318,55 +295,25 @@ function generateSection() {
 				if(ychange<-caveDepth/2||startedceil) {
 					var y = value+caveHeight
 					if(!startedceil) {
-//						//console.log(y)
 						ceilx=i*2
 						ceily=y
 						startedceil=true
-//						ceilverts = []
 						
 						ceilverts.push([5, 2+3])
 						ceilverts.push([0, 5+3])
-						
-//						ceilverts.push([5, 1])
-//						ceilverts.push([5, 3])
-						
-//						ceilverts.push([-1, 5])
-//						ceilverts.push([-1, 4])
-//						ceilverts.push([-1, 3])
-						
-//						ceilverts.push([0, 0])
-//						ceilverts.push([1, 0])
-//						ceilverts.push([2, 1])
-//						ceilverts.push([3, 2])
-//						ceilverts.push([4, 1])
-//						ceilverts.push([5, 3])
-//						ceilverts.push([6, 2])
-//						ceilverts.push([6, 6])
 					}
 					ceilverts.push([i*2-ceilx, y-ceily])
-//					ceilverts.push([y-ceily, i*2-ceilx])
-//					ceilverts.push([i*2-ceilx, 0])
 					
 					if((i%rarity==rarity-2)&&i!=secwidth/2) {
 						if(Math.random()>0.5) {
 							value += Math.random()*2
 						} else {
-//							ceilverts.pop();
 							ceilverts.push([i*2-ceilx, y-ceily-Math.random()*1.5-1])
 						}
 					}
-				} 
-//				else {
-//					if(lvl%1>0.5) {
-//						
-//					}
-//				}
+				}
 			}
 		}
-		
-//		var value1 = noise.perlin2(v, 0);
-		// data.push(0.5*Math.cos(0.2*i) * Math.sin(0.5*i) + 0.6*Math.sin(0.1*i)
-		// * Math.sin(0.05*i));
 		data.push(value)
 	}
 	
@@ -383,36 +330,19 @@ function generateSection() {
 	
 	heightfield.body.addShape(heightfield.shape);
 	
-//	var h1 = null
-	
 	if(startedceil) {
-		//console.log(ceilverts)
 		ceilverts.push([ceilverts[ceilverts.length-1][0], ceilverts[ceilverts.length-1][1]+5+3])
-//		ceilverts.push([4, 2+3])
-//				ceilverts = [[-1, 1],
-//                     [-1, 0],
-//                     [1, 0],
-//                     [1, 1],
-//                     [0.5, 0.5]];
-//		ceilverts.push(ceilverts[0])
-//		var newv = ceilverts.map(function(arr) {
-//		    return arr.slice();
-//		});
-//		//console.log(newv)
+
 		var h1 = new Object();
-//		h1.shape = new p2.Convex({ vertices: ceilverts });
 		h1.body = new p2.Body({
 			position : [ceilx-1, ceily-1]
 		});
-		//console.log(ceilverts)
 		console.log(h1.body.fromPolygon(JSON.parse(JSON.stringify(ceilverts))))
 		console.log(h1.body)
 		for(var i = 0; i < h1.body.shapes.length; i++) {
 			h1.body.shapes[i].collisionGroup = GROUND;
 			h1.body.shapes[i].collisionMask = FRAME|STICK;
 		}
-		//console.log(ceilverts)
-//		h1.body.addShape(h1.shape);
 	}
 	
 	var od = []
@@ -446,9 +376,6 @@ function generateSection() {
 	
 	secnum+=1
 	
-	//console.log(ceilverts)
-	//console.log(h1)
-	
 	if(h1!=null&&ceilverts.length<1) {
 		ceilverts = [[-1, 1],
                    [-1, 0],
@@ -474,7 +401,6 @@ function addSection(s) {
 	}
 	
 	if(s.h1!=null) {
-//	alert("HI")
 		world.addBody(s.h1.body)
 	}
 }
@@ -486,7 +412,6 @@ function removeSection(s) {
 	}
 	
 	if(s.h1!=null) {
-//		alert("BYE")
 			world.removeBody(s.h1.body)
 	}
 }
@@ -494,7 +419,6 @@ function removeSection(s) {
 function getsecwidth() {
 	var canvaswidth = Math.ceil(w/50+padding) //Get the ceil of the canvas width (along with extra padding) in game units
 	var x = Math.ceil(canvaswidth/rarity)*rarity // round so that distance between obstacles is consistent between sections
-//console.log(x)
 	return x;
 }
 
@@ -602,7 +526,6 @@ function initgame() {
 	secwidth = getsecwidth()
 	
 	sectionA = generateSection();
-//	sectionB = changenum(copysec(sectionA), 1);
 	sectionB = changenum(generateSection(), 1, 0);
 	
 	addSection(sectionA)
@@ -637,7 +560,6 @@ function initgame() {
 	
 	world.on("beginContact",function(event){
 		if(event.bodyA == pogo.frame.body || event.bodyB == pogo.frame.body) {
-//			return;
 			var h = event.bodyA == sectionA.h.body || event.bodyB == sectionA.h.body
 			h = h || event.bodyA == sectionB.h.body || event.bodyB == sectionB.h.body
 			if(!h) {
