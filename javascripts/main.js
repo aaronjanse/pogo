@@ -119,6 +119,14 @@ function onload() {
 //		  alert(window.orientation);
 		changeOrientation()
 		}, false);
+	
+	window.onresize = function onresize() {
+		w = canvas.width = window.innerWidth;
+		w = canvas.height = window.innerHeight;
+		
+		ctx = canvas.getContext("2d");
+		ctx.lineWidth = 0.05;
+	}
 }
 
 function init() {
