@@ -362,7 +362,7 @@ function render() {
 	var y = -1;
 	
 	ctx.beginPath();
-	ctx.moveTo(x, -h/50*3/4);
+	ctx.moveTo(x, -h/50*7/4);
 	
 	var px = -xscroll//pogo.frame.body.position[0]
 	
@@ -384,7 +384,7 @@ function render() {
 	}
 	
 	
-	ctx.lineTo(x+cdata.length*2-2, -h/50*3/4)
+	ctx.lineTo(x+cdata.length*2-2, -h/50*7/4)
 	// ctx.lineTo(gameWidth/2,gameHeight/2);
 	// ctx.lineTo(-gameWidth/2,gameHeight/2);
 	// ctx.lineTo(-gameWidth/2,-gameHeight/2);
