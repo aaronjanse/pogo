@@ -43,6 +43,8 @@
 </head>
 <body>
 	<div id="gamearea">
+	<p id="errortxt">Black screen of death? Try tapping around in the top right corner until you find settings, then change your controls to the joystick
+	Please submit this as an issue on github, along with your device specs and the steps to cause it (if possible). Thank you!</p>
 		<div id="mainmenu">
 			<span style="font-size: 2em">Pogo Run</span>
 			<span>By Aaronduino</span>
@@ -75,22 +77,21 @@
 		<div style="display: none">
 			<div class="controls">
 				<div class="btn-group" role="group" aria-label="...">
-					<button type="button" class="btn btn-default" class="savesel">Save</button>
-					<div class="dropdown">
+					<button onclick="saveopts()" type="button" class="btn btn-default" class="savesel">Save</button>
+					
 						<button class="dropdowntitle btn btn-default dropdown-toggle"
-							type="button" data-toggle="dropdown">
-							Mode <span class="caret"></span>
+							type="button" data-toggle="dropdown">Joystick <span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu">
 							<li class="dropdown-header">Recommended</li>
-							<li><a href="#">Gyro</a></li>
+							<li><a href="#" class="gyro">Gyro</a></li>
 							<li><a href="#">Joystick</a></li>
-							<li><a href="#">Keyboard</a></li>
+							<li><a href="#" class="keyboard">Keyboard</a></li>
 							<li class="divider"></li>
-							<li class="dropdown-header">Dropdown header 2</li>
-							<li><a href="#">About Us</a></li>
+							<li class="dropdown-header">Not Recommended</li>
+							<li><a href="#">Unfixed Joystick</a></li>
 						</ul>
-					</div>
+					
 				</div>
 			</div>
 		</div>
@@ -105,21 +106,22 @@
 						frame touches anything but the stick (such as terrain or
 						obstacles)
 					</p>
-					<h2 class="controlsheader">Select a control mode:</h2>
-					<p>
-						Mobile/Tablet:<br> Tap to expand the spring and let go to
+					<div class="controlsdiv"><h3>Select a control mode:</h3></div>
+					<p id="gyrohelp">
+						Mobile/Tablet (Gyro):<br> Tap to expand the spring and let go to
 						recompress. Tilt the device to tilt the pogostick
 					</p>
-					<p>Recommended controls:</p>
+					<div id="joyhelp">
 					<p id="unfixjoyhelp">Click/tap to compress spring and set the
 						center of a joystick, drag to twist like controlling a joystick,
 						then release to expand the spring</p>
-					<p id="fixjoyhelp" style="display: none;">The grey circle is
+					<p id="fixjoyhelp">The grey circle is
 						the joystick, with the center marked. Tap/click to compress the
 						spring, optionally drag to change the angle of the joystick, then
 						let go to let the spring expand.</p>
-					<p>
-						Alternate controls: <br> Press the up arrow or spacebar to
+					</div>
+					<p id="keyboardhelp">
+						Press the up arrow or spacebar to
 						expand the spring, and the left and right arrow keys to twist left
 						and right respectively
 					</p>
@@ -130,14 +132,7 @@
 						<i class="fa fa-arrow-left"></i>
 					</button>
 					<h1>Settings</h1>
-					<h2 class="dtop controlsheader">Controls mode:</h2>
-					<button id="fixedjoy" onclick="togglefixedjoy()">Fix
-						joystick location</button>
-					<p class="dtop">Colors</p>
-					<button id="coltoggle" onclick="toggleColor()">Disable
-						colors</button>
-					<button id="joysticktoggle" onclick="joysticktoggle()">Disable
-						joystick</button>
+					<div class="controlsdiv"><h3>Select a control mode:</h3></div>
 					<button onclick="resetcolors()">Reset colors</button>
 					<br> <span>Sky: </span><input readonly="true" id="skyCP"
 						class="jscolor {onFineChange:'updateSky()'}" value="4d79ff"><br>
