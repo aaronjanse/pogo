@@ -29,6 +29,12 @@
 
 <link rel="stylesheet" type="text/css" href="stylesheets/main.css">
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+
 <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -37,6 +43,8 @@
 </head>
 <body>
 	<div id="gamearea">
+	<p id="errortxt">Black screen of death? Try tapping around in the top right corner until you find settings, then change your controls to the joystick
+	Please submit this as an issue on github, along with your device specs and the steps to cause it (if possible). Thank you!</p>
 		<div id="mainmenu">
 			<span style="font-size: 2em">Pogo Run</span>
 			<span>By Aaronduino</span>
@@ -66,75 +74,100 @@
 		<button id="homebutton" class="circlebuttoni" onclick="gohome()">
 				<i class="fa fa-home"></i></button>
 
-		<div id="helparea">
-			<button class="circlebuttoni backbutton" onclick="back()">
-				<i class="fa fa-arrow-left"></i>
-			</button>
-			<h1>Help</h1>
-			<p>
-				Try to jump as far as possible!<br> You lose if the pogostick
-				frame touches anything but the stick (such as terrain or obstacles)
-			</p>
-			<p>
-			Mobile/Tablet:<br> Tap to expand the spring and let go to recompress. Tilt the device to tilt the pogostick
-			</p>
-			<p>Recommended controls:</p>
-			<p id="unfixjoyhelp">Click/tap to compress spring and set the
-				center of a joystick, drag to twist like controlling a joystick,
-				then release to expand the spring</p>
-			<p id="fixjoyhelp" style="display: none;">The grey circle is the
-				joystick, with the center marked. Tap/click to compress the spring,
-				optionally drag to change the angle of the joystick, then let go to
-				let the spring expand.</p>
-			<p>
-				Alternate controls: <br> Press the up arrow or spacebar to
-				expand the spring, and the left and right arrow keys to twist left
-				and right respectively
-			</p>
+		<div style="display: none">
+			<div class="controls">
+				<div class="btn-group" role="group" aria-label="...">
+					<button onclick="saveopts()" type="button" class="btn btn-default" class="savesel">Save</button>
+					
+						<button class="dropdowntitle btn btn-default dropdown-toggle"
+							type="button" data-toggle="dropdown">Joystick <span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu">
+							<li class="dropdown-header">Recommended</li>
+							<li><a href="#" class="gyro">Gyro</a></li>
+							<li><a href="#">Joystick</a></li>
+							<li><a href="#" class="keyboard">Keyboard</a></li>
+							<li class="divider"></li>
+							<li class="dropdown-header">Not Recommended</li>
+							<li><a href="#">Unfixed Joystick</a></li>
+						</ul>
+					
+				</div>
+			</div>
 		</div>
 
-		<div id="settings">
-			<button class="circlebuttoni backbutton" onclick="back()">
-				<i class="fa fa-arrow-left"></i>
-			</button>
-			<h1>Settings</h1>
-			<p class="dtop">Controls</p>
-			<button id="fixedjoy" onclick="togglefixedjoy()">Fix
-				joystick location</button>
-			<p class="dtop">Colors</p>
-			<button id="coltoggle" onclick="toggleColor()">Disable
-				colors</button>
-			<button id="joysticktoggle" onclick="joysticktoggle()">Disable joystick</button>
-			<button onclick="resetcolors()">Reset colors</button>
-			<br> <span>Sky: </span><input readonly="true" id="skyCP"
-				class="jscolor {onFineChange:'updateSky()'}" value="4d79ff"><br>
-			<span>Ground: </span><input readonly="true" id="groundCP"
-				class="jscolor {onFineChange:'updateGround()'}" value="00b300"><br>
-			<span>Pogo *Body*: </span><input readonly="true" id="bodyCP"
-				class="jscolor {onFineChange:'updateBody()'}" value="ed00ed"><br>
-			<span>Pogo *Stick*: </span><input readonly="true" id="stickCP"
-				class="jscolor {onFineChange:'updateStick()'}" value="ff66ff"><br>
-		</div>
-		
-		<button id="tutnextb" class="circlebuttoni" onclick="tutnext()"><i class="fa fa-arrow-right"></i></button>
-		<div id="tuthelp">
-		<br>
-		<div id="lvl0" class="th">
-		Welcome to the tutorial.<br>
-		The grey circle is the joystick, with the center marked. Tap/click to compress the spring,
-		optionally drag to change the angle of the joystick, then let go to let the spring expand.
-		</div>
-		<div id="lvl1" class="th" style="display: none;">
-		Now, try to get as far as possible without letting the pogostick frame touch the ground
-		or fall off the cliff at the beginning. <br>
-		Your score is how far you get.
-		</div>
-		<div id="lvl2" class="th" style="display: none;">
-		Now do the same thing, but don't let the pogostick's frame hit the obstacles (the circles). <br>
-		You lose one heart (out of 3) if you hit them.<br>
-		Click the next button to end the tutorial! Have fun!
-		</div>
-		<div id="nexttxt">Click the next arrow when you are ready to move on.</div>
+		<div id="helparea">
+					<button class="circlebuttoni backbutton" onclick="back()">
+						<i class="fa fa-arrow-left"></i>
+					</button>
+					<h1>Help</h1>
+					<p>
+						Try to jump as far as possible!<br> You lose if the pogostick
+						frame touches anything but the stick (such as terrain or
+						obstacles)
+					</p>
+					<div class="controlsdiv"><h3>Select a control mode:</h3></div>
+					<p id="gyrohelp">
+						Mobile/Tablet (Gyro):<br> Tap to expand the spring and let go to
+						recompress. Tilt the device to tilt the pogostick
+					</p>
+					<div id="joyhelp">
+					<p id="unfixjoyhelp">Click/tap to compress spring and set the
+						center of a joystick, drag to twist like controlling a joystick,
+						then release to expand the spring</p>
+					<p id="fixjoyhelp">The grey circle is
+						the joystick, with the center marked. Tap/click to compress the
+						spring, optionally drag to change the angle of the joystick, then
+						let go to let the spring expand.</p>
+					</div>
+					<p id="keyboardhelp">
+						Press the up arrow or spacebar to
+						expand the spring, and the left and right arrow keys to twist left
+						and right respectively
+					</p>
+				</div>
+
+				<div id="settings">
+					<button class="circlebuttoni backbutton" onclick="back()">
+						<i class="fa fa-arrow-left"></i>
+					</button>
+					<h1>Settings</h1>
+					<div class="controlsdiv"><h3>Select a control mode:</h3></div>
+					<button onclick="resetcolors()">Reset colors</button>
+					<br> <span>Sky: </span><input readonly="true" id="skyCP"
+						class="jscolor {onFineChange:'updateSky()'}" value="4d79ff"><br>
+					<span>Ground: </span><input readonly="true" id="groundCP"
+						class="jscolor {onFineChange:'updateGround()'}" value="00b300"><br>
+					<span>Pogo *Body*: </span><input readonly="true" id="bodyCP"
+						class="jscolor {onFineChange:'updateBody()'}" value="ed00ed"><br>
+					<span>Pogo *Stick*: </span><input readonly="true" id="stickCP"
+						class="jscolor {onFineChange:'updateStick()'}" value="ff66ff"><br>
+				</div>
+
+				<button id="tutnextb" class="circlebuttoni" onclick="tutnext()">
+					<i class="fa fa-arrow-right"></i>
+				</button>
+				<div id="tuthelp">
+					<br>
+					<div id="lvl0" class="th">
+						Welcome to the tutorial.<br> The grey circle is the joystick,
+						with the center marked. Tap/click to compress the spring,
+						optionally drag to change the angle of the joystick, then let go
+						to let the spring expand.
+					</div>
+					<div id="lvl1" class="th" style="display: none;">
+						Now, try to get as far as possible without letting the pogostick
+						frame touch the ground or fall off the cliff at the beginning. <br>
+						Your score is how far you get.
+					</div>
+					<div id="lvl2" class="th" style="display: none;">
+						Now do the same thing, but don't let the pogostick's frame hit the
+						obstacles (the circles). <br> You lose one heart (out of 3)
+						if you hit them.<br> Click the next button to end the
+						tutorial! Have fun!
+					</div>
+					<div id="nexttxt">Click the next arrow when you are ready to
+						move on.</div>
 		</div>
 
 	</div>

@@ -8,6 +8,8 @@ var tiltoffset = 0
 
 var orientationData;
 
+var keyboard=false;
+
 var keys = {
 	left: 37,
 	right: 39,

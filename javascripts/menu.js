@@ -56,6 +56,7 @@ function play() {
 }
 
 function pausegame() {
+	$("#errortxt").hide();
 	if(tutorialm) {
 		return;
 	}
@@ -177,17 +178,29 @@ function togglefixedjoy() {
 	}
 }
 
-function joysticktoggle() {
-	if(mobile) {
-	nojoystick=!nojoystick
-	if(!nojoystick) {
-//		window.removeEventListener('deviceorientation', handleOrientation);
+function updatehelp(nojoystickself, keyboardself, fixedjoyself) {
+	$("#gyrohelp").hide();
+	$("#keyboardhelp").hide();
+	$("#joyhelp").hide();
+	
+	if(!nojoystickself&&!keyboardself) {
+		$("#joyhelp").show();
+		
+		$("#fixjoyhelp").hide()
+		$("#unfixjoyhelp").hide()
+		
+		if(fixedjoyself) {
+			$("#fixjoyhelp").show()
+			
+		} else {
+			$("#unfixjoyhelp").show()
+		}
 	} else {
-//		window.addEventListener('deviceorientation', handleOrientation);
-	}
-	document.getElementById("joysticktoggle").innerHTML = (!nojoystick ? "Disable" : "Enable") + " joystick";
-	} else {
-		document.getElementById("joysticktoggle").className="future"
+		if(keyboardself) {
+			$("#keyboardhelp").show();
+		} else {
+			$("#gyrohelp").show();
+		}
 	}
 }
 
