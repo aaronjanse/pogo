@@ -116,6 +116,7 @@ function loseHeart() {
 }
 
 function onload() {
+	$(".controls").insertAfter(".controlsheader")
 	fullscreen()
 	window.addEventListener("orientationchange", function() {
 		  // Announce the new orientation number
