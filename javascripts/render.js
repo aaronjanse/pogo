@@ -217,6 +217,8 @@ var fixedDeltaTime = 1 / speed; // Physics "tick" delta time
 function animate(time) {
 	if(!pause) {
 		requestAnimationFrame(animate);
+	} else {
+		return;
 	}
 	// Get the elapsed time since last frame, in seconds
 	var deltaTime = lastTime ? (time - lastTime) / 1000 : 0;
@@ -266,6 +268,9 @@ function hexToRgb(hex) {
 }
 
 function render() {
+	if(pause) {
+		return;
+	}
 	var px = pogo.frame.body.position[0]
 	if(px>secwidth) {
 //		console.log("Sec #2")
@@ -511,45 +516,7 @@ function render() {
 	
 	ctx.restore();
 	
-	var rect = canvas.getBoundingClientRect();
-	
-	ctx.save()
-	if(fixedjoy&&!nojoystick) {
-		var jx = Math.round((jloc.x-rect.left)/(rect.right-rect.left)*canvas.width)
-		var jy = Math.round((jloc.y-rect.top)/(rect.bottom-rect.top)*canvas.height);
-		ctx.beginPath();
-		ctx.arc(jx, jy, 50, 0, 2 * Math.PI, false);
-		ctx.globalAlpha=0.5;
-		ctx.fillStyle= "#555555"
-		ctx.fill()
-		
-		ctx.beginPath();
-		ctx.arc(jx, jy, 10, 0, 2 * Math.PI, false);
-		ctx.globalAlpha=0.7;
-		ctx.fillStyle= "#AAAAAA"
-		ctx.fill()
-	}
-	ctx.restore()
-	
-	if(mousedrag&&!nojoystick) {
-		var mx1 = Math.round((lastmouse.x-rect.left)/(rect.right-rect.left)*canvas.width);
-		var my1 = Math.round((lastmouse.y-rect.top)/(rect.bottom-rect.top)*canvas.height);
-		var mx2 = Math.round((currentmouse.clientX-rect.left)/(rect.right-rect.left)*canvas.width);
-		var my2 = Math.round((currentmouse.clientY-rect.top)/(rect.bottom-rect.top)*canvas.height);
-		ctx.beginPath();
-		var origw = ctx.lineWidth
-		ctx.lineWidth = 2
-		ctx.strokeStyle = "#999999";
-		ctx.moveTo(mx1, my1);
-		ctx.lineTo(mx2, my2);
-		ctx.stroke();
-		ctx.beginPath();
-		ctx.arc(mx2, my2, 4, 0, 2 * Math.PI, false);
-		ctx.fillStyle = "#999999";
-		ctx.stroke();
-		ctx.fill();
-		ctx.lineWidth = origw
-	}
+	drawControls()
 	
 	ctx.font = "20px Comic Sans MS";
 	ctx.fillStyle = "#555555";
@@ -598,6 +565,48 @@ function render() {
 		ctx.textAlign = "left";
 		ctx.fillText("High Score: "+topscore, 10, 20); 
 		ctx.fillText("Score: "+(score-Math.floor(w/50/2)+Math.round(pogo.frame.body.position[0])), 10, 36); 
+	}
+}
+
+function drawControls() {
+var rect = canvas.getBoundingClientRect();
+	
+	ctx.save()
+	if(fixedjoy&&!nojoystick) {
+		var jx = Math.round((jloc.x-rect.left)/(rect.right-rect.left)*canvas.width)
+		var jy = Math.round((jloc.y-rect.top)/(rect.bottom-rect.top)*canvas.height);
+		ctx.beginPath();
+		ctx.arc(jx, jy, 50, 0, 2 * Math.PI, false);
+		ctx.globalAlpha=0.5;
+		ctx.fillStyle= "#555555"
+		ctx.fill()
+		
+		ctx.beginPath();
+		ctx.arc(jx, jy, 10, 0, 2 * Math.PI, false);
+		ctx.globalAlpha=0.7;
+		ctx.fillStyle= "#AAAAAA"
+		ctx.fill()
+	}
+	ctx.restore()
+	
+	if(mousedrag&&!nojoystick) {
+		var mx1 = Math.round((lastmouse.x-rect.left)/(rect.right-rect.left)*canvas.width);
+		var my1 = Math.round((lastmouse.y-rect.top)/(rect.bottom-rect.top)*canvas.height);
+		var mx2 = Math.round((currentmouse.clientX-rect.left)/(rect.right-rect.left)*canvas.width);
+		var my2 = Math.round((currentmouse.clientY-rect.top)/(rect.bottom-rect.top)*canvas.height);
+		ctx.beginPath();
+		var origw = ctx.lineWidth
+		ctx.lineWidth = 2
+		ctx.strokeStyle = "#999999";
+		ctx.moveTo(mx1, my1);
+		ctx.lineTo(mx2, my2);
+		ctx.stroke();
+		ctx.beginPath();
+		ctx.arc(mx2, my2, 4, 0, 2 * Math.PI, false);
+		ctx.fillStyle = "#999999";
+		ctx.stroke();
+		ctx.fill();
+		ctx.lineWidth = origw
 	}
 }
 
@@ -737,8 +746,12 @@ function drawObstacles() {
 //		ctx.arc(px+d, obstacles[i].position[1], 0.5, 0, 2 * Math.PI, false);
 //		ctx.strokeStyle = "#555555"
 //		ctx.stroke()
+	try {
 	canvas_arrow(px+d-0.3, obstacles[i1].position[1], px+d+0.5, obstacles[i1].position[1])
-//	}
+	} catch(e) {
+		
+	}
+	//	}
 	ctx.strokeStyle = "#000000"
 }
 

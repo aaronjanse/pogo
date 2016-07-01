@@ -49,7 +49,7 @@
 			<span style="font-size: 2em">Pogo Run</span>
 			<span>By Aaronduino</span>
 			<span><button onclick="play()">Play</button></span>
-			<span><button class="future" onclick="">Tutorial</button></span>
+			<span><button onclick="tutorial()">Tutorial</button></span>
 			<span><button onclick="settings1()">Settings</button></span>
 			<span><button onclick="help1()">Help</button></span>
 			<div align="right"><a href="https://github.com/Aaronduino/pogo">View on Github</a></div>
@@ -106,25 +106,27 @@
 						frame touches anything but the stick (such as terrain or
 						obstacles)
 					</p>
+					<div class="helptxtdiv">
 					<div class="controlsdiv"><h3>Select a control mode:</h3></div>
-					<p id="gyrohelp">
+					<p class="gyrohelp">
 						Mobile/Tablet (Gyro):<br> Tap to expand the spring and let go to
 						recompress. Tilt the device to tilt the pogostick
 					</p>
-					<div id="joyhelp">
-					<p id="unfixjoyhelp">Click/tap to compress spring and set the
+					<div class="joyhelp">
+					<p class="unfixjoyhelp">Click/tap to compress spring and set the
 						center of a joystick, drag to twist like controlling a joystick,
 						then release to expand the spring</p>
-					<p id="fixjoyhelp">The grey circle is
+					<p class="fixjoyhelp">The grey circle is
 						the joystick, with the center marked. Tap/click to compress the
 						spring, optionally drag to change the angle of the joystick, then
 						let go to let the spring expand.</p>
 					</div>
-					<p id="keyboardhelp">
+					<p class="keyboardhelp">
 						Press the up arrow or spacebar to
 						expand the spring, and the left and right arrow keys to twist left
 						and right respectively
 					</p>
+					</div>
 				</div>
 
 				<div id="settings">
@@ -150,10 +152,7 @@
 				<div id="tuthelp">
 					<br>
 					<div id="lvl0" class="th">
-						Welcome to the tutorial.<br> The grey circle is the joystick,
-						with the center marked. Tap/click to compress the spring,
-						optionally drag to change the angle of the joystick, then let go
-						to let the spring expand.
+						Welcome to the tutorial. <div class="tutcontrolsdiv">Choose the controls that you want to learn about.</div>
 					</div>
 					<div id="lvl1" class="th" style="display: none;">
 						Now, try to get as far as possible without letting the pogostick

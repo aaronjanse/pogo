@@ -108,53 +108,13 @@ function rendertut() {
 	
 	ctx.restore();
 	
-	var rect = canvas.getBoundingClientRect();
-	
-	ctx.save()
-	if(fixedjoy) {
-		var jx = Math.round((jloc.x-rect.left)/(rect.right-rect.left)*canvas.width)
-		var jy = Math.round((jloc.y-rect.top)/(rect.bottom-rect.top)*canvas.height);
-		ctx.beginPath();
-		ctx.arc(jx, jy, 50, 0, 2 * Math.PI, false);
-		ctx.globalAlpha=0.5;
-//		ctx.endPath();
-		ctx.fillStyle= "#555555"
-		ctx.fill()
-		
-		ctx.beginPath();
-		ctx.arc(jx, jy, 10, 0, 2 * Math.PI, false);
-		ctx.globalAlpha=0.7;
-//		ctx.endPath();
-		ctx.fillStyle= "#AAAAAA"
-		ctx.fill()
-	}
-	ctx.restore()
-	
-	if(mousedrag) {
-		var mx1 = Math.round((lastmouse.x-rect.left)/(rect.right-rect.left)*canvas.width);
-		var my1 = Math.round((lastmouse.y-rect.top)/(rect.bottom-rect.top)*canvas.height);
-		var mx2 = Math.round((currentmouse.clientX-rect.left)/(rect.right-rect.left)*canvas.width);
-		var my2 = Math.round((currentmouse.clientY-rect.top)/(rect.bottom-rect.top)*canvas.height);
-		ctx.beginPath();
-		var origw = ctx.lineWidth
-		ctx.lineWidth = 2
-		ctx.strokeStyle = "#999999";
-		ctx.moveTo(mx1, my1);
-		ctx.lineTo(mx2, my2);
-		ctx.stroke();
-		ctx.beginPath();
-		ctx.arc(mx2, my2, 4, 0, 2 * Math.PI, false);
-		ctx.fillStyle = "#999999";
-		ctx.stroke();
-		ctx.fill();
-		ctx.lineWidth = origw
-	}
+	drawControls()
 	
 	if(tutlvl>1) {
 	ctx.font = "20px Comic Sans MS";
 	ctx.fillStyle = "#555555";
 	ctx.textAlign = "center";
-	ctx.fillText("Next obstacle: "+Math.floor((r*2)-pogo.frame.body.position[0]%(r*2)), w-100, h-20);
+	ctx.fillText("Next obstacle: "+Math.floor((rarity*2)-pogo.frame.body.position[0]%(rarity*2)), w-100, h-20);
 	}
 	
 	if(tutlvl>0) {
@@ -220,6 +180,10 @@ function tutnext() {
 			// * Math.sin(0.05*i));
 			data.push(value * 1.75)
 		}
+//		nojoystick=oldcontrols.nojoystick
+//		fixedjoy=oldcontrols.fixedjoy
+//		keyboard=oldcontrols.keybiard
+		tutlvl=0;
 		gohome()
 		return;
 	}
@@ -392,7 +356,7 @@ var tut = {
 		
 		obstacles = []
 		for(var i = 5; i < 200; i++) {
-			if(i%r==0) {
+			if(i%rarity==0) {
 				if(Math.random()>0.5) {
 					y = data[i]+Math.random()*2
 				} else {

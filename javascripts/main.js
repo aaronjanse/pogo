@@ -22,9 +22,17 @@ var FRAME = 1, STICK = 2, GROUND = 4, OBSTACLE = 8;
 
 var mobile = false
 
+var oldcontrols = {
+		nojoystick: null,
+		fixedjoy: null,
+		keyboard: null
+}
+
 var nojoystick = false
 
 var heightfield;
+
+var oldlabel=""
 
 /* Start of options */
 var stiffness = 350, damping = 0.5, restLength = 0.25 // Options for spring
@@ -140,6 +148,10 @@ function processopts() {
 }
 
 function saveopts() {
+	saveopts1(true)
+}
+
+function saveopts1(tutsave) {
 	keyboard=false;
 	switch($(".dropdowntitle").val()) {
 		case 'Joystick':
@@ -158,6 +170,14 @@ function saveopts() {
 		case '':
 		default:
 	}
+	
+//	if(tutsave) {
+//		oldcontrols = {
+//				nojoystick: nojoystick,
+//				fixedjoy: fixedjoy,
+//				keyboard: keyboard
+//		}
+//	}
 	
 	updatehelp(nojoystick, keyboard, fixedjoy);
 	
@@ -183,6 +203,9 @@ function onload() {
 	}
 	
 	$(".controls").clone().appendTo(".controlsdiv")
+	
+	$(".helptxtdiv").clone().appendTo(".tutcontrolsdiv")
+	
 	$('.dropdown-menu li a').on('click', function() {
 	    //$('.dropdowntitle').html($(this).find('a').html()+' <span class="caret">');
 		$(".dropdowntitle").html($(this).text()+' <span class="caret">');

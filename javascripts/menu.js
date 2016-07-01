@@ -1,4 +1,6 @@
 function gohome() {
+	console.log(oldlabel)
+	$(".dropdowntitle").val(oldlabel);
 	document.getElementById("pausebutton").className = 'circlebutton'
 		document.getElementById("helpbutton").className = 'circlebutton'
 		document.getElementById("settingsbutton").className = 'circlebutton'
@@ -28,6 +30,7 @@ function gohome() {
 function play() {
 	if(pause) {
 		back()
+		pause=false;
 	}
 	document.getElementById("pausebutton").className = 'circlebutton'
 	document.getElementById("helpbutton").className = 'circlebutton'
@@ -50,6 +53,7 @@ function play() {
 	if(!pause) {
 		init();
 	}
+	
 	requestAnimationFrame(animate);
 	
 	pause = false;
@@ -103,6 +107,13 @@ function mainbpprep() {
 }
 
 function tutorial() {
+//	oldcontrols = {
+//			nojoystick: nojoystick,
+//			fixedjoy: fixedjoy,
+//			keyboard: keyboard
+//	}
+	oldlabel=$(".dropdowntitle").val();
+	
 	document.getElementById("mainmenu").style.display = 'none'
 	document.getElementById("mainmenu").style.opacity = '0'
 	document.getElementById("myCanvas").style.display = 'inline'
@@ -179,27 +190,27 @@ function togglefixedjoy() {
 }
 
 function updatehelp(nojoystickself, keyboardself, fixedjoyself) {
-	$("#gyrohelp").hide();
-	$("#keyboardhelp").hide();
-	$("#joyhelp").hide();
+	$(".gyrohelp").hide();
+	$(".keyboardhelp").hide();
+	$(".joyhelp").hide();
 	
 	if(!nojoystickself&&!keyboardself) {
-		$("#joyhelp").show();
+		$(".joyhelp").show();
 		
-		$("#fixjoyhelp").hide()
-		$("#unfixjoyhelp").hide()
+		$(".fixjoyhelp").hide()
+		$(".unfixjoyhelp").hide()
 		
 		if(fixedjoyself) {
-			$("#fixjoyhelp").show()
+			$(".fixjoyhelp").show()
 			
 		} else {
-			$("#unfixjoyhelp").show()
+			$(".unfixjoyhelp").show()
 		}
 	} else {
 		if(keyboardself) {
-			$("#keyboardhelp").show();
+			$(".keyboardhelp").show();
 		} else {
-			$("#gyrohelp").show();
+			$(".gyrohelp").show();
 		}
 	}
 }

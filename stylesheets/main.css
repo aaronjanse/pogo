@@ -144,6 +144,7 @@ button {
 }
 
 #tuthelp {
+	pointer-events: none;
 	opacity: 1;
 	display: none;
 	position: absolute;
@@ -151,6 +152,10 @@ button {
 	top: 0px;
 	left: 10px;
 	color: white;
+}
+
+#tuthelp .btn-group {
+	pointer-events: auto;
 }
 
 #helparea {
