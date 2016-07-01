@@ -27,6 +27,7 @@
 }
 
 #mainmenu span {
+	margin: 2px;
 	width: 100%;
 	align-content: center;
 	display: flex;
