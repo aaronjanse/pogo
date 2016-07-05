@@ -24,13 +24,13 @@ function gohome() {
 	}
 	
 	tutorialm=false
-	pause=true;
+	pause=false;
 }
 
 function play() {
 	if(pause) {
 		back()
-		pause=false;
+//		pause=false;
 	}
 	document.getElementById("pausebutton").className = 'circlebutton'
 	document.getElementById("helpbutton").className = 'circlebutton'

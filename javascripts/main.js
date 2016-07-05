@@ -292,17 +292,15 @@ var padding = 2;
 
 function copysec(s) {
 	var obstacles = []
-	var idx = 0
-	for(var i = 1; i < s.d.length; i++) {
-		if(i%rarity==0) {
+//	var idx = 0
+	for(var idx = 0; idx < s.o.length; idx++) {
 	        var circleShape = new p2.Circle({ radius: 0.5, sensor: true });
-	        var circleBody = new p2.Body({ mass:1, position:s.o[idx].position, fixedX: true, fixedY: true});
+	        var circleBody = new p2.Body({ mass:1, position:s.o[idx].position, fixedX: s.o[idx].fixedX, fixedY: s.o[idx].fixedY, velocity: s.o[idx].velocity});
 	        circleBody.addShape(circleShape);
 	        circleShape.collisionGroup = OBSTACLE;
 	        circleShape.collisionMask = FRAME|STICK;
 	        obstacles.push(circleBody);
-	        idx+=1
-		}
+//	        idx+=1
 	}
 	
 	var heightfield = new Object();
@@ -337,7 +335,8 @@ function copysec(s) {
 		h1: h1,
 		h1verts: s.h1verts,
 		o: obstacles,
-		od: s.od
+		od: s.od,
+		inverts: s.inverts
 	}
 }
 
@@ -346,6 +345,7 @@ function changenum(s1, num, oldnum) {
 	s.h.body.position[0] += (num-oldnum)*secwidth
 	for(var i = 0; i < s.o.length; i++) {
 		s.o[i].position[0] += (num-oldnum)*secwidth
+		s.o[i].velocity=[0, 0]
 	}
 	
 	if(s.h1!=null) {
@@ -435,8 +435,8 @@ function generateSection() {
 		h1.body = new p2.Body({
 			position : [ceilx-1, ceily-1]
 		});
-		console.log(h1.body.fromPolygon(JSON.parse(JSON.stringify(ceilverts))))
-		console.log(h1.body)
+//		console.log(h1.body.fromPolygon(JSON.parse(JSON.stringify(ceilverts))))
+//		console.log(h1.body)
 		for(var i = 0; i < h1.body.shapes.length; i++) {
 			h1.body.shapes[i].collisionGroup = GROUND;
 			h1.body.shapes[i].collisionMask = FRAME|STICK;
@@ -488,7 +488,8 @@ function generateSection() {
 		h1: h1,
 		h1verts: ceilverts,
 		o: obstacles,
-		od: od
+		od: od,
+		inverts: new Array(obstacles.length).fill(false)
 	};
 }
 
@@ -525,7 +526,7 @@ function isEmpty(str) {
     return (!str || 0 === str.length);
 }
 
-var lvlCnt = 5;
+var lvlCnt = 7;
 
 var lvl1length = 100;
 
@@ -637,24 +638,7 @@ function initgame() {
 	pogo.frame.shape.collisionMask = GROUND|OBSTACLE;
 	pogo.stick.shape.collisionMask = GROUND|OBSTACLE;
 	
-	world.on("postStep", function(){
-		var t = distToTime((secnum-1)*secwidth)
-		if(t>3) {
-			if(sectionA.h1===null||true) {
-				for(var i = 0; i < sectionA.o.length; i++) {
-					sectionA.o[i].fixedY = false;
-					sectionA.o[i].velocity[1] = 2.5 * Math.sin(world.time*3);
-				}
-			}
-		
-			if(sectionB.h1===null||true) {
-				for(var i = 0; i < sectionB.o.length; i++) {
-					sectionB.o[i].fixedY = false;
-					sectionB.o[i].velocity[1] = 2.5 * Math.sin(world.time*3);
-				}
-			}
-		}
-    });
+	world.on("postStep", updateObstacles);
 	
 	world.on("beginContact",function(event){
 		if(event.bodyA == pogo.frame.body || event.bodyB == pogo.frame.body) {
@@ -673,4 +657,68 @@ function initgame() {
 			}
 		}
 	});
+}
+
+function updateObstacles() {
+	var t = distToTime((secnum-1)*secwidth)
+//	console.log(t)
+	if(t>3) {
+		if(t<5) {
+			if(sectionA.h1===null||true) {
+				for(var i = 0; i < sectionA.o.length; i++) {
+					sectionA.o[i].fixedY = false;
+					sectionA.o[i].velocity[1] = 2.5 * Math.sin(world.time*3);
+				}
+			}
+		
+			if(sectionB.h1===null||true) {
+				for(var i = 0; i < sectionB.o.length; i++) {
+					sectionB.o[i].fixedY = false;
+					sectionB.o[i].velocity[1] = 2.5 * Math.sin(world.time*3);
+				}
+			}
+		} else {
+			var calc = function (b, a, invert) {
+				var v = [a[0]-b[0], a[1]-b[1]]
+				var mag = Math.sqrt(v[0]*v[0]+v[1]*v[1])
+				if(mag<=0) {
+					console.log("zero mag! target reached!")
+					return [0, 0]
+				}
+				var speed = Math.sin((Math.min(mag, 9)/10)*Math.PI)
+				speed*=3 // Top Speed
+				speed = Math.max(speed, 1) // Min speed
+				if(speed/mag<=0) {
+				console.log("HELP ME!!!!!")
+				}
+				speed*=invert?-1:1
+				v = [v[0]*speed/mag, v[1]*speed/mag] //Normalize then scale
+//				console.log(v)
+				return v;
+			}
+			if(sectionA.h1===null||true) {
+//				console.log("A")
+				for(var i = 0; i < sectionA.o.length; i++) {
+//					sectionA.o[i].fixedX = false;
+//					sectionA.o[i].fixedY = false;
+					var pos = sectionA.o[i].position
+					var ppos = pogo.stick.body.position
+					
+					sectionA.o[i].velocity = calc(pos, ppos, sectionA.inverts[i]);
+				}
+			}
+		
+			if(sectionB.h1===null||true) {
+//				console.log("B")
+				for(var i = 0; i < sectionB.o.length; i++) {
+//					sectionB.o[i].fixedX = false;
+//					sectionB.o[i].fixedY = false;
+					var ppos = sectionB.o[i].position
+					var pos = pogo.stick.body.position
+					
+					sectionB.o[i].velocity = calc(pos, ppos, sectionB.inverts[i]);
+				}
+			}
+		}
+	}
 }

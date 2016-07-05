@@ -24,7 +24,87 @@ var cloudSpeedDef = 1.5;
 var cloudSpeedMin = 0.2;
 var cloudCnt = 5;
 
+function getHatX(x) {
+	var gh = 0;
+	var worldX = x/50-xscroll-w/50/2
+	var idx;
+	if(worldX>sectionB.h.body.position[0]) { // in sectionB
+		 var real = (worldX-sectionB.h.body.position[0])/2
+		 idx = Math.floor(real)
+		var amnt = (real%2)/2
+		var diff = (sectionB.d[idx+1]-sectionB.d[idx])||0
+		gh = -(sectionB.d[idx]+diff*amnt)*50
+	} else { // in sectionA
+		
+		var real = (worldX-sectionA.h.body.position[0])/2
+		idx = Math.floor(real)
+		var amnt = ((real*2)%2)/2
+		var diff = (sectionA.d[idx+1]-sectionA.d[idx])||0
+		gh = -(sectionA.d[idx]+diff*amnt)*50
+	}
+	gh+=h/2
+	gh+=yscroll*50
+	gh+=50
+	return gh;
+}
+
 function updateCloud() {
+	for(var i = 0; i < this.snow.particles.length; i++) {
+		this.snow.particles[i].x-=this.xoffset
+		this.snow.particles[i].y-=this.yoffset
+	}
+	
+	
+		this.snow.angle += 0.01;
+		for (var i = 0; i < this.snow.mp; i++) {
+			var p = this.snow.particles[i];
+			// Updating X and Y coordinates
+			// We will add 1 to the cos function to prevent negative values
+			// which will lead flakes to move upwards
+			// Every particle has its own density which can be used to make the
+			// downward movement different for each flake
+			// Lets make it more random by adding in the radius
+			p.y += Math.cos(this.snow.angle + p.d) + 1 + p.r / 2;
+			p.x += Math.sin(this.snow.angle) * 2;
+			if(this.idx!=0||Math.floor(distToTime(score+pogo.frame.body.position[0]-w/50/2))!=5) {
+				continue;
+			}
+			// Sending flakes back from the top when it exits
+			// Lets make it a bit more organic and let flakes enter from the
+			// left and right also.
+			if (p.x > w + 5 || p.x < -5 || p.y > getHatX(p.x)) {
+				if (i % 3 > 0) // 66.67% of the flakes
+				{
+					this.snow.particles[i] = {
+						x : Math.random() * w,
+						y : -10,
+						r : p.r,
+						d : p.d
+					};
+				} else {
+					// If the flake is exitting from the right
+					if (Math.sin(this.snow.angle) > 0) {
+						// Enter from the left
+						this.snow.particles[i] = {
+							x : -5,
+							y : Math.random() * h,
+							r : p.r,
+							d : p.d
+						}
+					} else {
+						// Enter from the right
+						this.snow.particles[i] = {
+							x : w + 5,
+							y : Math.random() * h,
+							r : p.r,
+							d : p.d
+						};
+					}
+				}
+			}
+		}
+	
+	
 	this.x-=this.xoffset
 	this.y-=this.yoffset
 	
@@ -32,6 +112,8 @@ function updateCloud() {
 		this.rain.particles[i].x-=this.xoffset
 		this.rain.particles[i].y-=this.yoffset
 	}
+	
+//	this.xoffset = 0;
 	
 	for(var i = 0; i < this.rain.drops.length; i++) {
 		this.rain.drops[i].x-=this.xoffset
@@ -44,26 +126,7 @@ function updateCloud() {
 	for (var i = 0, activeparticles; activeparticles = localparticles[i]; i++) {
 		activeparticles.x += activeparticles.velX;
 		activeparticles.y += activeparticles.velY+5;
-		var gh = 0;
-		var worldX = activeparticles.x/50-xscroll-w/50/2
-		var idx;
-		if(worldX>sectionB.h.body.position[0]) { // in sectionB
-			 var real = (worldX-sectionB.h.body.position[0])/2
-			 idx = Math.floor(real)
-			var amnt = (real%2)/2
-			var diff = (sectionB.d[idx+1]-sectionB.d[idx])||0
-			gh = -(sectionB.d[idx]+diff*amnt)*50
-		} else { // in sectionA
-			
-			var real = (worldX-sectionA.h.body.position[0])/2
-			idx = Math.floor(real)
-			var amnt = ((real*2)%2)/2
-			var diff = (sectionA.d[idx+1]-sectionA.d[idx])||0
-			gh = -(sectionA.d[idx]+diff*amnt)*50
-		}
-		gh+=h/2
-		gh+=yscroll*50
-		gh+=50
+		var gh = getHatX(activeparticles.x)
 		if (activeparticles.y > gh) {//height-15) {
 			localparticles.splice(i--, 1);
 			this.rain.splash(activeparticles.x, activeparticles.y, activeparticles.col);
@@ -91,7 +154,7 @@ function updateCloud() {
 			i=0
 			break;
 		}
-		this.rain.addRaindrops(Math.floor(Math.random()*this.w), -500); //this.x-cloudSize*2+(Math.random()*cloudSize*2)...this.y-15
+		this.rain.addRaindrops(Math.floor(Math.random()*this.w*1.5), -500); //this.x-cloudSize*2+(Math.random()*cloudSize*2)...this.y-15
 	}
 	
 	var left = this.x<-cloudSize
@@ -145,6 +208,21 @@ function splash(x, y, col, cnt) {
 }
 
 function renderCloud() {
+//	ctx.clearRect(0, 0, W, H);
+	var val = Math.floor(distToTime(score+pogo.frame.body.position[0]-w/50/2))
+//	console.log(val)
+	if(val==5) {
+	ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+	ctx.beginPath();
+	for(var i = 0; i < this.snow.mp; i++)
+	{
+		var p = this.snow.particles[i];
+		ctx.moveTo(p.x, p.y);
+		ctx.arc(p.x, p.y, p.r, 0, Math.PI*2, true);
+	}
+	ctx.fill();
+	}
+	
 	var tau = Math.PI * 2;
 	var localparticles = this.rain.particles
 	var localdrops = this.rain.drops
@@ -175,7 +253,26 @@ function renderCloud() {
 	ctx.globalAlpha="1"
 }
 
+function Snow() {
+//	console.log("Hi1")
+	this.angle = 0;
+	this.mp = 45;//25; //max particles
+	this.particles = [];
+	for(var i = 0; i < this.mp; i++)
+	{
+		this.particles.push({
+			x: Math.random()*w, //x-coordinate
+			y: Math.random()*h, //y-coordinate
+			r: Math.random()*4+1, //radius
+			d: Math.random()*this.mp //density
+		})
+	}
+//	console.log("Hi")
+	
+}
+
 function Cloud(x, y, speed, w, h, idx) {
+//	console.log("Checking")
 	this.idx = idx
 	this.x = x;
 	this.y = y;
@@ -194,11 +291,16 @@ function Cloud(x, y, speed, w, h, idx) {
 		addRaindrops: addRaindrops,
 		splash: splash
 	};
+	
+//	console.log("Check")
+	this.snow = new Snow();
+//	console.log("Check1")
 }
 
 var clouds = [];
 
 function initRender() {
+//	console.log("Checking??")
 	clouds = [];
 	for(var i = 0; i < cloudCnt; i++) {
 		clouds.push(new Cloud(Math.random()*w, (h/2-20-h/(1.75*50)-10)*Math.random()-10, Math.random()*(cloudSpeedDef-cloudSpeedMin)+cloudSpeedMin, w, h, i))
@@ -215,6 +317,7 @@ var lastTime;
 var maxSubSteps = 5; // Max physics ticks per render frame
 var fixedDeltaTime = 1 / speed; // Physics "tick" delta time
 function animate(time) {
+//	console.log("Checking??")
 	if(!pause) {
 		requestAnimationFrame(animate);
 	} else {
@@ -279,6 +382,26 @@ function render() {
 	if(px-w/50/2>secwidth) {
 		removeSection(sectionA)
 		removeSection(sectionB)
+		
+		for(var i = 0; i < sectionA.inverts.length; i++) {
+			sectionA.inverts[i]=false
+		}
+		
+		for(var i = 0; i < sectionB.inverts.length; i++) {
+			sectionB.inverts[i]=false
+		}
+		
+		for(var i = 0; i < sectionA.o.length; i++) {
+			var o = sectionA.o[i]
+			if(o.position[0]>sectionB.h.body.position[0]) {
+//				console.log(sectionB.o.length)
+				sectionB.o.push(o)
+				sectionA.o.splice(i, 1);
+				sectionB.inverts.push(false)
+				sectionA.inverts.splice(i, 1)
+//				console.log(sectionB.o.length)
+			}
+		}
 		sectionA=changenum(sectionB, 0, 1)
 		sectionB=changenum(generateSection(), 1, 0);
 		pogo.frame.body.position[0]-=secwidth
@@ -292,14 +415,39 @@ function render() {
 	if(px<w/50/2&&secnum>2) {
 		removeSection(sectionA)
 		removeSection(sectionB)
+//		sectionA.inverts = sectionA.inverts.map(value => !value)
+		for(var i = 0; i < sectionA.inverts.length; i++) {
+			sectionA.inverts[i]=!sectionA.inverts[i]
+		}
+		
+		for(var i = 0; i < sectionB.inverts.length; i++) {
+			sectionB.inverts[i]=!sectionB.inverts[i]
+		}
+		
+		for(var i = 0; i < sectionB.o.length&&false; i++) {
+//			sectionB.o[i].velocity = [-sectionB.o[i].velocity[0], -sectionB.o[i].velocity[1]]
+//			sectionB.o[i].invert = true;
+			var o = sectionB.o[i]
+			if(o.position[0]<sectionB.h.body.position[0]) {
+//				o.velocity = [-o.velocity[0], -o.velocity[1]]
+				sectionA.o.push(copysec(sectionB).o[i])
+				sectionB.o.splice(i, 1);
+				sectionA.inverts.push(true)
+				sectionB.inverts.splice(i, 1)
+			} else {
+//				o.velocity = [-o.velocity[0], -o.velocity[1]]
+			}
+		}
 		secnum-=2
 		sectionB=changenum(sectionA, 1, 0)
 		sectionA=generateSection()
 		pogo.frame.body.position[0]+=secwidth
 		pogo.stick.body.position[0]+=secwidth
+		updateObstacles()
 //		console.log("Sec #1")
 		addSection(sectionA)
 		addSection(sectionB)
+		updateObstacles()
 		score-=secwidth
 	}
 	
@@ -372,7 +520,7 @@ function render() {
 	}
 	
 	if(progress>3) {
-		currentRainAmnt = (progress%2>1)?rainAmnt:0;
+		currentRainAmnt = (progress<4)?rainAmnt:0;
 	}
 
 	
@@ -797,7 +945,7 @@ function drawObstacles1(s) {
 	
 	for(var i = 0; i < s.o.length; i++) {
 		o = s.o[i]
-		if(Math.abs(o.position[0]-px)<=m) {
+		if(Math.abs(o.position[0]-px)<=m||true) {
 			ctx.beginPath();
 			ctx.arc(o.position[0], o.position[1], 0.5, 0, 2 * Math.PI, false);
 			ctx.stroke()
