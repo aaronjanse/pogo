@@ -323,6 +323,33 @@ function animate(time) {
 	} else {
 		return;
 	}
+	
+	if(keyboard) {
+		if (keyspressed.up || keyspressed.space) {
+			pogo.spring.restLength = 1.25;
+			pogo.spring.applyForce();
+		}
+		
+		if(!(keyspressed.left && keyspressed.right)) {
+			if (keyspressed.left) {
+				pogo.frame.body.angularVelocity = +twistval
+			}
+			
+			if (keyspressed.right) {
+				pogo.frame.body.angularVelocity = -twistval
+			}
+		}
+		
+		if (!keyspressed.up && !keyspressed.space) {
+			pogo.spring.restLength = 0.25;
+			pogo.spring.applyForce();
+		}
+		
+		if (!keyspressed.left && !keyspressed.right && Math.abs(pogo.frame.body.angularVelocity)>twistval*3/4) {
+			pogo.frame.body.angularVelocity /= 8
+		}
+	}
+	
 	// Get the elapsed time since last frame, in seconds
 	var deltaTime = lastTime ? (time - lastTime) / 1000 : 0;
 	lastTime = time;
@@ -717,6 +744,7 @@ function render() {
 }
 
 function drawControls() {
+	if(keyboard) return;
 var rect = canvas.getBoundingClientRect();
 	
 	ctx.save()

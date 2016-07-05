@@ -1,4 +1,4 @@
-var twistval = 3.5;
+var twistval = 2//3.5;
 
 var fixedjoy = true; //fixed joystick
 
@@ -15,6 +15,13 @@ var keys = {
 	right: 39,
 	up: 38,
 	space: 32
+}
+
+var keyspressed = {
+	left: false,
+	right: false,
+	up: false,
+	space: false
 }
 
 function initControls() {
@@ -280,18 +287,20 @@ function keydown(evt) {
         evt.preventDefault();
     }
 	
-	if (evt.keyCode == keys.up || evt.keyCode == keys.space) {
-		pogo.spring.restLength = 1.25;
-		pogo.spring.applyForce();
+	if(evt.keyCode == keys.up) {
+		keyspressed.up=true
+	}
+	if(evt.keyCode == keys.space) {
+		keyspressed.space=true
+	}
+	if(evt.keyCode == keys.left) {
+		keyspressed.left=true
+	}
+	if(evt.keyCode == keys.right) {
+		keyspressed.right=true
 	}
 	
-	if (evt.keyCode == keys.left) {
-		pogo.frame.body.angularVelocity = +twistval
-	}
 	
-	if (evt.keyCode == keys.right) {
-		pogo.frame.body.angularVelocity = -twistval
-	}
 	
 //	return !(evt.keyCode == 32 && (evt.target.type != 'text' && evt.target.type != 'textarea'));
 }
@@ -301,14 +310,20 @@ function keyup(evt) {
 //        e.preventDefault();
 //    }
 	
-	if (evt.keyCode == keys.up || evt.keyCode == keys.space) {
-		pogo.spring.restLength = 0.25;
-		pogo.spring.applyForce();
+	if(evt.keyCode == keys.up) {
+		keyspressed.up=false
+	}
+	if(evt.keyCode == keys.space) {
+		keyspressed.space=false
+	}
+	if(evt.keyCode == keys.left) {
+		keyspressed.left=false
+	}
+	if(evt.keyCode == keys.right) {
+		keyspressed.right=false
 	}
 	
-	if (evt.keyCode == keys.left || evt.keyCode == keys.right) {
-		pogo.frame.body.angularVelocity = 0
-	}
+	
 	
 }
 
@@ -316,6 +331,8 @@ function keypress(evt) {
 	if([32, 37, 38, 39, 40].indexOf(evt.keyCode) > -1) {
 		evt.preventDefault();
     }
+	
+	return;
 	
 	 if (evt.keyCode == keys.left) {
 	 pogo.frame.body.angularVelocity=twistval
