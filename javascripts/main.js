@@ -66,7 +66,7 @@ var main = (function() {
 		HELP: 5
 	}
 	
-	var game = {
+	var obj = {
 		rawstate: states.MENU,
 		set state(x) {
 			switch(x) {
@@ -259,7 +259,9 @@ var main = (function() {
 		}
 	}
 	
+	obj.init()
 	
+	return obj;
 })()
 
 function changeOrientation() {
