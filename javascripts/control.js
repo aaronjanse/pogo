@@ -1,4 +1,4 @@
-var twistval = 2//3.5;
+var twistval = 2.6//3.5;
 
 var fixedjoy = true; //fixed joystick
 
