@@ -56,6 +56,32 @@ var sectionB = {
 	o: null
 }
 
+var main = (function() {
+	var states = {
+		MENU: 0,
+		PLAY: 1,
+		PAUSE: 2,
+		TUTORIAL: 3,
+		SETTINGS: 4,
+		HELP: 5
+	}
+	
+	var game = {
+		rawstate: states.MENU,
+		set state(x) {
+			
+		},
+		get state() {
+			return this.rawstate;
+		},
+		init: function () {
+			
+		}
+	}
+	
+	
+})()
+
 function changeOrientation() {
 	var canv = document.getElementById("myCanvas")
 	if(canv.width!=window.innerWidth) {
