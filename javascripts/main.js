@@ -69,7 +69,187 @@ var main = (function() {
 	var game = {
 		rawstate: states.MENU,
 		set state(x) {
+			switch(x) {
+				case mode.PLAY:
+					if(this.state==mode.MENU) {
+						$("#mainmenu").hide()
+						$("#mainmenu").fadeTo(300, 0)
+						$("#gamearea").css('background-color', 'black');
+					} else if(this.state==mode.PAUSE) {
+						$("#helpbutton").hide()
+						$("#settingsbutton").hide()
+						$("#homebutton").hide()
+					}
+					
+					$('#pause, #helpbutton, #settingsbutton').removeClass().addClass('circlebutton');
+					
+					$("#myCanvas").show()
+					$("#myCanvas").fadeTo(300, 1)
+					
+					$("#pause").show()
+					$("#pause").fadeTo(300, 1)
+					$("#pause").html('<i class="fa fa-pause"></i>')
+					
+//					init();
+//					requestAnimationFrame(animate);
+					break;
+				default:
+			}
 			
+			this.rawstate=x;
+		},
+		setupMenus: function () {
+			$("#play").click(function() {
+				this.state=mode.PLAY
+			})
+			$("#pause").click(function() {
+				if(this.state==mode.PAUSE) {
+					this.state=mode.PLAY
+				} else {
+					this.state=mode.PAUSE;
+				}
+			})
+		},
+		game: {
+			world: {
+				p2world: null,
+				pogo: null,
+				sections: {
+					a: {
+						d: null,
+						h: null,
+						h1: null,
+						h1verts: null,
+						o: null,
+						od: null
+					},
+					b: Object.assign({}, a) 
+				}
+			},
+			decor: {
+				clouds: [],
+				rain: new (function () {
+					this.particles = []
+					this.drops = []
+					this.addRaindrops = function (x, y, pieces) {
+						pieces=pieces||options.rain.pieces
+						
+						while (pieces--) {
+							this.particles.push( 
+							{
+								velX : (Math.random() * 0.25),
+								velY : (Math.random() * 9) + 1,
+								x: x,
+								y: y,
+								alpha : 1,
+								col : "hsla(200, 100%, 50%, 0.8)",
+							})
+						}
+					}
+					this.splash = function (x, y, col, cnt) {
+						cnt=cnt||options.rain.splashSize
+						while(cnt--) {
+							this.drops.push( 
+									{
+										velX : (Math.random() * 4-2	),
+										velY : (Math.random() * -4 ),
+										x: x,
+										y: y,
+										radius : 0.65 + Math.floor(Math.random() *1.6),
+										alpha : 1,
+										col : col
+									})
+						}
+					}
+					this.render = function (ctx) {
+						var tau = Math.PI * 2;
+						var localparticles = this.particles
+						var localdrops = this.drops
+						for (var i = 0, activeparticles; activeparticles = localparticles[i]; i++) {
+							ctx.globalAlpha = activeparticles.alpha;
+							ctx.fillStyle = activeparticles.col;
+							ctx.fillRect(activeparticles.x, activeparticles.y, activeparticles.velY/4, activeparticles.velY);
+						}
+						
+						for (var i = 0, activedrops; activedrops = localdrops[i]; i++) {
+							
+							ctx.globalAlpha = activedrops.alpha;
+							ctx.fillStyle = activedrops.col;
+							
+							ctx.beginPath();
+							ctx.arc(activedrops.x, activedrops.y, activedrops.radius, 0, tau);
+							ctx.fill();
+						}
+					}
+					this.update = function () {
+						for(var i = 0; i < this.rain.particles.length; i++) {
+							this.particles[i].x-=this.xoffset
+							this.particles[i].y-=this.yoffset
+						}
+						
+						for(var i = 0; i < this.rain.drops.length; i++) {
+							this.drops[i].x-=this.xoffset
+							this.rain.drops[i].y-=this.yoffset
+						}
+						
+						var localparticles = this.particles;
+						var localdrops = this.drops;
+						
+						for (var i = 0, activeparticles; activeparticles = localparticles[i]; i++) {
+							activeparticles.x += activeparticles.velX;
+							activeparticles.y += activeparticles.velY+5;
+							var gh = 0;
+							var worldX = activeparticles.x/50-xscroll-w/50/2
+							var idx;
+							if(worldX>sectionB.h.body.position[0]) { // in sectionB
+								 var real = (worldX-sectionB.h.body.position[0])/2
+								 idx = Math.floor(real)
+								var amnt = (real%2)/2
+								var diff = (sectionB.d[idx+1]-sectionB.d[idx])||0
+								gh = -(sectionB.d[idx]+diff*amnt)*50
+							} else { // in sectionA
+								
+								var real = (worldX-sectionA.h.body.position[0])/2
+								idx = Math.floor(real)
+								var amnt = ((real*2)%2)/2
+								var diff = (sectionA.d[idx+1]-sectionA.d[idx])||0
+								gh = -(sectionA.d[idx]+diff*amnt)*50
+							}
+							gh+=h/2
+							gh+=yscroll*50
+							gh+=50
+							if (activeparticles.y > gh) {//height-15) {
+								localparticles.splice(i--, 1);
+								this.splash(activeparticles.x, activeparticles.y, activeparticles.col);
+							}
+							
+						}
+
+						for (var i = 0, activedrops; activedrops = localdrops[i]; i++) {
+							activedrops.x += activedrops.velX;
+							activedrops.y += activedrops.velY;
+							activedrops.radius -= 0.075;
+							if (activedrops.alpha > 0) {
+								activedrops.alpha -= 0.005;
+							} else {
+								activedrops.alpha = 0;
+							}
+							if (activedrops.radius < 0) {
+								localdrops.splice(i--, 1);
+							}
+						}
+
+						var i = currentRainAmnt;
+						while (i--) {
+							if(this.idx!=0) {
+								i=0
+								break;
+							}
+							this.rain.addRaindrops(Math.floor(Math.random()*this.w), -500); //this.x-cloudSize*2+(Math.random()*cloudSize*2)...this.y-15
+						}
+					}
+				})()
+			}
 		},
 		get state() {
 			return this.rawstate;
