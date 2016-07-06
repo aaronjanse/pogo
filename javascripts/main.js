@@ -39,6 +39,9 @@ var stiffness = 350, damping = 0.5, restLength = 0.25 // Options for spring
 
 var rarity = 10 // obstacle rarity (must be even)
 
+var pogomaterial = new p2.Material()
+var icematerial = new p2.Material()
+
 /* End of options */
 
 var sectionA = {
@@ -326,6 +329,7 @@ function copysec(s) {
 		for(var i = 0; i < h1.body.shapes.length; i++) {
 			h1.body.shapes[i].collisionGroup = GROUND;
 			h1.body.shapes[i].collisionMask = FRAME|STICK;
+			h1.body.shapes[i].material=icematerial
 		}
 	}
 	
@@ -369,13 +373,14 @@ function generateSection() {
 	var endceil = false
 	var ceilx = null
 	var ceily = null
+	var ice = false
 	for (var i = 0; i <= secwidth/2; i++) {
 		var v = (i+secnum*secwidth/2) / 10
 		
 		var value = noise.simplex2(v, 0)*1.75;
 		var lvl=distToTime(secnum*secwidth+i*2)
 		if(lvl>2) {
-			if(lvl%2<1) { // Cave
+			if(lvl%2<1&&(Math.floor(lvl)<7||Math.floor(lvl)==9)) { // Cave
 				value=value/1.75; //Make terrain smoother
 				var ychange=null;
 				if(lvl%1<=0.5) {
@@ -410,6 +415,20 @@ function generateSection() {
 						}
 					}
 				}
+			} else {
+				if(lvl>=7&&lvl<9) {
+					if(!startedceil) {
+						value = Math.max(value, 1)
+						ceilx=i*2
+						ceily=-9
+						startedceil=true
+						ice=true
+						ceilverts.push([0, 0])
+					} else {
+						value=-2
+					}
+					ceilverts.push([i*2-ceilx, 1-ceily])
+				}
 			}
 		}
 		data.push(value)
@@ -428,18 +447,28 @@ function generateSection() {
 	
 	heightfield.body.addShape(heightfield.shape);
 	
+	var cm = null
+	
 	if(startedceil) {
-		ceilverts.push([ceilverts[ceilverts.length-1][0], ceilverts[ceilverts.length-1][1]+5+3])
-
+		if(!ice) {
+			ceilverts.push([ceilverts[ceilverts.length-1][0], ceilverts[ceilverts.length-1][1]+5+3])
+		} else {
+			ceilverts.push([ceilverts[ceilverts.length-1][0], 0])
+		}
+//		ceilverts.reverse()
 		var h1 = new Object();
 		h1.body = new p2.Body({
 			position : [ceilx-1, ceily-1]
 		});
+		h1.body.fromPolygon(JSON.parse(JSON.stringify(ceilverts)))
 //		console.log(h1.body.fromPolygon(JSON.parse(JSON.stringify(ceilverts))))
 //		console.log(h1.body)
 		for(var i = 0; i < h1.body.shapes.length; i++) {
 			h1.body.shapes[i].collisionGroup = GROUND;
 			h1.body.shapes[i].collisionMask = FRAME|STICK;
+//			if(ice) {
+				h1.body.shapes[i].material=icematerial
+//			}
 		}
 	}
 	
@@ -502,6 +531,10 @@ function addSection(s) {
 	if(s.h1!=null) {
 		world.addBody(s.h1.body)
 	}
+	
+//	if(s.cm!=null) {
+//		world.addContactMaterial(s.cm);
+//	}
 }
 
 function removeSection(s) {
@@ -513,6 +546,10 @@ function removeSection(s) {
 	if(s.h1!=null) {
 			world.removeBody(s.h1.body)
 	}
+	
+//	if(cm!=null) {
+//		world.removeContactMaterial(cm);
+//	}
 }
 
 function getsecwidth() {
@@ -526,7 +563,7 @@ function isEmpty(str) {
     return (!str || 0 === str.length);
 }
 
-var lvlCnt = 7;
+var lvlCnt = 10;
 
 var lvl1length = 100;
 
@@ -557,6 +594,11 @@ function initgame() {
 	world.defaultContactMaterial.friction = 100;
 	world.defaultContactMaterial.restitution = 0.1;
 	
+	world.addContactMaterial(new p2.ContactMaterial(icematerial, pogomaterial, {
+		restitution: 0,
+        friction: 25
+    }));
+	
 	var pogox = w/50/2;
 	
 	pogo = {
@@ -567,7 +609,8 @@ function initgame() {
 
 	pogo.stick.shape = new p2.Box({
 		width : 0.25,
-		height : 1.6
+		height : 1.6,
+		material: pogomaterial
 	});
 	
 	pogo.stick.body = new p2.Body({
@@ -580,7 +623,8 @@ function initgame() {
 	
 	pogo.frame.shape = new p2.Box({
 		width : 0.5,
-		height : 1.5
+		height : 1.5,
+		material: pogomaterial
 	});
 	
 	pogo.frame.body = new p2.Body({

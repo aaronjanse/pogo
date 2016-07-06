@@ -66,13 +66,21 @@ function updateCloud() {
 			// Lets make it more random by adding in the radius
 			p.y += Math.cos(this.snow.angle + p.d) + 1 + p.r / 2;
 			p.x += Math.sin(this.snow.angle) * 2;
-			if(this.idx!=0||Math.floor(distToTime(score+pogo.frame.body.position[0]-w/50/2))!=5) {
+			var lvl = distToTime(score+pogo.frame.body.position[0]-w/50/2)
+			if(this.idx!=0||(Math.floor(lvl)==6)) {
 				continue;
 			}
 			// Sending flakes back from the top when it exits
 			// Lets make it a bit more organic and let flakes enter from the
 			// left and right also.
-			if (p.x > w + 5 || p.x < -5 || p.y > getHatX(p.x)) {
+			var h = getHatX(p.x)
+			if(lvl>6) {
+				h = 0;
+				h+=this.h/2
+				h+=yscroll*50
+//				h+=50
+			}
+			if (p.x > w + 5 || p.x < -5 || p.y > h) {
 				if (i % 3 > 0) // 66.67% of the flakes
 				{
 					this.snow.particles[i] = {
@@ -211,7 +219,7 @@ function renderCloud() {
 //	ctx.clearRect(0, 0, W, H);
 	var val = Math.floor(distToTime(score+pogo.frame.body.position[0]-w/50/2))
 //	console.log(val)
-	if(val==5) {
+	if(val>=5&&val!=6) {
 	ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
 	ctx.beginPath();
 	for(var i = 0; i < this.snow.mp; i++)
@@ -600,6 +608,10 @@ function render() {
 	var bh1 = sectionB.h1!=null
 	
 	ctx.fillStyle="#555555"
+		
+	if(!(progress<7-0.15||Math.floor(progress)==9)) {
+		ctx.fillStyle = "#5555FF"
+	}
 	
 	if(ah1) {
 		ctx.beginPath();
@@ -689,6 +701,43 @@ function render() {
 	
 	// Restore transform
 	
+	var idx = -1;
+	var closest = -1;
+	var A = true
+	for(var i = 0; i < sectionA.o.length; i++) {
+		if(sectionA.o[i].position[0]>px+w/50/2) {
+			if(sectionA.o[i].position[0]-px<closest||closest==-1) {
+				closest = sectionA.o[i].position[0]-px
+				idx = i
+			}
+		}
+	}
+	
+	for(var i = 0; i < sectionB.o.length; i++) {
+		if(sectionB.o[i].position[0]>px+w/50/2) {
+			if(sectionB.o[i].position[0]-px<closest||closest==-1) {
+				closest = sectionB.o[i].position[0]-px
+				idx = i
+				A=false
+			}
+		}
+	}
+	
+	try {
+//		var o = null
+		if(A) {
+			var o = sectionA.o[idx]
+		} else {
+			var o = sectionB.o[idx]
+		}
+		canvas_arrow(px+w/50/2-0.3-1, o.position[1], px+w/50/2+0.5-1, o.position[1])
+		
+		ctx.strokeStyle = "#000000"
+		ctx.stroke()
+	} catch (e) {
+//		console.log(e)
+	}
+	
 	ctx.restore();
 	
 	drawControls()
@@ -696,8 +745,11 @@ function render() {
 	ctx.font = "20px Comic Sans MS";
 	ctx.fillStyle = "#555555";
 	ctx.textAlign = "center";
-	var dist = (Math.floor(((-xscroll-((progress>2&&progress%2<=1)?4:0))%secwidth)%(rarity*2)))
-	ctx.fillText("Next obstacle: "+(((rarity*2)-dist)), 100, h-20);
+	
+//	var dist = (Math.floor(((-xscroll-((progress>2&&progress%2<=1)?4:0))%secwidth)%(rarity*2)))
+	ctx.fillText("Next obstacle: "+Math.floor(closest), 100, h-20);
+	
+	
 	
 	ctx.font = "20px Comic Sans MS";
 	ctx.fillStyle = "#000000";
@@ -805,6 +857,11 @@ function fadeColors(progress) {
     var b = Math.round(lerp(a.b, b.b, 1-t%1));
     
     color.sky = rgbToHex(r, g, b)
+    
+    if(!(Math.floor(progress)<7||Math.floor(progress)==9)) {
+    	return;
+    }
+    
     var skyold = color.sky
     
     var caveFade = 0.025
@@ -989,17 +1046,17 @@ function drawObstacles1(s) {
 //		ctx.strokeStyle = "#555555"
 //		ctx.stroke()
 //	console.log(s.o[i1])
-	try {
-	if(!b) {
-		var co = sectionA.o.concat(sectionB.o)
-	
-	canvas_arrow(px+d-0.3, co[i1].position[1], px+d+0.5, co[i1].position[1])
+//	try {
+//	if(!b) {
+//		var co = sectionA.o.concat(sectionB.o)
+//	
+//	canvas_arrow(px+d-0.3, co[i1].position[1], px+d+0.5, co[i1].position[1])
+////	}
+//	ctx.strokeStyle = "#000000"
 //	}
-	ctx.strokeStyle = "#000000"
-	}
-	} catch (e) {
-		return;
-	}
+//	} catch (e) {
+//		return;
+//	}
 }
 
 // from http://stackoverflow.com/a/6333775
