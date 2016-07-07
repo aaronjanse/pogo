@@ -37,8 +37,6 @@ var oldlabel=""
 /* Start of options */
 var stiffness = 350, damping = 0.5, restLength = 0.25 // Options for spring
 
-var rarity = 10 // obstacle rarity (must be even)
-
 var pogomaterial = new p2.Material()
 var icematerial = new p2.Material()
 
@@ -56,8 +54,21 @@ var sectionB = {
 	o: null
 }
 
-var main = (function() {
-	var states = {
+var options = {
+	obstacles: {
+		ratity: 10 // obstacle rarity (must be even)
+	}
+	pogo: {
+		spring: {
+			stiffness: 350,
+			damping: 0.5,
+			restLength: 0.25
+		}
+	}
+}
+
+// var main = (function() {
+	var mode = {
 		MENU: 0,
 		PLAY: 1,
 		PAUSE: 2,
@@ -67,7 +78,7 @@ var main = (function() {
 	}
 	
 	var obj = {
-		rawstate: states.MENU,
+		rawstate: mode.MENU,
 		set state(x) {
 			switch(x) {
 				case mode.PLAY:
@@ -90,25 +101,36 @@ var main = (function() {
 					$("#pause").fadeTo(300, 1)
 					$("#pause").html('<i class="fa fa-pause"></i>')
 					
-//					init();
-//					requestAnimationFrame(animate);
+// init();
+// requestAnimationFrame(animate);
 					break;
 				default:
 			}
 			
 			this.rawstate=x;
 		},
+		get state() {
+			return this.rawstate;
+		},
 		setupMenus: function () {
-			$("#play").click(function() {
-				this.state=mode.PLAY
-			})
-			$("#pause").click(function() {
-				if(this.state==mode.PAUSE) {
-					this.state=mode.PLAY
-				} else {
-					this.state=mode.PAUSE;
+			var getStatic = (function(varthis) {
+				return function(func) {
+					return function(){
+						func(varthis);
+						}
 				}
-			})
+			})(this)
+			
+			$("#play").click(getStatic(function(thisobj) {
+				thisobj.state=mode.PLAY
+			}))
+			$("#pause").click(getStatic(function(thisobj) {
+				if(thisobj.state==mode.PAUSE) {
+					thisobj.state=mode.PLAY
+				} else {
+					thisobj.state=mode.PAUSE;
+				}
+			}))
 		},
 		game: {
 			world: {
@@ -123,45 +145,45 @@ var main = (function() {
 						o: null,
 						od: null
 					},
-					b: Object.assign({}, a) 
+					b: Object.assign({}, this.a) 
 				}
 			},
 			decor: {
 				clouds: [],
-				rain: new (function () {
-					this.particles = []
-					this.drops = []
-					this.addRaindrops = function (x, y, pieces) {
-						pieces=pieces||options.rain.pieces
-						
-						while (pieces--) {
-							this.particles.push( 
-							{
-								velX : (Math.random() * 0.25),
-								velY : (Math.random() * 9) + 1,
-								x: x,
-								y: y,
-								alpha : 1,
-								col : "hsla(200, 100%, 50%, 0.8)",
-							})
-						}
-					}
-					this.splash = function (x, y, col, cnt) {
-						cnt=cnt||options.rain.splashSize
-						while(cnt--) {
-							this.drops.push( 
-									{
-										velX : (Math.random() * 4-2	),
-										velY : (Math.random() * -4 ),
+				rain: (function () {
+					var obj = {
+							particles : [],
+							drops: []
+							addRaindrops: function (x, y, pieces) {
+								pieces=pieces||options.rain.pieces
+							
+								while (pieces--) {
+									this.particles.push( 
+											{
+										velX : (Math.random() * 0.25),
+										velY : (Math.random() * 9) + 1,
 										x: x,
 										y: y,
-										radius : 0.65 + Math.floor(Math.random() *1.6),
 										alpha : 1,
-										col : col
+										col : "hsla(200, 100%, 50%, 0.8)",
 									})
-						}
-					}
-					this.render = function (ctx) {
+								}
+							},
+							splash: function (x, y, col, cnt) {
+								cnt=cnt||options.rain.splashSize
+								while(cnt--) {
+									this.drops.push({
+											velX : (Math.random() * 4-2	),
+											velY : (Math.random() * -4 ),
+											x: x,
+											y: y,
+											radius : 0.65 + Math.floor(Math.random() *1.6),
+											alpha : 1,
+											col : col
+									});
+								}
+							},
+					render: function (ctx) {
 						var tau = Math.PI * 2;
 						var localparticles = this.particles
 						var localdrops = this.drops
@@ -180,18 +202,8 @@ var main = (function() {
 							ctx.arc(activedrops.x, activedrops.y, activedrops.radius, 0, tau);
 							ctx.fill();
 						}
-					}
-					this.update = function () {
-						for(var i = 0; i < this.rain.particles.length; i++) {
-							this.particles[i].x-=this.xoffset
-							this.particles[i].y-=this.yoffset
-						}
-						
-						for(var i = 0; i < this.rain.drops.length; i++) {
-							this.drops[i].x-=this.xoffset
-							this.rain.drops[i].y-=this.yoffset
-						}
-						
+					},
+					update: function () {
 						var localparticles = this.particles;
 						var localdrops = this.drops;
 						
@@ -201,7 +213,8 @@ var main = (function() {
 							var gh = 0;
 							var worldX = activeparticles.x/50-xscroll-w/50/2
 							var idx;
-							if(worldX>sectionB.h.body.position[0]) { // in sectionB
+							if(worldX>sectionB.h.body.position[0]) { // in
+																		// sectionB
 								 var real = (worldX-sectionB.h.body.position[0])/2
 								 idx = Math.floor(real)
 								var amnt = (real%2)/2
@@ -218,7 +231,7 @@ var main = (function() {
 							gh+=h/2
 							gh+=yscroll*50
 							gh+=50
-							if (activeparticles.y > gh) {//height-15) {
+							if (activeparticles.y > gh) {// height-15) {
 								localparticles.splice(i--, 1);
 								this.splash(activeparticles.x, activeparticles.y, activeparticles.col);
 							}
@@ -245,24 +258,53 @@ var main = (function() {
 								i=0
 								break;
 							}
-							this.rain.addRaindrops(Math.floor(Math.random()*this.w), -500); //this.x-cloudSize*2+(Math.random()*cloudSize*2)...this.y-15
+							this.addRaindrops(Math.floor(Math.random()*this.w), -500); // this.x-cloudSize*2+(Math.random()*cloudSize*2)...this.y-15
+						}
+					},
+					offset: function(x, y) {
+						for(var i = 0; i < this.particles.length; i++) {
+							this.particles[i].x-=x;
+							this.particles[i].y-=y;
+						}
+						
+						for(var i = 0; i < this.drops.length; i++) {
+							this.drops[i].x-=x;
+							this.rain.drops[i].y-=y;
 						}
 					}
+				}
+					obj.init();
+					return obj;
 				})()
+			},
+			controls: {
+				init: function() {
+					
+				}
+			}
+			init: function() {
+				this.controls.init()
+			},
+			animate: function() {
+				
+			},
+			pause: function() {
+				
+			},
+			play: function() {
+				
 			}
 		},
-		get state() {
-			return this.rawstate;
-		},
+		
 		init: function () {
-			
+			this.setupMenus();
 		}
 	}
 	
 	obj.init()
-	
-	return obj;
-})()
+//	
+// return obj;
+// })()
 
 function changeOrientation() {
 	var canv = document.getElementById("myCanvas")
@@ -282,9 +324,26 @@ function changeOrientation() {
 }
 
 function fullscreen() {
-//	console.log("FULLSCREEN")
-//	var check = false; //from detectmobilebrowsers.com
-//	  (function(a){if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4)))check = true})(navigator.userAgent||navigator.vendor||window.opera);
+// console.log("FULLSCREEN")
+// var check = false; //from detectmobilebrowsers.com
+// (function(a){if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge
+// |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm(
+// os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows
+// ce|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a
+// wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r
+// |s
+// )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1
+// u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp(
+// i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac(
+// |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt(
+// |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg(
+// g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-|
+// |o|v)|zz)|mt(50|p1|v
+// )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v
+// )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-|
+// )|webc|whit|wi(g
+// |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4)))check =
+// true})(navigator.userAgent||navigator.vendor||window.opera);
 	
 	document.getElementById("myCanvas").style.width = '100%';
 	document.getElementById("myCanvas").style.height = '100%';
@@ -382,13 +441,13 @@ function saveopts1(tutsave) {
 		default:
 	}
 	
-//	if(tutsave) {
-//		oldcontrols = {
-//				nojoystick: nojoystick,
-//				fixedjoy: fixedjoy,
-//				keyboard: keyboard
-//		}
-//	}
+// if(tutsave) {
+// oldcontrols = {
+// nojoystick: nojoystick,
+// fixedjoy: fixedjoy,
+// keyboard: keyboard
+// }
+// }
 	
 	updatehelp(nojoystick, keyboard, fixedjoy);
 	
@@ -418,20 +477,21 @@ function onload() {
 	$(".helptxtdiv").clone().appendTo(".tutcontrolsdiv")
 	
 	$('.dropdown-menu li a').on('click', function() {
-	    //$('.dropdowntitle').html($(this).find('a').html()+' <span class="caret">');
+	    // $('.dropdowntitle').html($(this).find('a').html()+' <span
+		// class="caret">');
 		$(".dropdowntitle").html($(this).text()+' <span class="caret">');
 	      $(".dropdowntitle").val($(this).text());
 	      processopts()
 	});
 	
-//	$('.savesel').on('click', function() {
-//	    console.log("Hi!");
-//	    alert("Hi")
-//	});
+// $('.savesel').on('click', function() {
+// console.log("Hi!");
+// alert("Hi")
+// });
 	fullscreen()
 	window.addEventListener("orientationchange", function() {
 		  // Announce the new orientation number
-//		  alert(window.orientation);
+// alert(window.orientation);
 		changeOrientation()
 		}, false);
 	
@@ -447,28 +507,46 @@ function onload() {
 function init() {
 	gameOver = false
 	pendingquit = false
-	//detects mobile
-//	var check = false; //from detectmobilebrowsers.com
-//	  (function(a){if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4)))check = true})(navigator.userAgent||navigator.vendor||window.opera);
+	// detects mobile
+// var check = false; //from detectmobilebrowsers.com
+// (function(a){if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge
+// |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm(
+// os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows
+// ce|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a
+// wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r
+// |s
+// )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1
+// u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp(
+// i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac(
+// |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt(
+// |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg(
+// g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-|
+// |o|v)|zz)|mt(50|p1|v
+// )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v
+// )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-|
+// )|webc|whit|wi(g
+// |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4)))check =
+// true})(navigator.userAgent||navigator.vendor||window.opera);
 	
 	
 	
 	console.log("Mobile or tablet: "+mobile)
 	
-//	if(mobile&&!fixedjoy) {
-////		togglefixedjoy() //fix the joystick location on mobile in case not by default
+// if(mobile&&!fixedjoy) {
+// // togglefixedjoy() //fix the joystick location on mobile in case not by
+// default
 //	
-//	}
+// }
 	nojoystick=mobile;
 	
-//	if(mobile) {
-//		if(!nojoystick) {
-//			joysticktoggle()
-//		}
-//	} else { // Disable button
-//		joysticktoggle()
-//		joysticktoggle()
-//	}
+// if(mobile) {
+// if(!nojoystick) {
+// joysticktoggle()
+// }
+// } else { // Disable button
+// joysticktoggle()
+// joysticktoggle()
+// }
 	
 	updatehelp(nojoystick, keyboard, fixedjoy);
 	
@@ -503,7 +581,7 @@ var padding = 2;
 
 function copysec(s) {
 	var obstacles = []
-//	var idx = 0
+// var idx = 0
 	for(var idx = 0; idx < s.o.length; idx++) {
 	        var circleShape = new p2.Circle({ radius: 0.5, sensor: true });
 	        var circleBody = new p2.Body({ mass:1, position:s.o[idx].position, fixedX: s.o[idx].fixedX, fixedY: s.o[idx].fixedY, velocity: s.o[idx].velocity});
@@ -511,7 +589,7 @@ function copysec(s) {
 	        circleShape.collisionGroup = OBSTACLE;
 	        circleShape.collisionMask = FRAME|STICK;
 	        obstacles.push(circleBody);
-//	        idx+=1
+// idx+=1
 	}
 	
 	var heightfield = new Object();
@@ -589,7 +667,7 @@ function generateSection() {
 		var lvl=distToTime(secnum*secwidth+i*2)
 		if(lvl>2) {
 			if(lvl%2<1&&(Math.floor(lvl)<7||Math.floor(lvl)==9)) { // Cave
-				value=value/1.75; //Make terrain smoother
+				value=value/1.75; // Make terrain smoother
 				var ychange=null;
 				if(lvl%1<=0.5) {
 					var x = (lvl%1)*4-1
@@ -663,20 +741,20 @@ function generateSection() {
 		} else {
 			ceilverts.push([ceilverts[ceilverts.length-1][0], 0])
 		}
-//		ceilverts.reverse()
+// ceilverts.reverse()
 		var h1 = new Object();
 		h1.body = new p2.Body({
 			position : [ceilx-1, ceily-1]
 		});
 		h1.body.fromPolygon(JSON.parse(JSON.stringify(ceilverts)))
-//		console.log(h1.body.fromPolygon(JSON.parse(JSON.stringify(ceilverts))))
-//		console.log(h1.body)
+// console.log(h1.body.fromPolygon(JSON.parse(JSON.stringify(ceilverts))))
+// console.log(h1.body)
 		for(var i = 0; i < h1.body.shapes.length; i++) {
 			h1.body.shapes[i].collisionGroup = GROUND;
 			h1.body.shapes[i].collisionMask = FRAME|STICK;
-//			if(ice) {
+// if(ice) {
 				h1.body.shapes[i].material=icematerial
-//			}
+// }
 		}
 	}
 	
@@ -740,9 +818,9 @@ function addSection(s) {
 		world.addBody(s.h1.body)
 	}
 	
-//	if(s.cm!=null) {
-//		world.addContactMaterial(s.cm);
-//	}
+// if(s.cm!=null) {
+// world.addContactMaterial(s.cm);
+// }
 }
 
 function removeSection(s) {
@@ -755,18 +833,23 @@ function removeSection(s) {
 			world.removeBody(s.h1.body)
 	}
 	
-//	if(cm!=null) {
-//		world.removeContactMaterial(cm);
-//	}
+// if(cm!=null) {
+// world.removeContactMaterial(cm);
+// }
 }
 
 function getsecwidth() {
-	var canvaswidth = Math.ceil(w/50+padding) //Get the ceil of the canvas width (along with extra padding) in game units
-	var x = Math.ceil(canvaswidth/rarity)*rarity // round so that distance between obstacles is consistent between sections
+	var canvaswidth = Math.ceil(w/50+padding) // Get the ceil of the canvas
+												// width (along with extra
+												// padding) in game units
+	var x = Math.ceil(canvaswidth/rarity)*rarity // round so that distance
+													// between obstacles is
+													// consistent between
+													// sections
 	return x;
 }
 
-//from http://stackoverflow.com/a/3261380
+// from http://stackoverflow.com/a/3261380
 function isEmpty(str) {
     return (!str || 0 === str.length);
 }
@@ -823,7 +906,7 @@ function initgame() {
 	
 	pogo.stick.body = new p2.Body({
 		mass : 0.25,
-//		damping: 0.2,
+// damping: 0.2,
 		position : [ pogox, 2.75],
 		angularVelocity : angularVelocity,
 		velocity : [ 5, 0 ]
@@ -913,7 +996,7 @@ function initgame() {
 
 function updateObstacles() {
 	var t = distToTime((secnum-1)*secwidth)
-//	console.log(t)
+// console.log(t)
 	if(t>3) {
 		if(t<5) {
 			if(sectionA.h1===null||true) {
@@ -944,15 +1027,15 @@ function updateObstacles() {
 				console.log("HELP ME!!!!!")
 				}
 				speed*=invert?-1:1
-				v = [v[0]*speed/mag, v[1]*speed/mag] //Normalize then scale
-//				console.log(v)
+				v = [v[0]*speed/mag, v[1]*speed/mag] // Normalize then scale
+// console.log(v)
 				return v;
 			}
 			if(sectionA.h1===null||true) {
-//				console.log("A")
+// console.log("A")
 				for(var i = 0; i < sectionA.o.length; i++) {
-//					sectionA.o[i].fixedX = false;
-//					sectionA.o[i].fixedY = false;
+// sectionA.o[i].fixedX = false;
+// sectionA.o[i].fixedY = false;
 					var pos = sectionA.o[i].position
 					var ppos = pogo.stick.body.position
 					
@@ -961,10 +1044,10 @@ function updateObstacles() {
 			}
 		
 			if(sectionB.h1===null||true) {
-//				console.log("B")
+// console.log("B")
 				for(var i = 0; i < sectionB.o.length; i++) {
-//					sectionB.o[i].fixedX = false;
-//					sectionB.o[i].fixedY = false;
+// sectionB.o[i].fixedX = false;
+// sectionB.o[i].fixedY = false;
 					var ppos = sectionB.o[i].position
 					var pos = pogo.stick.body.position
 					
