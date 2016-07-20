@@ -1,2 +1,4 @@
 minify.bat
 imports.html
+minify.bat.old
+*.bat

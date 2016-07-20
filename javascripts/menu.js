@@ -1,4 +1,9 @@
 function gohome() {
+//	ga('send', 'event', {
+//	    eventCategory: 'Menu Interaction',
+//	    eventAction: 'click',
+//	    eventLabel: "home"
+//	  });
 	console.log(oldlabel)
 	$(".dropdowntitle").val(oldlabel);
 	document.getElementById("pausebutton").className = 'circlebutton'
@@ -28,6 +33,11 @@ function gohome() {
 }
 
 function play() {
+	ga('send', 'event', {
+	    eventCategory: 'Menu Interaction',
+	    eventAction: 'click',
+	    eventLabel: "play"
+	  });
 	if(pause) {
 		back()
 //		pause=false;
@@ -65,6 +75,11 @@ function pausegame() {
 		return;
 	}
 	if(!pause) {
+//		ga('send', 'event', {
+//		    eventCategory: 'Menu Interaction',
+//		    eventAction: 'click',
+//		    eventLabel: "pause"
+//		  });
 		pause = true;
 	//	document.getElementById("myCanvas").style.display = 'none'
 		document.getElementById("myCanvas").style.opacity = '0.3'
@@ -107,6 +122,11 @@ function mainbpprep() {
 }
 
 function tutorial() {
+	ga('send', 'event', {
+	    eventCategory: 'Menu Interaction',
+	    eventAction: 'click',
+	    eventLabel: "tutorial"
+	  });
 //	oldcontrols = {
 //			nojoystick: nojoystick,
 //			fixedjoy: fixedjoy,
@@ -137,6 +157,11 @@ function tutorial() {
 }
 
 function help() {
+	ga('send', 'event', {
+	    eventCategory: 'Menu Interaction',
+	    eventAction: 'click',
+	    eventLabel: "help"
+	  });
 	document.getElementById("helpbutton").style.display = 'none'
 	document.getElementById("settingsbutton").style.display = 'none'
 		
@@ -151,6 +176,11 @@ function help1() {
 }
 
 function settings() {
+	ga('send', 'event', {
+	    eventCategory: 'Menu Interaction',
+	    eventAction: 'click',
+	    eventLabel: "settings"
+	  });
 	document.getElementById("homebutton").style.display = 'none'
 	document.getElementById("helpbutton").style.display = 'none'
 	document.getElementById("settingsbutton").style.display = 'none'
