@@ -125,12 +125,12 @@ function rendertut() {
 		if (!pendingquit) {
 			score = Math.round(pogo.frame.body.position[0]);
 			pendingquit = true
-			setTimeout(function() {
+			restarttimer = setTimeout(function() {
 //				return;
-				if(leftplay) {
-					leftplay=false;
-					return;
-				}
+//				if(leftplay) {
+//					leftplay=false;
+//					return;
+//				}
 				gameOver = false
 				pendingquit = false
 				inittut();

@@ -325,6 +325,9 @@ var lastTime;
 var maxSubSteps = 5; // Max physics ticks per render frame
 var fixedDeltaTime = 1 / speed; // Physics "tick" delta time
 function animate(time) {
+	if(home) {
+		return;
+	}
 //	console.log("Checking??")
 	if(!pause) {
 		requestAnimationFrame(animate);
@@ -770,11 +773,11 @@ function render() {
 			}
 			
 			pendingquit = true
-			setTimeout(function() {
-				if(leftplay) {
-					leftplay=false;
-					return;
-				}
+			restarttimer = setTimeout(function() {
+//				if(leftplay) {
+//					leftplay=false;
+//					return;
+//				}
 				gameOver = false
 				pendingquit = false
 				initgame();

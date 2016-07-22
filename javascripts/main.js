@@ -2,6 +2,10 @@ var gameOver = false
 var pendingquit = false
 var pause = false;
 
+var home = true;
+
+var restarttimer = null;
+
 var lives = 3;
 
 var tutorialm = false
@@ -54,6 +58,12 @@ var sectionB = {
 	d: null,
 	h: null,
 	o: null
+}
+
+function clearTimer() {
+	if(restarttimer!==null) {
+		clearTimeout(restarttimer)
+	}
 }
 
 function changeOrientation() {

@@ -1,4 +1,5 @@
 function gohome() {
+	home=true
 //	ga('send', 'event', {
 //	    eventCategory: 'Menu Interaction',
 //	    eventAction: 'click',
@@ -23,7 +24,7 @@ function gohome() {
 	document.getElementById("tutnextb").style.display = 'none'
 	
 	document.getElementById("health").style.display = 'none'
-	
+	clearTimer()
 	if(gameOver) {
 		leftplay=true;
 	}
@@ -33,6 +34,8 @@ function gohome() {
 }
 
 function play() {
+	tutorialm=false;
+	home=false
 	ga('send', 'event', {
 	    eventCategory: 'Menu Interaction',
 	    eventAction: 'click',
@@ -121,7 +124,12 @@ function mainbpprep() {
 	document.getElementById("settingsbutton").className = 'circlebuttoni'
 }
 
+var test = function() {}
+
 function tutorial() {
+	console.log("tutorial() Called")
+	test()
+	home=false
 	ga('send', 'event', {
 	    eventCategory: 'Menu Interaction',
 	    eventAction: 'click',
