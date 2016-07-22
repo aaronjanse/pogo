@@ -1,3 +1,5 @@
+var debugtesting = false
+
 var gameOver = false
 var pendingquit = false
 var pause = false;
@@ -695,6 +697,9 @@ function initgame() {
 	world.on("postStep", updateObstacles);
 	
 	world.on("beginContact",function(event){
+		if(debugtesting) {
+			return;
+		}
 		if(event.bodyA == pogo.frame.body || event.bodyB == pogo.frame.body) {
 			var h = event.bodyA == sectionA.h.body || event.bodyB == sectionA.h.body
 			h = h || event.bodyA == sectionB.h.body || event.bodyB == sectionB.h.body
