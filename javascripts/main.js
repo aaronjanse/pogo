@@ -218,10 +218,6 @@ function onload() {
 
     if (!mobile) {
         $(".gyro").hide();
-    } else {
-        $(".keyboard").hide();
-        $(".dropdowntitle").html("Gyro" + ' <span class="caret">');
-        $(".dropdowntitle").val("Gyro");
     }
 
     $(".controls").clone().appendTo(".controlsdiv")
@@ -293,6 +289,8 @@ function init() {
             $(".gyro").hide();
         }
     }
+    
+    $("#errortxt").html+=""+nojoystick
 
     //	if(mobile) {
     //		if(!nojoystick) {
@@ -309,6 +307,12 @@ function init() {
         elems = document.getElementsByClassName("dtop")
         for (var i = 0; i < elems.length; i++) {
             elems[i].style.display = "none"
+        }
+        
+        if(nojoystick) {
+            $(".keyboard").hide();
+            $(".dropdowntitle").html("Gyro" + ' <span class="caret">');
+            $(".dropdowntitle").val("Gyro");
         }
     }
 
