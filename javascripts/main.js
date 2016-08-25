@@ -271,6 +271,28 @@ function init() {
     //	
     //	}
     nojoystick = mobile;
+    
+    var isChromium = window.chrome,
+    winNav = window.navigator,
+    vendorName = winNav.vendor,
+    isOpera = winNav.userAgent.indexOf("OPR") > -1,
+    isIEedge = winNav.userAgent.indexOf("Edge") > -1,
+    isIOSChrome = winNav.userAgent.match("CriOS");
+
+    if(isIOSChrome){
+        // is Google Chrome on IOS
+        
+    } else if(isChromium !== null && isChromium !== undefined && vendorName === "Google Inc." && isOpera == false && isIEedge == false) {
+        // is Google Chrome
+    } else { 
+        // not Google Chrome
+        var ua = navigator.userAgent;
+        var is_native_android = ((ua.indexOf('Mozilla/5.0') > -1 && ua.indexOf('Android ') > -1 && ua.indexOf('AppleWebKit') > -1) && (ua.indexOf('Version') > -1));
+        if(!is_native_android) {
+            nojoystick = false
+            $(".gyro").hide();
+        }
+    }
 
     //	if(mobile) {
     //		if(!nojoystick) {
