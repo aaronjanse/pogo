@@ -11,7 +11,7 @@ var colordef = {
 		stick: "#ff66ff"
 }
 
-var color = Object.assign({}, colordef);
+var color = JSON.parse(JSON.stringify(colordef));
 var currentRainAmnt = 0
 
 var rainAmnt = 4;
