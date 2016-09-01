@@ -266,7 +266,8 @@ function init() {
     ////		togglefixedjoy() //fix the joystick location on mobile in case not by default
     //	
     //	}
-    nojoystick = mobile;
+    nojoystick = false
+//    nojoystick = mobile; //#################*************** This line when uncommented enables auto-gyro mode
     
     var isChromium = window.chrome,
     winNav = window.navigator,
@@ -285,8 +286,8 @@ function init() {
         var ua = navigator.userAgent;
         var is_native_android = ((ua.indexOf('Mozilla/5.0') > -1 && ua.indexOf('Android ') > -1 && ua.indexOf('AppleWebKit') > -1) && (ua.indexOf('Version') > -1));
         if(!is_native_android) {
-            nojoystick = false
-            $(".gyro").hide();
+//            nojoystick = false
+//            $(".gyro").hide();
         }
     }
     
