@@ -270,8 +270,17 @@ function init() {
     ////		togglefixedjoy() //fix the joystick location on mobile in case not by default
     //
     //	}
+
     nojoystick = !mobile
     keyboard = !mobile
+
+    if(!mobile) {
+      $(".dropdowntitle").html('Keyboard' + ' <span class="caret">');
+      $(".dropdowntitle").val('Keyboard');
+      //processopts()
+    } else {
+      document.getElementById("modeHUD").innerHTML="Mode: Joystick"
+    }
 //    nojoystick = mobile; //#################*************** This line when uncommented enables auto-gyro mode
 
     var isChromium = window.chrome,
