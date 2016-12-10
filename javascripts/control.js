@@ -41,10 +41,11 @@ function initControls() {
     //		window.addEventListener('deviceorientation', handleOrientation);
     //	}
 
-    tiltoffset = window.screen.orientation.angle;
+    //tiltoffset = window.screen.orientation.angle;
+    tiltoffset = 0;
 
-    console.log("Offset: ");
-    console.log(window.screen.orientation);
+    //console.log("Offset: ");
+    //console.log(window.screen.orientation);
 
     if (!window.DeviceOrientationEvent) {
         console.log("DeviceOrientation is not supported");
