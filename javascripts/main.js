@@ -99,6 +99,24 @@ function fullscreen() {
     document.getElementById("myCanvas").style.height = '100%';
     document.getElementById("myCanvas").width = window.innerWidth
     document.getElementById("myCanvas").height = window.innerHeight
+
+    if (window.devicePixelRatio > 1 && false) {
+      console.log("Retina?")
+      canvas = document.getElementById("myCanvas");
+    var canvasWidth = canvas.width;
+    var canvasHeight = canvas.height;
+
+    canvas.width = canvasWidth * window.devicePixelRatio;
+    canvas.height = canvasHeight * window.devicePixelRatio;
+    canvas.style.width = canvasWidth;
+    canvas.style.height = canvasHeight;
+
+    ctx = canvas.getContext("2d");
+    w = canvas.width;
+    h = canvas.height;
+    //ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    //ctx.translate(-w/2, -h/4)
+}
 }
 
 function resetHealth() {
