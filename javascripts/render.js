@@ -751,14 +751,43 @@ function render() {
 	
 //	var dist = (Math.floor(((-xscroll-((progress>2&&progress%2<=1)?4:0))%secwidth)%(rarity*2)))
 	ctx.fillText("Next obstacle: "+Math.floor(closest), 100, h-20);
-	
-	
-	
-	ctx.font = "20px Comic Sans MS";
+
+
+
+	ctx.font = "20px Courier New";
 	ctx.fillStyle = "#000000";
 	ctx.textAlign = "left";
-	ctx.fillText("Level/Half-Days: "+progress, 0, 60);
-	
+	var daysRaw = progress/2+0.25;
+
+
+	// based on http://stackoverflow.com/a/13904120/6496271
+	// in seconds
+	var delta = daysRaw*24*60*60;
+
+	// calculate (and subtract) whole days
+	var days = Math.floor(delta / 86400);
+	delta -= days * 86400;
+
+	// calculate (and subtract) whole hours
+	var hours = Math.floor(delta / 3600) % 24;
+	delta -= hours * 3600;
+
+	// calculate (and subtract) whole minutes
+	var minutes = Math.floor(delta / 60) % 60;
+	delta -= minutes * 60;
+
+	// what's left is seconds
+	var seconds = delta % 60;  // in theory the modulus is not required
+
+	var timeTxt = "Day " + days + ", ";
+	var hrsTxt = hours%12+1+"";
+	timeTxt += ("0"+hrsTxt).substring(hrsTxt.length-1) + ":";
+	timeTxt += ("0"+minutes).substring((""+minutes).length-1) + " ";
+	timeTxt += (hours>11) ? "PM" : "AM"
+
+	ctx.fillText(timeTxt, 10, 60);
+	// "Level/Half-Days: "+Math.round(progress*10000)/10000
+
 	if(gameOver) {
 		ctx.font = "30px Comic Sans MS";
 		ctx.fillStyle = "red";
