@@ -316,7 +316,7 @@ function init() {
     //
     //	}
 
-    nojoystick = !mobile
+    nojoystick = true
     keyboard = !mobile
 
     if(!mobile) {
@@ -324,7 +324,7 @@ function init() {
       $(".dropdowntitle").val('Keyboard');
       //processopts()
     } else {
-      document.getElementById("modeHUD").innerHTML="Mode: Joystick"
+      document.getElementById("modeHUD").innerHTML="Mode: Gyro"
     }
 //    nojoystick = mobile; //#################*************** This line when uncommented enables auto-gyro mode
 
