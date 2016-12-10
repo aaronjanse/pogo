@@ -99,7 +99,7 @@ function initControls() {
     }
 
     //	tiltoffset=90
-    //	
+    //
     //	document.getElementById("myCanvas").webkitRequestFullscreen();
     ////	screen.lockOrientationUniversal = screen.lockOrientation || screen.mozLockOrientation || screen.msLockOrientation;
     //
@@ -291,16 +291,16 @@ function keydown(evt) {
         evt.preventDefault();
     }
 
-    if (evt.keyCode == keys.up) {
+    if (evt.keyCode == keys.up || evt.keyCode == 87) {
         keyspressed.up = true
     }
-    if (evt.keyCode == keys.space) {
+    if (evt.keyCode == keys.space  || evt.keyCode == 87) {
         keyspressed.space = true
     }
-    if (evt.keyCode == keys.left) {
+    if (evt.keyCode == keys.left || evt.keyCode == 65) {
         keyspressed.left = true
     }
-    if (evt.keyCode == keys.right) {
+    if (evt.keyCode == keys.right || evt.keyCode == 68) {
         keyspressed.right = true
     }
 
@@ -314,16 +314,16 @@ function keyup(evt) {
     //        e.preventDefault();
     //    }
 
-    if (evt.keyCode == keys.up) {
+    if (evt.keyCode == keys.up || evt.keyCode == 87) {
         keyspressed.up = false
     }
-    if (evt.keyCode == keys.space) {
+    if (evt.keyCode == keys.space || evt.keyCode == 87) {
         keyspressed.space = false
     }
-    if (evt.keyCode == keys.left) {
+    if (evt.keyCode == keys.left || evt.keyCode == 65) {
         keyspressed.left = false
     }
-    if (evt.keyCode == keys.right) {
+    if (evt.keyCode == keys.right || evt.keyCode == 68) {
         keyspressed.right = false
     }
 
@@ -332,17 +332,17 @@ function keyup(evt) {
 }
 
 function keypress(evt) {
-    if ([32, 37, 38, 39, 40].indexOf(evt.keyCode) > -1) {
-        evt.preventDefault();
-    }
+//    if ([32, 37, 38, 39, 40].indexOf(evt.keyCode) > -1) {
+//        evt.preventDefault();
+//    }
 
     return;
 
-    if (evt.keyCode == keys.left) {
+    if (evt.keyCode == keys.left || evt.keyCode == 65) {
         pogo.frame.body.angularVelocity = twistval
     }
 
-    if (evt.keyCode == keys.right) {
+    if (evt.keyCode == keys.right|| evt.keyCode == 68) {
         pogo.frame.body.angularVelocity = -twistval
     }
 }
