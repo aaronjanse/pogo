@@ -264,11 +264,12 @@ function init() {
 
     //	if(mobile&&!fixedjoy) {
     ////		togglefixedjoy() //fix the joystick location on mobile in case not by default
-    //	
+    //
     //	}
-    nojoystick = false
+    nojoystick = !mobile
+    keyboard = !mobile
 //    nojoystick = mobile; //#################*************** This line when uncommented enables auto-gyro mode
-    
+
     var isChromium = window.chrome,
     winNav = window.navigator,
     vendorName = winNav.vendor,
@@ -278,10 +279,10 @@ function init() {
 
     if(isIOSChrome){
         // is Google Chrome on IOS
-        
+
     } else if(isChromium !== null && isChromium !== undefined && vendorName === "Google Inc." && isOpera == false && isIEedge == false) {
         // is Google Chrome
-    } else { 
+    } else {
         // not Google Chrome
         var ua = navigator.userAgent;
         var is_native_android = ((ua.indexOf('Mozilla/5.0') > -1 && ua.indexOf('Android ') > -1 && ua.indexOf('AppleWebKit') > -1) && (ua.indexOf('Version') > -1));
@@ -290,7 +291,7 @@ function init() {
 //            $(".gyro").hide();
         }
     }
-    
+
     $("#errortxt").html+=""+nojoystick
 
     //	if(mobile) {
@@ -309,7 +310,7 @@ function init() {
         for (var i = 0; i < elems.length; i++) {
             elems[i].style.display = "none"
         }
-        
+
         if(nojoystick) {
             $(".keyboard").hide();
             $(".dropdowntitle").html("Gyro" + ' <span class="caret">');
