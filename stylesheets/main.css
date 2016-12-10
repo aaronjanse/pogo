@@ -54,6 +54,28 @@ button {
 	color: black;
 }
 
+#modeHUD {
+	position: absolute;
+	z-index: 13;
+	top: 10px;
+	right: 100px;
+	display: none;
+	color: white;
+
+	-webkit-transition-duration: 5s; /* Safari */
+	transition-duration: 5s;
+}
+
+@-webkit-keyframes zoominout {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(2); }
+}
+
+@keyframes zoominout {
+	0%,100% { transform: scale(1); }
+  50% { transform: scale(2); }
+}
+
 .circlebutton {
 	background-color: rgba(0, 0, 0, 0.15);
 	color: black;
@@ -123,7 +145,7 @@ button {
 	pointer-events: none;
 	display: none;
 	opacity: 0.8;
-	position: absolute; 
+	position: absolute;
 	z-index: 2;
 	left:50%;
     top:50%;

@@ -11,24 +11,25 @@ function gohome() {
 		document.getElementById("helpbutton").className = 'circlebutton'
 		document.getElementById("settingsbutton").className = 'circlebutton'
 	document.getElementById("pausebutton").style.display = 'none'
+	document.getElementById("modeHUD").style.display = 'none'
 	document.getElementById("helpbutton").style.display = 'none'
 	document.getElementById("settingsbutton").style.display = 'none'
 	document.getElementById("mainmenu").style.display = 'inline'
 	document.getElementById("mainmenu").style.opacity = '1'
 	document.getElementById("myCanvas").style.display = 'none'
-	
+
 	document.getElementById("gamearea").style.backgroundColor = 'white'
-	
+
 	document.getElementById("homebutton").style.display = 'none'
-		
+
 	document.getElementById("tutnextb").style.display = 'none'
-	
+
 	document.getElementById("health").style.display = 'none'
 	clearTimer()
 	if(gameOver) {
 		leftplay=true;
 	}
-	
+
 	tutorialm=false
 	pause=false;
 }
@@ -45,10 +46,17 @@ function play() {
 		back()
 //		pause=false;
 	}
+
+	document.getElementById("modeHUD").style.display = 'block'
+
+	document.getElementById("modeHUD").style.animation = 'zoominout 0.75s linear forwards';
+
+
+
 	document.getElementById("pausebutton").className = 'circlebutton'
 	document.getElementById("helpbutton").className = 'circlebutton'
 	document.getElementById("settingsbutton").className = 'circlebutton'
-			
+
 	document.getElementById("helpbutton").style.display = 'none'
 	document.getElementById("settingsbutton").style.display = 'none'
 	document.getElementById("mainmenu").style.display = 'none'
@@ -58,17 +66,17 @@ function play() {
 	document.getElementById("pausebutton").style.display = 'block'
 //	document.getElementById("pausebutton").style.opacity = '1'
 	document.getElementById("myCanvas").style.opacity = '1'
-		
+
 	document.getElementById("gamearea").style.backgroundColor = 'black'
-	
+
 	document.getElementById("homebutton").style.display = 'none'
-	
+
 	if(!pause) {
 		init();
 	}
-	
+
 	requestAnimationFrame(animate);
-	
+
 	pause = false;
 }
 
@@ -89,9 +97,9 @@ function pausegame() {
 		document.getElementById("pausebutton").innerHTML = '<i class="fa fa-play"></i>'
 		document.getElementById("helpbutton").style.display = 'inline-block'
 		document.getElementById("settingsbutton").style.display = 'inline-block'
-			
+
 		document.getElementById("homebutton").style.display = 'inline-block'
-		
+
 		document.getElementById("pausebutton").className = 'circlebuttoni'
 		document.getElementById("helpbutton").className = 'circlebuttoni'
 		document.getElementById("settingsbutton").className = 'circlebuttoni'
@@ -109,7 +117,7 @@ function mainbpprep() {
 	document.getElementById("pausebutton").style.display = 'block'
 //	document.getElementById("pausebutton").style.opacity = '1'
 	document.getElementById("myCanvas").style.opacity = '1'
-		
+
 	document.getElementById("gamearea").style.backgroundColor = 'black'
 	init();
 	animate();
@@ -118,7 +126,7 @@ function mainbpprep() {
 	document.getElementById("pausebutton").innerHTML = '<i class="fa fa-play"></i>'
 	document.getElementById("helpbutton").style.display = 'inline-block'
 	document.getElementById("settingsbutton").style.display = 'inline-block'
-	
+
 	document.getElementById("pausebutton").className = 'circlebuttoni'
 	document.getElementById("helpbutton").className = 'circlebuttoni'
 	document.getElementById("settingsbutton").className = 'circlebuttoni'
@@ -141,22 +149,22 @@ function tutorial() {
 //			keyboard: keyboard
 //	}
 	oldlabel=$(".dropdowntitle").val();
-	
+
 	document.getElementById("mainmenu").style.display = 'none'
 	document.getElementById("mainmenu").style.opacity = '0'
 	document.getElementById("myCanvas").style.display = 'inline'
 	document.getElementById("myCanvas").style.opacity = '1'
-		
+
 	document.getElementById("tuthelp").style.display = 'block'
 	document.getElementById("tuthelp").style.opacity = '1'
-		
+
 	document.getElementById("lvl0").style.display = 'block'
 	document.getElementById("lvl2").style.display = 'none'
-	
+
 	document.getElementById("homebutton").style.display = 'none'
-		
+
 	document.getElementById("gamearea").style.backgroundColor = 'black'
-		
+
 	tutorialm=true
 	pause=false
 	lvl=0
@@ -172,7 +180,7 @@ function help() {
 	  });
 	document.getElementById("helpbutton").style.display = 'none'
 	document.getElementById("settingsbutton").style.display = 'none'
-		
+
 	document.getElementById("helparea").style.display = 'block'
 	document.getElementById("helparea").style.opacity = '1'
 	document.getElementById("homebutton").style.display = 'none'
@@ -192,7 +200,7 @@ function settings() {
 	document.getElementById("homebutton").style.display = 'none'
 	document.getElementById("helpbutton").style.display = 'none'
 	document.getElementById("settingsbutton").style.display = 'none'
-		
+
 	document.getElementById("settings").style.display = 'block'
 	document.getElementById("settings").style.opacity = '1'
 }
@@ -206,10 +214,10 @@ function back() {
 	document.getElementById("helpbutton").style.display = 'inline-block'
 	document.getElementById("settingsbutton").style.display = 'inline-block'
 	document.getElementById("homebutton").style.display = 'inline-block'
-	
+
 	document.getElementById("helparea").style.display = 'none'
 	document.getElementById("helparea").style.opacity = '0'
-		
+
 	document.getElementById("settings").style.display = 'none'
 	document.getElementById("settings").style.opacity = '0'
 }
@@ -231,16 +239,16 @@ function updatehelp(nojoystickself, keyboardself, fixedjoyself) {
 	$(".gyrohelp").hide();
 	$(".keyboardhelp").hide();
 	$(".joyhelp").hide();
-	
+
 	if(!nojoystickself&&!keyboardself) {
 		$(".joyhelp").show();
-		
+
 		$(".fixjoyhelp").hide()
 		$(".unfixjoyhelp").hide()
-		
+
 		if(fixedjoyself) {
 			$(".fixjoyhelp").show()
-			
+
 		} else {
 			$(".unfixjoyhelp").show()
 		}
@@ -278,7 +286,7 @@ function resetcolors() {
 	if(!colorful) {
 		toggleColor()
 	}
-	
+
 	document.getElementById("skyCP").jscolor.fromString(colordef.sky.slice(1))
 	document.getElementById("groundCP").jscolor.fromString(colordef.ground.slice(1))
 	document.getElementById("bodyCP").jscolor.fromString(colordef.body.slice(1))

@@ -177,16 +177,20 @@ function saveopts1(tutsave) {
         case 'Joystick':
             fixedjoy = true
             nojoystick = false;
+            document.getElementById("modeHUD").innerHTML = "Mode: Joystick"
             break;
         case 'Unfixed Joystick':
             fixedjoy = false
             nojoystick = false;
+            document.getElementById("modeHUD").innerHTML = "Mode: Unfixed Joystick"
             break;
         case 'Gyro':
             nojoystick = true;
+            document.getElementById("modeHUD").innerHTML = "Mode: Gyro"
             break;
         case 'Keyboard':
             keyboard = true;
+            document.getElementById("modeHUD").innerHTML = "Mode: Keyboard"
         case '':
         default:
     }
