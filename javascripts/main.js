@@ -293,7 +293,7 @@ function onload() {
     }
 });
 
-$('#keyslider').val(keysensitivityval).change();
+$('input[type="range"]').val(keysensitivityval).change();
 
 // $('input[type="range"]').rangeslider('update', true);
 
