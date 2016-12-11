@@ -822,8 +822,8 @@ function render() {
 		ctx.font = "16px Comic Sans MS";
 		ctx.fillStyle = "black";
 		ctx.textAlign = "left";
-		ctx.fillText("High Score: "+topscore, 10, 20); 
-		ctx.fillText("Score: "+(score-Math.floor(w/50/2)+Math.round(pogo.frame.body.position[0])), 10, 36); 
+		ctx.fillText("High Score: "+topscore, 10, 20);
+		ctx.fillText("Score: "+(score-Math.floor(w/50/2)+Math.round(pogo.frame.body.position[0])), 10, 36);
 	}
 }
 
