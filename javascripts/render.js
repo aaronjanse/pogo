@@ -343,11 +343,11 @@ function animate(time) {
 		
 		if(!(keyspressed.left && keyspressed.right)) {
 			if (keyspressed.left) {
-				pogo.frame.body.angularVelocity = +twistval
+				pogo.frame.body.angularVelocity = +twistval*keysensitivityval/100
 			}
 			
 			if (keyspressed.right) {
-				pogo.frame.body.angularVelocity = -twistval
+				pogo.frame.body.angularVelocity = -twistval*keysensitivityval/100
 			}
 		}
 		

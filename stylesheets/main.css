@@ -66,6 +66,11 @@ button {
 	transition-duration: 5s;
 }
 
+#keyslider {
+	width: 90%;
+	max-width: 300px;
+}
+
 @-webkit-keyframes zoominout {
   0%,100% { transform: scale(1); }
   50% { transform: scale(2); }

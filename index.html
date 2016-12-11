@@ -11,6 +11,7 @@
 	
 <meta name="author" content="Aaronduino">
 <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="stylesheets/rangeslider.css">
 
 <!-- <script src="https://rawgit.com/schteppe/p2.js/master/build/p2.min.js"></script> -->
 <script src="javascripts/p2.min.js"></script>
@@ -135,15 +136,14 @@
 					</button>
 					<h1>Settings</h1>
 					<div class="controlsdiv"><h3>Select a control mode:</h3></div>
-					<button onclick="resetcolors()">Reset colors</button>
-					<br> <span>Sky: </span><input readonly="true" id="skyCP"
-						class="jscolor {onFineChange:'updateSky()'}" value="4d79ff"><br>
-					<span>Ground: </span><input readonly="true" id="groundCP"
-						class="jscolor {onFineChange:'updateGround()'}" value="00b300"><br>
+					<button onclick="resetcolors()">Reset colors</button><br><br>
+					<button onclick="colorful=!colorful">Toggle colors</button><br>
 					<span>Pogo *Body*: </span><input readonly="true" id="bodyCP"
 						class="jscolor {onFineChange:'updateBody()'}" value="ed00ed"><br>
 					<span>Pogo *Stick*: </span><input readonly="true" id="stickCP"
 						class="jscolor {onFineChange:'updateStick()'}" value="ff66ff"><br>
+					<h3>Keyboard Sensitivity</h3><br>
+					<input id="keyslider" type="range" min="25" max="200"><br>
 					<button onclick="openDebug()">Open Debugger</button>
 				</div>
 
@@ -184,6 +184,7 @@
 <script src="javascripts/fulltilt.min.js"></script>
 
 <script src="javascripts/hidpi-canvas.min.js"></script>
+<script src="javascripts/rangeslider.min.js"></script>
 
 <script>
 	onload()

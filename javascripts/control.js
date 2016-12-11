@@ -10,6 +10,8 @@ var orientationData;
 
 var keyboard = false;
 
+var keysensitivityval = 100;
+
 var keys = {
     left: 37,
     right: 39,
