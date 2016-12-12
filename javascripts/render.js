@@ -3,20 +3,22 @@ var canvas, ctx, w, h;
 var colorful = true;
 
 var colordef = {
-		sky: "#4d79ff",
-		skyday: "#4d79ff",
-		skynight: "#241c52",
-		ground: "#00b300",
-		body: "#ed00ed",
-		stick: "#ff66ff"
+	sky: "#4d79ff",
+	skyday: "#4d79ff",
+	skynight: "#241c52",
+	ground: "#00b300",
+	body: "#ed00ed",
+	stick: "#ff66ff"
 }
+
+var filtersEnabled = true;
 
 var color = JSON.parse(JSON.stringify(colordef));
 var currentRainAmnt = 0
 
 var rainAmnt = 4;
 
-var addedClouds=false
+var addedClouds = false
 
 var cloudSpeed = 1;
 var cloudSize = 100;
@@ -26,120 +28,120 @@ var cloudCnt = 5;
 
 function getHatX(x) {
 	var gh = 0;
-	var worldX = x/50-xscroll-w/50/2
+	var worldX = x / 50 - xscroll - w / 50 / 2
 	var idx;
-	if(worldX>sectionB.h.body.position[0]) { // in sectionB
-		 var real = (worldX-sectionB.h.body.position[0])/2
-		 idx = Math.floor(real)
-		var amnt = (real%2)/2
-		var diff = (sectionB.d[idx+1]-sectionB.d[idx])||0
-		gh = -(sectionB.d[idx]+diff*amnt)*50
-	} else { // in sectionA
-		
-		var real = (worldX-sectionA.h.body.position[0])/2
+	if (worldX > sectionB.h.body.position[0]) { // in sectionB
+		var real = (worldX - sectionB.h.body.position[0]) / 2
 		idx = Math.floor(real)
-		var amnt = ((real*2)%2)/2
-		var diff = (sectionA.d[idx+1]-sectionA.d[idx])||0
-		gh = -(sectionA.d[idx]+diff*amnt)*50
+		var amnt = (real % 2) / 2
+		var diff = (sectionB.d[idx + 1] - sectionB.d[idx]) || 0
+		gh = -(sectionB.d[idx] + diff * amnt) * 50
+	} else { // in sectionA
+
+		var real = (worldX - sectionA.h.body.position[0]) / 2
+		idx = Math.floor(real)
+		var amnt = ((real * 2) % 2) / 2
+		var diff = (sectionA.d[idx + 1] - sectionA.d[idx]) || 0
+		gh = -(sectionA.d[idx] + diff * amnt) * 50
 	}
-	gh+=h/2
-	gh+=yscroll*50
-	gh+=50
+	gh += h / 2
+	gh += yscroll * 50
+	gh += 50
 	return gh;
 }
 
 function updateCloud() {
-	for(var i = 0; i < this.snow.particles.length; i++) {
-		this.snow.particles[i].x-=this.xoffset
-		this.snow.particles[i].y-=this.yoffset
+	for (var i = 0; i < this.snow.particles.length; i++) {
+		this.snow.particles[i].x -= this.xoffset
+		this.snow.particles[i].y -= this.yoffset
 	}
-	
-	
-		this.snow.angle += 0.01;
-		for (var i = 0; i < this.snow.mp; i++) {
-			var p = this.snow.particles[i];
-			// Updating X and Y coordinates
-			// We will add 1 to the cos function to prevent negative values
-			// which will lead flakes to move upwards
-			// Every particle has its own density which can be used to make the
-			// downward movement different for each flake
-			// Lets make it more random by adding in the radius
-			p.y += Math.cos(this.snow.angle + p.d) + 1 + p.r / 2;
-			p.x += Math.sin(this.snow.angle) * 2;
-			var lvl = distToTime(score+pogo.frame.body.position[0]-w/50/2)
-			if(this.idx!=0||(Math.floor(lvl)==6)) {
-				continue;
-			}
-			// Sending flakes back from the top when it exits
-			// Lets make it a bit more organic and let flakes enter from the
-			// left and right also.
-			var h = getHatX(p.x)
-			if(lvl>6) {
-				h = 0;
-				h+=this.h/2
-				h+=yscroll*50
-//				h+=50
-			}
-			if (p.x > w + 5 || p.x < -5 || p.y > h) {
-				if (i % 3 > 0) // 66.67% of the flakes
-				{
+
+
+	this.snow.angle += 0.01;
+	for (var i = 0; i < this.snow.mp; i++) {
+		var p = this.snow.particles[i];
+		// Updating X and Y coordinates
+		// We will add 1 to the cos function to prevent negative values
+		// which will lead flakes to move upwards
+		// Every particle has its own density which can be used to make the
+		// downward movement different for each flake
+		// Lets make it more random by adding in the radius
+		p.y += Math.cos(this.snow.angle + p.d) + 1 + p.r / 2;
+		p.x += Math.sin(this.snow.angle) * 2;
+		var lvl = distToTime(score + pogo.frame.body.position[0] - w / 50 / 2)
+		if (this.idx != 0 || (Math.floor(lvl) == 6)) {
+			continue;
+		}
+		// Sending flakes back from the top when it exits
+		// Lets make it a bit more organic and let flakes enter from the
+		// left and right also.
+		var h = getHatX(p.x)
+		if (lvl > 6) {
+			h = 0;
+			h += this.h / 2
+			h += yscroll * 50
+				//				h+=50
+		}
+		if (p.x > w + 5 || p.x < -5 || p.y > h) {
+			if (i % 3 > 0) // 66.67% of the flakes
+			{
+				this.snow.particles[i] = {
+					x: Math.random() * w,
+					y: -10,
+					r: p.r,
+					d: p.d
+				};
+			} else {
+				// If the flake is exitting from the right
+				if (Math.sin(this.snow.angle) > 0) {
+					// Enter from the left
 					this.snow.particles[i] = {
-						x : Math.random() * w,
-						y : -10,
-						r : p.r,
-						d : p.d
-					};
-				} else {
-					// If the flake is exitting from the right
-					if (Math.sin(this.snow.angle) > 0) {
-						// Enter from the left
-						this.snow.particles[i] = {
-							x : -5,
-							y : Math.random() * h,
-							r : p.r,
-							d : p.d
-						}
-					} else {
-						// Enter from the right
-						this.snow.particles[i] = {
-							x : w + 5,
-							y : Math.random() * h,
-							r : p.r,
-							d : p.d
-						};
+						x: -5,
+						y: Math.random() * h,
+						r: p.r,
+						d: p.d
 					}
+				} else {
+					// Enter from the right
+					this.snow.particles[i] = {
+						x: w + 5,
+						y: Math.random() * h,
+						r: p.r,
+						d: p.d
+					};
 				}
 			}
 		}
-	
-	
-	this.x-=this.xoffset
-	this.y-=this.yoffset
-	
-	for(var i = 0; i < this.rain.particles.length; i++) {
-		this.rain.particles[i].x-=this.xoffset
-		this.rain.particles[i].y-=this.yoffset
 	}
-	
-//	this.xoffset = 0;
-	
-	for(var i = 0; i < this.rain.drops.length; i++) {
-		this.rain.drops[i].x-=this.xoffset
-		this.rain.drops[i].y-=this.yoffset
+
+
+	this.x -= this.xoffset
+	this.y -= this.yoffset
+
+	for (var i = 0; i < this.rain.particles.length; i++) {
+		this.rain.particles[i].x -= this.xoffset
+		this.rain.particles[i].y -= this.yoffset
 	}
-	
+
+	//	this.xoffset = 0;
+
+	for (var i = 0; i < this.rain.drops.length; i++) {
+		this.rain.drops[i].x -= this.xoffset
+		this.rain.drops[i].y -= this.yoffset
+	}
+
 	var localparticles = this.rain.particles;
 	var localdrops = this.rain.drops;
-	
+
 	for (var i = 0, activeparticles; activeparticles = localparticles[i]; i++) {
 		activeparticles.x += activeparticles.velX;
-		activeparticles.y += activeparticles.velY+5;
+		activeparticles.y += activeparticles.velY + 5;
 		var gh = getHatX(activeparticles.x)
-		if (activeparticles.y > gh) {//height-15) {
+		if (activeparticles.y > gh) { //height-15) {
 			localparticles.splice(i--, 1);
 			this.rain.splash(activeparticles.x, activeparticles.y, activeparticles.col);
 		}
-		
+
 	}
 
 	for (var i = 0, activedrops; activedrops = localdrops[i]; i++) {
@@ -158,41 +160,40 @@ function updateCloud() {
 
 	var i = currentRainAmnt;
 	while (i--) {
-		if(this.idx!=0) {
-			i=0
+		if (this.idx != 0) {
+			i = 0
 			break;
 		}
-		this.rain.addRaindrops(Math.floor(Math.random()*this.w*1.5), -500); //this.x-cloudSize*2+(Math.random()*cloudSize*2)...this.y-15
+		this.rain.addRaindrops(Math.floor(Math.random() * this.w * 1.5), -500); //this.x-cloudSize*2+(Math.random()*cloudSize*2)...this.y-15
 	}
-	
-	var left = this.x<-cloudSize
-	var right = this.x>this.w*2+cloudSize
-	if(left||right) {
-		this.y = (this.h/2-20-this.h/(1.75*50)-10)*Math.random()-10
-		this.speed = Math.random()*(cloudSpeedDef-cloudSpeedMin)+cloudSpeedMin
-		if(left) {
-			this.x = this.w+cloudSize // to right
+
+	var left = this.x < -cloudSize
+	var right = this.x > this.w * 2 + cloudSize
+	if (left || right) {
+		this.y = (this.h / 2 - 20 - this.h / (1.75 * 50) - 10) * Math.random() - 10
+		this.speed = Math.random() * (cloudSpeedDef - cloudSpeedMin) + cloudSpeedMin
+		if (left) {
+			this.x = this.w + cloudSize // to right
 		} else {
 			this.x = -cloudSize; // to left
 		}
 	}
-	
-	this.x+=this.speed*cloudSpeed;
+
+	this.x += this.speed * cloudSpeed;
 }
 
 //based off of https://codepen.io/Sheepeuh/pen/cFazd?editors=0010
 function addRaindrops(x, y, pieces) {
-	pieces=pieces||2
-	
+	pieces = pieces || 2
+
 	while (pieces--) {
-		this.particles.push( 
-		{
-			velX : (Math.random() * 0.25),
-			velY : (Math.random() * 9) + 1,
+		this.particles.push({
+			velX: (Math.random() * 0.25),
+			velY: (Math.random() * 9) + 1,
 			x: x,
 			y: y,
-			alpha : 1,
-			col : "hsla(200, 100%, 50%, 0.8)",
+			alpha: 1,
+			col: "hsla(200, 100%, 50%, 0.8)",
 		})
 	}
 }
@@ -200,87 +201,84 @@ function addRaindrops(x, y, pieces) {
 var splashSize = 5
 
 function splash(x, y, col, cnt) {
-	cnt=cnt||splashSize
-	while(cnt--) {
-		this.drops.push( 
-				{
-					velX : (Math.random() * 4-2	),
-					velY : (Math.random() * -4 ),
-					x: x,
-					y: y,
-					radius : 0.65 + Math.floor(Math.random() *1.6),
-					alpha : 1,
-					col : col
-				})
+	cnt = cnt || splashSize
+	while (cnt--) {
+		this.drops.push({
+			velX: (Math.random() * 4 - 2),
+			velY: (Math.random() * -4),
+			x: x,
+			y: y,
+			radius: 0.65 + Math.floor(Math.random() * 1.6),
+			alpha: 1,
+			col: col
+		})
 	}
 }
 
 function renderCloud() {
-//	ctx.clearRect(0, 0, W, H);
-	var val = Math.floor(distToTime(score+pogo.frame.body.position[0]-w/50/2))
-//	console.log(val)
-	if(val>=5&&val!=6) {
-	ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
-	ctx.beginPath();
-	for(var i = 0; i < this.snow.mp; i++)
-	{
-		var p = this.snow.particles[i];
-		ctx.moveTo(p.x, p.y);
-		ctx.arc(p.x, p.y, p.r, 0, Math.PI*2, true);
+	//	ctx.clearRect(0, 0, W, H);
+	var val = Math.floor(distToTime(score + pogo.frame.body.position[0] - w / 50 / 2))
+		//	console.log(val)
+	if (val >= 5 && val != 6) {
+		ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+		ctx.beginPath();
+		for (var i = 0; i < this.snow.mp; i++) {
+			var p = this.snow.particles[i];
+			ctx.moveTo(p.x, p.y);
+			ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2, true);
+		}
+		ctx.fill();
 	}
-	ctx.fill();
-	}
-	
+
 	var tau = Math.PI * 2;
 	var localparticles = this.rain.particles
 	var localdrops = this.rain.drops
 	for (var i = 0, activeparticles; activeparticles = localparticles[i]; i++) {
 		ctx.globalAlpha = activeparticles.alpha;
 		ctx.fillStyle = activeparticles.col;
-		ctx.fillRect(activeparticles.x, activeparticles.y, activeparticles.velY/4, activeparticles.velY);
+		ctx.fillRect(activeparticles.x, activeparticles.y, activeparticles.velY / 4, activeparticles.velY);
 	}
-	
+
 	for (var i = 0, activedrops; activedrops = localdrops[i]; i++) {
-		
+
 		ctx.globalAlpha = activedrops.alpha;
 		ctx.fillStyle = activedrops.col;
-		
+
 		ctx.beginPath();
 		ctx.arc(activedrops.x, activedrops.y, activedrops.radius, 0, tau);
 		ctx.fill();
 	}
-	
-	ctx.shadowBlur=7;
-	ctx.shadowColor="black";
-	ctx.font = cloudSize+"px FontAwesome";
-	ctx.globalAlpha="0.7"
+
+	ctx.shadowBlur = 7;
+	ctx.shadowColor = "black";
+	ctx.font = cloudSize + "px FontAwesome";
+	ctx.globalAlpha = "0.7"
 	ctx.fillStyle = "#ffffff";
 	ctx.textAlign = "center";
-	ctx.fillText("\uf0c2", this.x-cloudSize/2, this.y)
-	ctx.shadowBlur=0;
-	ctx.globalAlpha="1"
+	ctx.fillText("\uf0c2", this.x - cloudSize / 2, this.y)
+	ctx.shadowBlur = 0;
+	ctx.globalAlpha = "1"
 }
 
 function Snow() {
-//	console.log("Hi1")
+	//	console.log("Hi1")
 	this.angle = 0;
-	this.mp = 45;//25; //max particles
+	this.mp = 45; //25; //max particles
 	this.particles = [];
-	for(var i = 0; i < this.mp; i++)
-	{
+	for (var i = 0; i < this.mp; i++) {
 		this.particles.push({
-			x: Math.random()*w, //x-coordinate
-			y: Math.random()*h, //y-coordinate
-			r: Math.random()*4+1, //radius
-			d: Math.random()*this.mp //density
+			x: Math.random() * w, //x-coordinate
+			y: Math.random() * h, //y-coordinate
+			r: Math.random() * 4 + 1, //radius
+			d: Math.random() * this.mp //density
 		})
 	}
-//	console.log("Hi")
-	
+	//	console.log("Hi")
+
 }
 
 function Cloud(x, y, speed, w, h, idx) {
-//	console.log("Checking")
+	//	console.log("Checking")
 	this.idx = idx
 	this.x = x;
 	this.y = y;
@@ -299,68 +297,68 @@ function Cloud(x, y, speed, w, h, idx) {
 		addRaindrops: addRaindrops,
 		splash: splash
 	};
-	
-//	console.log("Check")
+
+	//	console.log("Check")
 	this.snow = new Snow();
-//	console.log("Check1")
+	//	console.log("Check1")
 }
 
 var clouds = [];
 
 function initRender() {
-//	console.log("Checking??")
+	//	console.log("Checking??")
 	clouds = [];
-	for(var i = 0; i < cloudCnt; i++) {
-		clouds.push(new Cloud(Math.random()*w, (h/2-20-h/(1.75*50)-10)*Math.random()-10, Math.random()*(cloudSpeedDef-cloudSpeedMin)+cloudSpeedMin, w, h, i))
+	for (var i = 0; i < cloudCnt; i++) {
+		clouds.push(new Cloud(Math.random() * w, (h / 2 - 20 - h / (1.75 * 50) - 10) * Math.random() - 10, Math.random() * (cloudSpeedDef - cloudSpeedMin) + cloudSpeedMin, w, h, i))
 	}
-	
-	lastpx = w/50/2;
+
+	lastpx = w / 50 / 2;
 }
 
 // Animation loop
 
-speed = 60*5
-//speed = 1/speed
+speed = 60 * 5
+	//speed = 1/speed
 var lastTime;
 var maxSubSteps = 5; // Max physics ticks per render frame
 var fixedDeltaTime = 1 / speed; // Physics "tick" delta time
 function animate(time) {
-	if(home) {
+	if (home) {
 		return;
 	}
-//	console.log("Checking??")
-	if(!pause) {
+	//	console.log("Checking??")
+	if (!pause || !fullPause) {
 		requestAnimationFrame(animate);
 	} else {
 		return;
 	}
-	
-	if(keyboard) {
+
+	if (keyboard) {
 		if (keyspressed.up || keyspressed.space) {
 			pogo.spring.restLength = 1.25;
 			pogo.spring.applyForce();
 		}
-		
-		if(!(keyspressed.left && keyspressed.right)) {
+
+		if (!(keyspressed.left && keyspressed.right)) {
 			if (keyspressed.left) {
-				pogo.frame.body.angularVelocity = +twistval*keysensitivityval/100
+				pogo.frame.body.angularVelocity = +twistval * keysensitivityval / 100
 			}
-			
+
 			if (keyspressed.right) {
-				pogo.frame.body.angularVelocity = -twistval*keysensitivityval/100
+				pogo.frame.body.angularVelocity = -twistval * keysensitivityval / 100
 			}
 		}
-		
+
 		if (!keyspressed.up && !keyspressed.space) {
 			pogo.spring.restLength = 0.25;
 			pogo.spring.applyForce();
 		}
-		
-		if (!keyspressed.left && !keyspressed.right && Math.abs(pogo.frame.body.angularVelocity)>twistval*3/4) {
+
+		if (!keyspressed.left && !keyspressed.right && Math.abs(pogo.frame.body.angularVelocity) > twistval * keysensitivityval / 100 * 3 / 7) {
 			pogo.frame.body.angularVelocity /= 8
 		}
 	}
-	
+
 	// Get the elapsed time since last frame, in seconds
 	var deltaTime = lastTime ? (time - lastTime) / 1000 : 0;
 	lastTime = time;
@@ -370,7 +368,7 @@ function animate(time) {
 	// Move physics bodies forward in time
 	world.step(fixedDeltaTime, deltaTime, maxSubSteps);
 	// Render scene
-	if(!tutorialm) {
+	if (!tutorialm) {
 		render();
 	} else {
 		rendertut()
@@ -385,384 +383,397 @@ var endscore = 0
 
 //from http://stackoverflow.com/a/11293378
 function lerp(a, b, u) {
-    return (1 - u) * a + u * b;
+	return (1 - u) * a + u * b;
 };
 
 
 //from http://stackoverflow.com/a/5624139
 function componentToHex(c) {
-    var hex = c.toString(16);
-    return hex.length == 1 ? "0" + hex : hex;
+	var hex = c.toString(16);
+	return hex.length == 1 ? "0" + hex : hex;
 }
 
 function rgbToHex(r, g, b) {
-    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+	return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
 }
 
 function hexToRgb(hex) {
-    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16)
-    } : null;
+	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+	return result ? {
+		r: parseInt(result[1], 16),
+		g: parseInt(result[2], 16),
+		b: parseInt(result[3], 16)
+	} : null;
 }
 
+var fullPause = false;
+
 function render() {
-	if(pause) {
-		return;
+
+	if (pause) {
+		if (fullPause || !filtersEnabled) {
+			ctx.filter = "none";
+			return;
+		} else {
+			ctx.filter = "blur(30px)";
+		}
+		fullPause = true;
+	} else {
+		ctx.filter = "none";
+		fullPause = false;
 	}
 	var px = pogo.frame.body.position[0]
-	if(px>secwidth) {
-//		console.log("Sec #2")
+	if (px > secwidth) {
+		//		console.log("Sec #2")
 	}
-	
-	if(px-w/50/2>secwidth) {
+
+	if (px - w / 50 / 2 > secwidth) {
 		removeSection(sectionA)
 		removeSection(sectionB)
-		
-		for(var i = 0; i < sectionA.inverts.length; i++) {
-			sectionA.inverts[i]=false
+
+		for (var i = 0; i < sectionA.inverts.length; i++) {
+			sectionA.inverts[i] = false
 		}
-		
-		for(var i = 0; i < sectionB.inverts.length; i++) {
-			sectionB.inverts[i]=false
+
+		for (var i = 0; i < sectionB.inverts.length; i++) {
+			sectionB.inverts[i] = false
 		}
-		
-		for(var i = 0; i < sectionA.o.length; i++) {
+
+		for (var i = 0; i < sectionA.o.length; i++) {
 			var o = sectionA.o[i]
-			if(o.position[0]>sectionB.h.body.position[0]) {
-//				console.log(sectionB.o.length)
+			if (o.position[0] > sectionB.h.body.position[0]) {
+				//				console.log(sectionB.o.length)
 				sectionB.o.push(o)
 				sectionA.o.splice(i, 1);
 				sectionB.inverts.push(false)
 				sectionA.inverts.splice(i, 1)
-//				console.log(sectionB.o.length)
+					//				console.log(sectionB.o.length)
 			}
 		}
-		sectionA=changenum(sectionB, 0, 1)
-		sectionB=changenum(generateSection(), 1, 0);
-		pogo.frame.body.position[0]-=secwidth
-		pogo.stick.body.position[0]-=secwidth
-//		console.log("Sec #1")
+		sectionA = changenum(sectionB, 0, 1)
+		sectionB = changenum(generateSection(), 1, 0);
+		pogo.frame.body.position[0] -= secwidth
+		pogo.stick.body.position[0] -= secwidth
+			//		console.log("Sec #1")
 		addSection(sectionA)
 		addSection(sectionB)
-		score+=secwidth
+		score += secwidth
 	}
-	
-	if(px<w/50/2&&secnum>2) {
+
+	if (px < w / 50 / 2 && secnum > 2) {
 		removeSection(sectionA)
 		removeSection(sectionB)
-//		sectionA.inverts = sectionA.inverts.map(value => !value)
-		for(var i = 0; i < sectionA.inverts.length; i++) {
-			sectionA.inverts[i]=!sectionA.inverts[i]
+			//		sectionA.inverts = sectionA.inverts.map(value => !value)
+		for (var i = 0; i < sectionA.inverts.length; i++) {
+			sectionA.inverts[i] = !sectionA.inverts[i]
 		}
-		
-		for(var i = 0; i < sectionB.inverts.length; i++) {
-			sectionB.inverts[i]=!sectionB.inverts[i]
+
+		for (var i = 0; i < sectionB.inverts.length; i++) {
+			sectionB.inverts[i] = !sectionB.inverts[i]
 		}
-		
-		for(var i = 0; i < sectionB.o.length&&false; i++) {
-//			sectionB.o[i].velocity = [-sectionB.o[i].velocity[0], -sectionB.o[i].velocity[1]]
-//			sectionB.o[i].invert = true;
+
+		for (var i = 0; i < sectionB.o.length && false; i++) {
+			//			sectionB.o[i].velocity = [-sectionB.o[i].velocity[0], -sectionB.o[i].velocity[1]]
+			//			sectionB.o[i].invert = true;
 			var o = sectionB.o[i]
-			if(o.position[0]<sectionB.h.body.position[0]) {
-//				o.velocity = [-o.velocity[0], -o.velocity[1]]
+			if (o.position[0] < sectionB.h.body.position[0]) {
+				//				o.velocity = [-o.velocity[0], -o.velocity[1]]
 				sectionA.o.push(copysec(sectionB).o[i])
 				sectionB.o.splice(i, 1);
 				sectionA.inverts.push(true)
 				sectionB.inverts.splice(i, 1)
 			} else {
-//				o.velocity = [-o.velocity[0], -o.velocity[1]]
+				//				o.velocity = [-o.velocity[0], -o.velocity[1]]
 			}
 		}
-		secnum-=2
-		sectionB=changenum(sectionA, 1, 0)
-		sectionA=generateSection()
-		pogo.frame.body.position[0]+=secwidth
-		pogo.stick.body.position[0]+=secwidth
+		secnum -= 2
+		sectionB = changenum(sectionA, 1, 0)
+		sectionA = generateSection()
+		pogo.frame.body.position[0] += secwidth
+		pogo.stick.body.position[0] += secwidth
 		updateObstacles()
-//		console.log("Sec #1")
+			//		console.log("Sec #1")
 		addSection(sectionA)
 		addSection(sectionB)
 		updateObstacles()
-		score-=secwidth
+		score -= secwidth
 	}
-	
-	if(pogo.frame.body.position[0]<0) {
+
+	if (pogo.frame.body.position[0] < 0) {
 		gameOver = true;
 		leftplay = false;
-		pogo.frame.body.position[0]=Math.max(pogo.frame.body.position[0], -2)
-		pogo.frame.body.position[1]=Math.max(pogo.frame.body.position[1], -5)
+		pogo.frame.body.position[0] = Math.max(pogo.frame.body.position[0], -2)
+		pogo.frame.body.position[1] = Math.max(pogo.frame.body.position[1], -5)
 	}
 	// Clear the canvas
 	ctx.clearRect(0, 0, w, h);
-	
-	if(colorful) {
+
+
+	if (colorful) {
 		ctx.fillStyle = color.sky;
 	} else {
 		ctx.fillStyle = "#FFFFFF"
 	}
-	
-	ctx.fillRect(0,0,w,h);
+
+	ctx.fillRect(0, 0, w, h);
 	ctx.fill()
-	
-	
+
+
 	// Transform the canvas
 	// Note that we need to flip the y axis since Canvas pixel coordinates
 	// goes from top to bottom, while physics does the opposite.
-	var xdelta = (Math.max(pogo.frame.body.position[0], w/50/2)+xscroll)*50%secwidth
-	for(var i = 0; i < clouds.length; i++) {
-		clouds[i].xoffset=xdelta;
+	var xdelta = (Math.max(pogo.frame.body.position[0], w / 50 / 2) + xscroll) * 50 % secwidth
+	for (var i = 0; i < clouds.length; i++) {
+		clouds[i].xoffset = xdelta;
 	}
-	
+
 	var ysold = yscroll;
-	
-	
-	if(px>=w/50/2) {
+
+
+	if (px >= w / 50 / 2) {
 		xscroll = -pogo.frame.body.position[0]
 	}
-	v = pogo.frame.body.position[1]-yscroll
-	
-	if (Math.abs(v)>0.35) {
+	v = pogo.frame.body.position[1] - yscroll
+
+	if (Math.abs(v) > 0.35) {
 		lerpval = 0.015
 	} else {
 		lerpval = 0.01
 	}
-	
-	if (v<-0.2) {
+
+	if (v < -0.2) {
 		lerpval = 0.0325
 	}
-	yscroll = v*lerpval+yscroll
-	
-	var progress = distToTime(score+pogo.frame.body.position[0]-w/50/2) // half days
-	
-	var angle = progress*Math.PI-Math.PI
-	
+	yscroll = v * lerpval + yscroll
+
+	var progress = distToTime(score + pogo.frame.body.position[0] - w / 50 / 2) // half days
+
+	var angle = progress * Math.PI - Math.PI
+
 	ctx.font = "100px FontAwesome";
 	ctx.fillStyle = "#ffff00";
 	ctx.textAlign = "center";
-	ctx.fillText("\uf185", Math.cos(angle)*h/2+w/2, Math.sin(angle)*h/2+yscroll*50+5*h/9)
-	
+	ctx.fillText("\uf185", Math.cos(angle) * h / 2 + w / 2, Math.sin(angle) * h / 2 + yscroll * 50 + 5 * h / 9)
+
 	ctx.fillStyle = "#ddddff";
 	ctx.textAlign = "center";
-	ctx.fillText("\uf186", Math.cos(angle+Math.PI)*h/2+w/2, Math.sin(angle+Math.PI)*h/2+yscroll*50+5*h/9)
-	
+	ctx.fillText("\uf186", Math.cos(angle + Math.PI) * h / 2 + w / 2, Math.sin(angle + Math.PI) * h / 2 + yscroll * 50 + 5 * h / 9)
+
 	fadeColors(progress)
-	
-	if(!addedClouds&&progress>3) {
-		for(var i = 0; i < cloudCnt; i++) {
-			clouds.push(new Cloud(Math.random()*w, (h/2-20-h/(1.75*50)-10)*Math.random()-10, Math.random()*(cloudSpeedDef-cloudSpeedMin)+cloudSpeedMin, w, h, i+cloudCnt))
+
+	if (!addedClouds && progress > 3) {
+		for (var i = 0; i < cloudCnt; i++) {
+			clouds.push(new Cloud(Math.random() * w, (h / 2 - 20 - h / (1.75 * 50) - 10) * Math.random() - 10, Math.random() * (cloudSpeedDef - cloudSpeedMin) + cloudSpeedMin, w, h, i + cloudCnt))
 		}
-		addedClouds=true
-	}
-	
-	if(progress>3) {
-		currentRainAmnt = (progress<4)?rainAmnt:0;
+		addedClouds = true
 	}
 
-	
-	ctx.save();
-	
-	ctx.translate(w / 2, h / 2); // Translate to the center
-	ctx.scale(50, -50); // Zoom in and flip y axis
-	
-	for(var i = 0; i < clouds.length; i++) {
-		clouds[i].yoffset=-(yscroll-ysold)*50
+	if (progress > 3) {
+		currentRainAmnt = (progress < 4) ? rainAmnt : 0;
 	}
-	
+
+
+	ctx.save();
+
+	ctx.translate(w / 2, h / 2); // Translate to the center
+	// ctx.scale(1/window.devicePixelRatio, 1/window.devicePixelRatio);
+	ctx.scale(50, -50); // Zoom in and flip y axis
+
+	for (var i = 0; i < clouds.length; i++) {
+		clouds[i].yoffset = -(yscroll - ysold) * 50
+	}
+
 	ctx.translate(xscroll, -yscroll)
-	// Draw all bodies
-	ctx.strokeStyle = "#000000";
+		// Draw all bodies
 	drawpogo();
-//	var x = sectionA.h.body.position[0]
-//	var y = sectionA.h.body.position[1]
+	//	var x = sectionA.h.body.position[0]
+	//	var y = sectionA.h.body.position[1]
 	var x = -1;
 	var y = -1;
-	
+
 	ctx.beginPath();
-	ctx.moveTo(x, -h/50*7/4);
-	
-	var px = -xscroll//pogo.frame.body.position[0]
-	
+	ctx.moveTo(x, -h / 50 * 7 / 4);
+
+	var px = -xscroll //pogo.frame.body.position[0]
+
 	var cdata = sectionA.d.slice(0, -1).concat(sectionB.d)
-	
+
 	for (var i = 0; i < cdata.length; i++) {
-		var x1 = i * 2//sectionA.h.shape.elementWidth
-		if(x1>=px-w/50/2-1) {
+		var x1 = i * 2 //sectionA.h.shape.elementWidth
+		if (x1 >= px - w / 50 / 2 - 1) {
 			ctx.lineTo(x + x1, y + cdata[i]);
 		}
-		if(x1>px+w/50/2+2) {
+		if (x1 > px + w / 50 / 2 + 2) {
 			break;
 		}
 	}
-	
-	
-	ctx.lineTo(x+cdata.length*2-2, -h/50*7/4)
+
+
+	ctx.lineTo(x + cdata.length * 2 - 2, -h / 50 * 7 / 4)
 	ctx.closePath()
 	ctx.fillStyle = color.ground
-	if(colorful) {
+	if (colorful) {
 		ctx.fill();
 	}
 	ctx.stroke();
-	
+
 	///////////////////////////////////////////////
-	var ah1 = sectionA.h1!=null
-	var bh1 = sectionB.h1!=null
-	
-	ctx.fillStyle="#555555"
-		
-	if(!(progress<7-0.15||Math.floor(progress)==9)) {
+	var ah1 = sectionA.h1 != null
+	var bh1 = sectionB.h1 != null
+
+	ctx.fillStyle = "#555555"
+
+	if (!(progress < 7 - 0.15 || Math.floor(progress) == 9)) {
 		ctx.fillStyle = "#5555FF"
 	}
-	
-	if(ah1) {
+
+	if (ah1) {
 		ctx.beginPath();
-		
+
 		var startpos = sectionA.h1.body.position
 		var dat = sectionA.h1verts
-		
-		ctx.moveTo(dat[0][0]+startpos[0], dat[0][1]+startpos[1]);
-		for (var i = 1; i < dat.length-1; i++) {
-			var x1 = i * 2//sectionA.h.shape.elementWidth
-//			if(startpos[0] + x1>=px-w/50/2-1) {
-				ctx.lineTo(startpos[0] + dat[i][0], startpos[1]+dat[i][1]);
-//			}
-			
-//			if(i==sectionA.d.length-1){
-//				ctx.lineTo(x+x1, -h/50)
-//			}
-//			if(startpos[0] + x1>px+w/50/2+2) {
-//				break;
-//			}
-//			i += 1;
+
+		ctx.moveTo(dat[0][0] + startpos[0], dat[0][1] + startpos[1]);
+		for (var i = 1; i < dat.length - 1; i++) {
+			var x1 = i * 2 //sectionA.h.shape.elementWidth
+				//			if(startpos[0] + x1>=px-w/50/2-1) {
+			ctx.lineTo(startpos[0] + dat[i][0], startpos[1] + dat[i][1]);
+			//			}
+
+			//			if(i==sectionA.d.length-1){
+			//				ctx.lineTo(x+x1, -h/50)
+			//			}
+			//			if(startpos[0] + x1>px+w/50/2+2) {
+			//				break;
+			//			}
+			//			i += 1;
 		}
-		
-		
-		ctx.lineTo(dat[dat.length-1][0]+startpos[0], dat[dat.length-1][1]+startpos[1])
-		// ctx.lineTo(gameWidth/2,gameHeight/2);
-		// ctx.lineTo(-gameWidth/2,gameHeight/2);
-		// ctx.lineTo(-gameWidth/2,-gameHeight/2);
+
+
+		ctx.lineTo(dat[dat.length - 1][0] + startpos[0], dat[dat.length - 1][1] + startpos[1])
+			// ctx.lineTo(gameWidth/2,gameHeight/2);
+			// ctx.lineTo(-gameWidth/2,gameHeight/2);
+			// ctx.lineTo(-gameWidth/2,-gameHeight/2);
 		ctx.closePath()
-		if(colorful) {
+		if (colorful) {
 			ctx.fill();
 		}
 		ctx.stroke();
-		}
-	
-	if(bh1) {
+	}
+
+	if (bh1) {
 		ctx.beginPath();
-		
-		
+
+
 		var startpos = sectionB.h1.body.position
 		var dat = sectionB.h1verts
-		
-//		console.log(xstart)
-//		console.log("")
-//		console.log(dat.length)
-		ctx.moveTo(dat[0][0]+startpos[0], dat[0][1]+startpos[1]);
-		for (var i = 1; i < dat.length-1; i++) {
-			var x1 = i * 2//sectionA.h.shape.elementWidth
-//			if(startpos[0] + x1>=px-w/50/2-1) {
-				ctx.lineTo(startpos[0] + dat[i][0], startpos[1]+dat[i][1]);
-//			}
-			
-//			if(i==sectionA.d.length-1){
-//				ctx.lineTo(x+x1, -h/50)
-//			}
-//			if(startpos[0] + x1>px+w/50/2+2) {
-//				break;
-//			}
-//			i += 1;
+
+		//		console.log(xstart)
+		//		console.log("")
+		//		console.log(dat.length)
+		ctx.moveTo(dat[0][0] + startpos[0], dat[0][1] + startpos[1]);
+		for (var i = 1; i < dat.length - 1; i++) {
+			var x1 = i * 2 //sectionA.h.shape.elementWidth
+				//			if(startpos[0] + x1>=px-w/50/2-1) {
+			ctx.lineTo(startpos[0] + dat[i][0], startpos[1] + dat[i][1]);
+			//			}
+
+			//			if(i==sectionA.d.length-1){
+			//				ctx.lineTo(x+x1, -h/50)
+			//			}
+			//			if(startpos[0] + x1>px+w/50/2+2) {
+			//				break;
+			//			}
+			//			i += 1;
 		}
-		
-		
-		ctx.lineTo(dat[dat.length-1][0]+startpos[0], dat[dat.length-1][1]+startpos[1])
+
+
+		ctx.lineTo(dat[dat.length - 1][0] + startpos[0], dat[dat.length - 1][1] + startpos[1])
 		ctx.closePath()
 
-		if(colorful) {
+		if (colorful) {
 			ctx.fill();
 		}
 		ctx.stroke();
-		}
+	}
 	///////////////////////////////////
 
 	ctx.restore();
-	for(var i = 0; i < clouds.length; i++) {
+	for (var i = 0; i < clouds.length; i++) {
 		clouds[i].update();
 		clouds[i].render();
 	}
 	ctx.save();
-	
+
 	ctx.translate(w / 2, h / 2); // Translate to the center
 	ctx.scale(50, -50); // Zoom in and flip y axis
-	
+
 	ctx.translate(xscroll, -yscroll)
-	ctx.strokeStyle="#000000"
+	ctx.strokeStyle = "#000000"
 	drawObstacles1(sectionA)
 	drawObstacles1(sectionB)
-	
+
 	// Restore transform
-	
+
 	var idx = -1;
 	var closest = -1;
 	var A = true
-	for(var i = 0; i < sectionA.o.length; i++) {
-		if(sectionA.o[i].position[0]>px+w/50/2) {
-			if(sectionA.o[i].position[0]-px<closest||closest==-1) {
-				closest = sectionA.o[i].position[0]-px
+	for (var i = 0; i < sectionA.o.length; i++) {
+		if (sectionA.o[i].position[0] > px + w / 50 / 2) {
+			if (sectionA.o[i].position[0] - px < closest || closest == -1) {
+				closest = sectionA.o[i].position[0] - px
 				idx = i
 			}
 		}
 	}
-	
-	for(var i = 0; i < sectionB.o.length; i++) {
-		if(sectionB.o[i].position[0]>px+w/50/2) {
-			if(sectionB.o[i].position[0]-px<closest||closest==-1) {
-				closest = sectionB.o[i].position[0]-px
+
+	for (var i = 0; i < sectionB.o.length; i++) {
+		if (sectionB.o[i].position[0] > px + w / 50 / 2) {
+			if (sectionB.o[i].position[0] - px < closest || closest == -1) {
+				closest = sectionB.o[i].position[0] - px
 				idx = i
-				A=false
+				A = false
 			}
 		}
 	}
-	
+
 	try {
-//		var o = null
-		if(A) {
+		//		var o = null
+		if (A) {
 			var o = sectionA.o[idx]
 		} else {
 			var o = sectionB.o[idx]
 		}
-		canvas_arrow(px+w/50/2-0.3-1, o.position[1], px+w/50/2+0.5-1, o.position[1])
-		
+		canvas_arrow(px + w / 50 / 2 - 0.3 - 1, o.position[1], px + w / 50 / 2 + 0.5 - 1, o.position[1])
+
 		ctx.strokeStyle = "#000000"
 		ctx.stroke()
 	} catch (e) {
-//		console.log(e)
+		//		console.log(e)
 	}
-	
+
 	ctx.restore();
-	
+
 	drawControls()
-	
+
 	ctx.font = "20px Comic Sans MS";
 	ctx.fillStyle = "#555555";
 	ctx.textAlign = "center";
-	
-//	var dist = (Math.floor(((-xscroll-((progress>2&&progress%2<=1)?4:0))%secwidth)%(rarity*2)))
-	ctx.fillText("Next obstacle: "+Math.floor(closest), 100, h-20);
+
+	//	var dist = (Math.floor(((-xscroll-((progress>2&&progress%2<=1)?4:0))%secwidth)%(rarity*2)))
+	ctx.fillText("Next obstacle: " + Math.floor(closest), 100, h - 20);
 
 
 
 	ctx.font = "20px Courier New";
 	ctx.fillStyle = "#000000";
 	ctx.textAlign = "left";
-	var daysRaw = progress/2+0.25;
+	var daysRaw = progress / 2 + 0.25;
 
 
 	// based on http://stackoverflow.com/a/13904120/6496271
 	// in seconds
-	var delta = daysRaw*24*60*60;
+	var delta = daysRaw * 24 * 60 * 60;
 
 	// calculate (and subtract) whole days
 	var days = Math.floor(delta / 86400);
@@ -777,83 +788,83 @@ function render() {
 	delta -= minutes * 60;
 
 	// what's left is seconds
-	var seconds = delta % 60;  // in theory the modulus is not required
+	var seconds = delta % 60; // in theory the modulus is not required
 
 	var timeTxt = "Day " + days + ", ";
-	var hrsTxt = hours%12+1+"";
-	timeTxt += ("0"+hrsTxt).substring(hrsTxt.length-1) + ":";
-	timeTxt += ("0"+minutes).substring((""+minutes).length-1) + " ";
-	timeTxt += (hours>11) ? "PM" : "AM"
+	var hrsTxt = hours % 12 + 1 + "";
+	timeTxt += ("0" + hrsTxt).substring(hrsTxt.length - 1) + ":";
+	timeTxt += ("0" + minutes).substring(("" + minutes).length - 1) + " ";
+	timeTxt += (hours > 11) ? "PM" : "AM"
 
 	ctx.fillText(timeTxt, 10, 60);
 	// "Level/Half-Days: "+Math.round(progress*10000)/10000
 
-	if(gameOver) {
+	if (gameOver) {
 		ctx.font = "30px Comic Sans MS";
 		ctx.fillStyle = "red";
 		ctx.textAlign = "center";
 		if (!pendingquit) {
-			endscore = score + Math.round(pogo.frame.body.position[0])-Math.floor(w/50/2);
-			newtopscore=false
-			if(endscore>topscore) {
-				topscore=endscore
-				newtopscore=true
-				document.cookie = "topscore="+endscore+"; expires=Tue, 19 Jan 2038 03:14:07 UTC";
+			endscore = score + Math.round(pogo.frame.body.position[0]) - Math.floor(w / 50 / 2);
+			newtopscore = false
+			if (endscore > topscore) {
+				topscore = endscore
+				newtopscore = true
+				document.cookie = "topscore=" + endscore + "; expires=Tue, 19 Jan 2038 03:14:07 UTC";
 			}
-			
+
 			pendingquit = true
-			restarttimer = setTimeout(function() {
-//				if(leftplay) {
-//					leftplay=false;
-//					return;
-//				}
+			restarttimer = setTimeout(function () {
+				//				if(leftplay) {
+				//					leftplay=false;
+				//					return;
+				//				}
 				gameOver = false
 				pendingquit = false
 				initgame();
-			}, 1000*3);
+			}, 1000 * 3);
 		}
-		
+
 		var msg = "";
-		if(newtopscore) {
+		if (newtopscore) {
 			msg = "New High Score!\n"
 		}
-		ctx.fillText(msg+"Score: "+endscore, w/2, h/2-40); 
+		ctx.fillText(msg + "Score: " + endscore, w / 2, h / 2 - 40);
 	} else {
 		ctx.font = "16px Comic Sans MS";
 		ctx.fillStyle = "black";
 		ctx.textAlign = "left";
-		ctx.fillText("High Score: "+topscore, 10, 20);
-		ctx.fillText("Score: "+(score-Math.floor(w/50/2)+Math.round(pogo.frame.body.position[0])), 10, 36);
+		ctx.fillText("High Score: " + topscore, 10, 20);
+		ctx.fillText("Score: " + (score - Math.floor(w / 50 / 2) + Math.round(pogo.frame.body.position[0])), 10, 36);
 	}
 }
 
 function drawControls() {
-	if(keyboard) return;
-var rect = canvas.getBoundingClientRect();
-	
+	if (keyboard) return;
+	var rect = canvas.getBoundingClientRect();
+
 	ctx.save()
-	if(fixedjoy&&!nojoystick) {
-		var jx = Math.round((jloc.x-rect.left)/(rect.right-rect.left)*canvas.width)
-		var jy = Math.round((jloc.y-rect.top)/(rect.bottom-rect.top)*canvas.height);
+	if (fixedjoy && !nojoystick) {
+		var jx = Math.round((jloc.x - rect.left) / (rect.right - rect.left) * canvas.width)
+		var jy = Math.round((jloc.y - rect.top) / (rect.bottom - rect.top) * canvas.height);
 		ctx.beginPath();
 		ctx.arc(jx, jy, 50, 0, 2 * Math.PI, false);
-		ctx.globalAlpha=0.5;
-		ctx.fillStyle= "#555555"
+		ctx.globalAlpha = 0.5;
+		ctx.fillStyle = "#555555"
 		ctx.fill()
-		
+
 		ctx.beginPath();
 		ctx.arc(jx, jy, 10, 0, 2 * Math.PI, false);
-		ctx.globalAlpha=0.7;
-		ctx.fillStyle= "#AAAAAA"
+		ctx.globalAlpha = 0.7;
+		ctx.fillStyle = "#AAAAAA"
 		ctx.fill()
 	}
 	ctx.restore()
-	
-	if(mousedrag&&!nojoystick) {
-		var mx1 = Math.round((lastmouse.x-rect.left)/(rect.right-rect.left)*canvas.width);
-		var my1 = Math.round((lastmouse.y-rect.top)/(rect.bottom-rect.top)*canvas.height);
-		var mx2 = Math.round((currentmouse.clientX-rect.left)/(rect.right-rect.left)*canvas.width);
-		var my2 = Math.round((currentmouse.clientY-rect.top)/(rect.bottom-rect.top)*canvas.height);
+
+	if (mousedrag && !nojoystick) {
+		var mx1 = Math.round((lastmouse.x - rect.left) / (rect.right - rect.left) * canvas.width);
+		var my1 = Math.round((lastmouse.y - rect.top) / (rect.bottom - rect.top) * canvas.height);
+		var mx2 = Math.round((currentmouse.clientX - rect.left) / (rect.right - rect.left) * canvas.width);
+		var my2 = Math.round((currentmouse.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height);
 		ctx.beginPath();
 		var origw = ctx.lineWidth
 		ctx.lineWidth = 2
@@ -873,100 +884,100 @@ var rect = canvas.getBoundingClientRect();
 function fadeColors(progress) {
 	var nightCol = hexToRgb(color.skynight)
 	var dayCol = hexToRgb(color.skyday)
-	
-	var t = (progress+0.5)%2 // shift left a quarter day and make it between 0 and 2 for a full day
+
+	var t = (progress + 0.5) % 2 // shift left a quarter day and make it between 0 and 2 for a full day
 	var a = dayCol
 	var b = nightCol
-	
-	if(t>1) {
+
+	if (t > 1) {
 		var tmp = a;
 		a = b;
 		b = tmp;
 	}
-	
-	var r = Math.round(lerp(a.r, b.r, 1-t%1));
-    var g = Math.round(lerp(a.g, b.g, 1-t%1));
-    var b = Math.round(lerp(a.b, b.b, 1-t%1));
-    
-    color.sky = rgbToHex(r, g, b)
-    
-    if(!(Math.floor(progress)<7||Math.floor(progress)==9)) {
-    	return;
-    }
-    
-    var skyold = color.sky
-    
-    var caveFade = 0.025
-    
-    if(progress>2&&progress%2<1-caveFade) {
-    	color.sky="#222222"
-    }
-    
-    if(progress%2>2-caveFade) {
-    	a = hexToRgb(color.sky)
-		b = hexToRgb("#222222")
-		
-		var val = 1-(2-progress%2)*1/caveFade
-		
-		var r = Math.round(lerp(a.r, b.r, val));
-        var g = Math.round(lerp(a.g, b.g, val));
-        var b = Math.round(lerp(a.b, b.b, val));
-        
-        color.sky = rgbToHex(r, g, b)
+
+	var r = Math.round(lerp(a.r, b.r, 1 - t % 1));
+	var g = Math.round(lerp(a.g, b.g, 1 - t % 1));
+	var b = Math.round(lerp(a.b, b.b, 1 - t % 1));
+
+	color.sky = rgbToHex(r, g, b)
+
+	if (!(Math.floor(progress) < 7 || Math.floor(progress) == 9)) {
+		return;
 	}
-	
-	if(progress>2&&progress%2>1-caveFade) {
+
+	var skyold = color.sky
+
+	var caveFade = 0.025
+
+	if (progress > 2 && progress % 2 < 1 - caveFade) {
+		color.sky = "#222222"
+	}
+
+	if (progress % 2 > 2 - caveFade) {
+		a = hexToRgb(color.sky)
+		b = hexToRgb("#222222")
+
+		var val = 1 - (2 - progress % 2) * 1 / caveFade
+
+		var r = Math.round(lerp(a.r, b.r, val));
+		var g = Math.round(lerp(a.g, b.g, val));
+		var b = Math.round(lerp(a.b, b.b, val));
+
+		color.sky = rgbToHex(r, g, b)
+	}
+
+	if (progress > 2 && progress % 2 > 1 - caveFade) {
 		b = hexToRgb(color.sky)
 		a = hexToRgb("#222222")
-		
-		var val = 1-(1-progress%2)*1/caveFade
-		
+
+		var val = 1 - (1 - progress % 2) * 1 / caveFade
+
 		var r = Math.round(lerp(a.r, b.r, val));
-        var g = Math.round(lerp(a.g, b.g, val));
-        var b = Math.round(lerp(a.b, b.b, val));
-        
-        color.sky = rgbToHex(r, g, b)
+		var g = Math.round(lerp(a.g, b.g, val));
+		var b = Math.round(lerp(a.b, b.b, val));
+
+		color.sky = rgbToHex(r, g, b)
 	}
-	
-	if(((progress>2&&progress%2>1)||(progress<2))&&progress%2<2-caveFade) {
+
+	if (((progress > 2 && progress % 2 > 1) || (progress < 2)) && progress % 2 < 2 - caveFade) {
 		color.sky = skyold
-		color.ground=colordef.ground
+		color.ground = colordef.ground
 	}
-	
+
 	// Ground
-	
-	if(progress>2&&progress%2<=1) {
-    	color.ground="#222222"
-    }
-    
-    if(progress%2>2-caveFade) {
-    	a = hexToRgb(colordef.ground)
-		b = hexToRgb("#222222")
-		
-		var val = 1-(2-progress%2)*1/caveFade
-		
-		var r = Math.round(lerp(a.r, b.r, val));
-        var g = Math.round(lerp(a.g, b.g, val));
-        var b = Math.round(lerp(a.b, b.b, val));
-        
-        color.ground = rgbToHex(r, g, b)
+
+	if (progress > 2 && progress % 2 <= 1) {
+		color.ground = "#222222"
 	}
-	
-	if(progress>2&&progress%2>1-caveFade) {
+
+	if (progress % 2 > 2 - caveFade) {
+		a = hexToRgb(colordef.ground)
+		b = hexToRgb("#222222")
+
+		var val = 1 - (2 - progress % 2) * 1 / caveFade
+
+		var r = Math.round(lerp(a.r, b.r, val));
+		var g = Math.round(lerp(a.g, b.g, val));
+		var b = Math.round(lerp(a.b, b.b, val));
+
+		color.ground = rgbToHex(r, g, b)
+	}
+
+	if (progress > 2 && progress % 2 > 1 - caveFade) {
 		b = hexToRgb(colordef.ground)
 		a = hexToRgb("#555555")
-		
-		var val = 1-(1-(progress%2))*1/caveFade
-		
+
+		var val = 1 - (1 - (progress % 2)) * 1 / caveFade
+
 		var r = Math.round(lerp(a.r, b.r, val));
-        var g = Math.round(lerp(a.g, b.g, val));
-        var b = Math.round(lerp(a.b, b.b, val));
-        
-        color.ground = rgbToHex(r, g, b)
+		var g = Math.round(lerp(a.g, b.g, val));
+		var b = Math.round(lerp(a.b, b.b, val));
+
+		color.ground = rgbToHex(r, g, b)
 	}
-	
-	if(progress>2&&progress%2>1&&progress%2<2-caveFade) {
-		color.ground=colordef.ground
+
+	if (progress > 2 && progress % 2 > 1 && progress % 2 < 2 - caveFade) {
+		color.ground = colordef.ground
 	}
 }
 
@@ -974,47 +985,47 @@ var newtopscore = false
 
 // from w3schools
 function getCookie(cname) {
-    var name = cname + "=";
-    var ca = document.cookie.split(';');
-    for(var i = 0; i <ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length,c.length);
-        }
-    }
-    return "";
+	var name = cname + "=";
+	var ca = document.cookie.split(';');
+	for (var i = 0; i < ca.length; i++) {
+		var c = ca[i];
+		while (c.charAt(0) == ' ') {
+			c = c.substring(1);
+		}
+		if (c.indexOf(name) == 0) {
+			return c.substring(name.length, c.length);
+		}
+	}
+	return "";
 }
 
 function drawObstacles() {
-	var m = w/50/2
-	var d = m-1
+	var m = w / 50 / 2
+	var d = m - 1
 	var px = -xscroll
-	var i1 = Math.floor((px+d)/(rarity*2))
-	
-	for(var i = 0; i < obstacles.length; i++) {
+	var i1 = Math.floor((px + d) / (rarity * 2))
+
+	for (var i = 0; i < obstacles.length; i++) {
 		o = obstacles[i]
-		if(Math.abs(o.position[0]-px)<=m) {
+		if (Math.abs(o.position[0] - px) <= m) {
 			ctx.beginPath();
 			ctx.arc(o.position[0], o.position[1], 0.5, 0, 2 * Math.PI, false);
 			ctx.stroke()
 		}
 	}
-	
-	
-	
-	
-//	if(px+d<obstacles[i].position[0]) {
-//		ctx.beginPath();
-//		ctx.arc(px+d, obstacles[i].position[1], 0.5, 0, 2 * Math.PI, false);
-//		ctx.strokeStyle = "#555555"
-//		ctx.stroke()
+
+
+
+
+	//	if(px+d<obstacles[i].position[0]) {
+	//		ctx.beginPath();
+	//		ctx.arc(px+d, obstacles[i].position[1], 0.5, 0, 2 * Math.PI, false);
+	//		ctx.strokeStyle = "#555555"
+	//		ctx.stroke()
 	try {
-	canvas_arrow(px+d-0.3, obstacles[i1].position[1], px+d+0.5, obstacles[i1].position[1])
-	} catch(e) {
-		
+		canvas_arrow(px + d - 0.3, obstacles[i1].position[1], px + d + 0.5, obstacles[i1].position[1])
+	} catch (e) {
+
 	}
 	//	}
 	ctx.strokeStyle = "#000000"
@@ -1023,12 +1034,12 @@ function drawObstacles() {
 function drawpogo() {
 	ctx.fillStyle = color.stick;
 	drawbox(pogo.stick)
-	if(colorful) {
+	if (colorful) {
 		ctx.fill();
 	}
 	ctx.fillStyle = color.body;
 	drawbox(pogo.frame)
-	if(colorful) {
+	if (colorful) {
 		ctx.fill();
 	}
 	// drawBox({body: boxBody, shape: boxShape})
@@ -1043,63 +1054,64 @@ function drawpogo() {
 
 function drawbox(obj) {
 	ctx.beginPath();
-	var x = obj.body.interpolatedPosition[0], y = obj.body.interpolatedPosition[1];
+	var x = obj.body.interpolatedPosition[0],
+		y = obj.body.interpolatedPosition[1];
 	ctx.save();
 	ctx.translate(x, y); // Translate to the center of the box
 	ctx.rotate(obj.body.angle); // Rotate to the box body frame
 	ctx.rect(-obj.shape.width / 2, -obj.shape.height / 2, obj.shape.width,
-			obj.shape.height);
+		obj.shape.height);
 	ctx.stroke();
 	ctx.restore();
 }
 
 function drawObstacles1(s) {
-	var b = s.h.body.position[0]!=-1
-	var m = w/50/2
-	var d = m-1
-	var px = -xscroll//pogo.frame.body.position[0]
-	var i1 = Math.floor(((px)+d)/(rarity*2))
-	
-	for(var i = 0; i < s.o.length; i++) {
+	var b = s.h.body.position[0] != -1
+	var m = w / 50 / 2
+	var d = m - 1
+	var px = -xscroll //pogo.frame.body.position[0]
+	var i1 = Math.floor(((px) + d) / (rarity * 2))
+
+	for (var i = 0; i < s.o.length; i++) {
 		o = s.o[i]
-		if(Math.abs(o.position[0]-px)<=m||true) {
+		if (Math.abs(o.position[0] - px) <= m || true) {
 			ctx.beginPath();
 			ctx.arc(o.position[0], o.position[1], 0.5, 0, 2 * Math.PI, false);
 			ctx.stroke()
 		}
 	}
-	
-	
-	
-	
-//	if(px+d<obstacles[i].position[0]) {
-//		ctx.beginPath();
-//		ctx.arc(px+d, obstacles[i].position[1], 0.5, 0, 2 * Math.PI, false);
-//		ctx.strokeStyle = "#555555"
-//		ctx.stroke()
-//	console.log(s.o[i1])
-//	try {
-//	if(!b) {
-//		var co = sectionA.o.concat(sectionB.o)
-//	
-//	canvas_arrow(px+d-0.3, co[i1].position[1], px+d+0.5, co[i1].position[1])
-////	}
-//	ctx.strokeStyle = "#000000"
-//	}
-//	} catch (e) {
-//		return;
-//	}
+
+
+
+
+	//	if(px+d<obstacles[i].position[0]) {
+	//		ctx.beginPath();
+	//		ctx.arc(px+d, obstacles[i].position[1], 0.5, 0, 2 * Math.PI, false);
+	//		ctx.strokeStyle = "#555555"
+	//		ctx.stroke()
+	//	console.log(s.o[i1])
+	//	try {
+	//	if(!b) {
+	//		var co = sectionA.o.concat(sectionB.o)
+	//
+	//	canvas_arrow(px+d-0.3, co[i1].position[1], px+d+0.5, co[i1].position[1])
+	////	}
+	//	ctx.strokeStyle = "#000000"
+	//	}
+	//	} catch (e) {
+	//		return;
+	//	}
 }
 
 // from http://stackoverflow.com/a/6333775
-function canvas_arrow(fromx, fromy, tox, toy){
-    var headlen = 0.5;   // length of head in pixels
-    var angle = Math.atan2(toy-fromy,tox-fromx);
-    ctx.beginPath();
-    ctx.moveTo(fromx, fromy);
-    ctx.lineTo(tox, toy);
-    ctx.lineTo(tox-headlen*Math.cos(angle-Math.PI/6),toy-headlen*Math.sin(angle-Math.PI/6));
-    ctx.moveTo(tox, toy);
-    ctx.lineTo(tox-headlen*Math.cos(angle+Math.PI/6),toy-headlen*Math.sin(angle+Math.PI/6));
-    ctx.stroke()
+function canvas_arrow(fromx, fromy, tox, toy) {
+	var headlen = 0.5; // length of head in pixels
+	var angle = Math.atan2(toy - fromy, tox - fromx);
+	ctx.beginPath();
+	ctx.moveTo(fromx, fromy);
+	ctx.lineTo(tox, toy);
+	ctx.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
+	ctx.moveTo(tox, toy);
+	ctx.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
+	ctx.stroke()
 }

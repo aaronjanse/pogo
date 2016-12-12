@@ -1,51 +1,58 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset='utf-8'>
-<meta http-equiv="X-UA-Compatible" content="chrome=1">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="keywords"
-	content="aaronduino, pogo, pogorun, pogo run, run, github, js, javascript">
-<meta name="Description" content="Aaronduino's pogostick runner, written with javascript.">
-	
-<meta name="author" content="Aaronduino">
-<link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
-<link rel="stylesheet" href="stylesheets/rangeslider.css">
+	<meta charset='utf-8'>
+	<meta http-equiv="X-UA-Compatible" content="chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="keywords" content="aaronduino, pogo, pogorun, pogo run, run, github, js, javascript">
+	<meta name="Description" content="Aaronduino's pogostick runner, written with javascript.">
 
-<!-- <script src="https://rawgit.com/schteppe/p2.js/master/build/p2.min.js"></script> -->
-<script src="javascripts/p2.min.js"></script>
-<script src="javascripts/jscolor.min.js"></script>
+	<meta name="author" content="Aaronduino">
+	<link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="stylesheets/rangeslider.css">
 
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	<!-- <script src="https://rawgit.com/schteppe/p2.js/master/build/p2.min.js"></script> -->
+	<script src="javascripts/p2.min.js"></script>
+	<script src="javascripts/jscolor.min.js"></script>
 
-  ga('create', 'UA-79457306-1', 'auto');
-  ga('send', 'pageview');
+	<script>
+		(function(i, s, o, g, r, a, m) {
+			i['GoogleAnalyticsObject'] = r;
+			i[r] = i[r] || function() {
+				(i[r].q = i[r].q || []).push(arguments)
+			}, i[r].l = 1 * new Date();
+			a = s.createElement(o),
+				m = s.getElementsByTagName(o)[0];
+			a.async = 1;
+			a.src = g;
+			m.parentNode.insertBefore(a, m)
+		})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
-</script>
+		ga('create', 'UA-79457306-1', 'auto');
+		ga('send', 'pageview');
+	</script>
 
-<link rel="stylesheet" type="text/css" href="stylesheets/main.css">
+	<link rel="stylesheet" type="text/css" href="stylesheets/main.css">
 
-<script src="javascripts/jquery.min.js"></script>
+	<script src="javascripts/jquery.min.js"></script>
 
-<link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
-<script src="javascripts/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
+	<script src="javascripts/bootstrap.min.js"></script>
 
 
-<!--[if lt IE 9]>
+	<!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
-<title>Pogo Run by Aaronduino</title>
+	<title>Pogo Run by Aaronduino</title>
 </head>
+
 <body>
 	<div id="gamearea">
-	<p id="errortxt">Black screen of death? Try tapping around in the top right corner until you find settings, then change your controls to the joystick
-	Please submit this as an issue on github, along with your device specs and the steps to cause it (if possible). Thank you!</p>
+		<p id="errortxt">Black screen of death? Try tapping around in the top right corner until you find settings, then change your controls to the joystick Please submit this as an issue on github, along with your device specs and the steps to cause it (if possible). Thank
+			you!
+		</p>
 		<div id="mainmenu">
 			<span style="font-size: 2em">Pogo Run</span>
 			<span>By Aaronduino</span>
@@ -57,11 +64,11 @@
 		</div>
 		<canvas id="myCanvas"></canvas>
 		<div id="health">
-			<i class="fa fa-heart" aria-hidden="true"></i> 
-			<i id="h2" class="fa fa-heart" aria-hidden="true"></i> 
+			<i class="fa fa-heart" aria-hidden="true"></i>
+			<i id="h2" class="fa fa-heart" aria-hidden="true"></i>
 			<i id="h3" class="fa fa-heart" aria-hidden="true"></i>
 		</div>
-		
+
 		<button id="pausebutton" class="circlebutton" onclick="pausegame()">
 			<i class="fa fa-pause"></i>
 		</button>
@@ -72,7 +79,7 @@
 		<button id="settingsbutton" class="circlebutton" onclick="settings()">
 			<i class="fa fa-cog" aria-hidden="true"></i>
 		</button>
-		
+
 		<button id="homebutton" class="circlebuttoni" onclick="gohome()">
 				<i class="fa fa-home"></i></button>
 
@@ -80,114 +87,100 @@
 			<div class="controls">
 				<div class="btn-group" role="group" aria-label="...">
 					<button onclick="saveopts()" type="button" class="btn btn-default" class="savesel">Save</button>
-					
-						<button class="dropdowntitle btn btn-default dropdown-toggle"
-							type="button" data-toggle="dropdown">Joystick <span class="caret"></span>
+
+					<button class="dropdowntitle btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Joystick <span class="caret"></span>
 						</button>
-						<ul class="dropdown-menu">
-							<li class="dropdown-header">Recommended</li>
-							<li><a href="#" class="gyro">Gyro</a></li>
-							<li><a href="#">Joystick</a></li>
-							<li><a href="#" class="keyboard">Keyboard</a></li>
-							<li class="divider"></li>
-							<li class="dropdown-header">Not Recommended</li>
-							<li><a href="#">Unfixed Joystick</a></li>
-						</ul>
-					
+					<ul class="dropdown-menu">
+						<li class="dropdown-header">Recommended</li>
+						<li><a href="#" class="gyro">Gyro</a></li>
+						<li><a href="#">Joystick</a></li>
+						<li><a href="#" class="keyboard">Keyboard</a></li>
+						<li class="divider"></li>
+						<li class="dropdown-header">Not Recommended</li>
+						<li><a href="#">Unfixed Joystick</a></li>
+					</ul>
+
 				</div>
 			</div>
 		</div>
 
 		<div id="helparea">
-					<button class="circlebuttoni backbutton" onclick="back()">
+			<button class="circlebuttoni backbutton" onclick="back()">
 						<i class="fa fa-arrow-left"></i>
 					</button>
-					<h1>Help</h1>
-					<p>
-					 	Jump to try to get as far as possible!<br> You lose if the pogostick
-						frame touches anything the ground, and you lose a heart if it hits an obstacle.
-					</p>
-					<div class="helptxtdiv">
-					<div class="controlsdiv"><h3>Select a control mode:</h3></div>
-					<p class="gyrohelp">
-						Mobile/Tablet (Gyro):<br> Tap to expand the spring and let go to
-						recompress. Tilt the device to tilt the pogostick
-					</p>
-					<div class="joyhelp">
-					<p class="unfixjoyhelp">Click/tap to compress spring and set the
-						center of a joystick, drag to twist like controlling a joystick,
-						then release to expand the spring</p>
-					<p class="fixjoyhelp">The grey circle is
-						the joystick, with the center marked. Tap/click to compress the
-						spring, optionally drag to change the angle of the joystick, then
-						let go to let the spring expand.</p>
-					</div>
-					<p class="keyboardhelp">
-						Press the up arrow or spacebar to
-						expand the spring, and the left and right arrow keys to twist left
-						and right respectively
-					</p>
-					</div>
+			<h1>Help</h1>
+			<p>
+				Jump to try to get as far as possible!<br> You lose if the pogostick frame touches anything the ground, and you lose a heart if it hits an obstacle.
+			</p>
+			<div class="helptxtdiv">
+				<div class="controlsdiv">
+					<h3>Select a control mode:</h3></div>
+				<p class="gyrohelp">
+					Mobile/Tablet (Gyro):<br> Tap to expand the spring and let go to recompress. Tilt the device to tilt the pogostick
+				</p>
+				<div class="joyhelp">
+					<p class="unfixjoyhelp">Click/tap to compress spring and set the center of a joystick, drag to twist like controlling a joystick, then release to expand the spring</p>
+					<p class="fixjoyhelp">The grey circle is the joystick, with the center marked. Tap/click to compress the spring, optionally drag to change the angle of the joystick, then let go to let the spring expand.</p>
 				</div>
+				<p class="keyboardhelp">
+					Press the up arrow or spacebar to expand the spring, and the left and right arrow keys to twist left and right respectively
+				</p>
+			</div>
+		</div>
 
-				<div id="settings">
-					<button class="circlebuttoni backbutton" onclick="back()">
+		<div id="settings">
+			<button class="circlebuttoni backbutton" onclick="back()">
 						<i class="fa fa-arrow-left"></i>
 					</button>
-					<h1>Settings</h1>
-					<div class="controlsdiv"><h3>Select a control mode:</h3></div>
-					<button onclick="resetcolors()">Reset colors</button><br><br>
-					<button onclick="colorful=!colorful">Toggle colors</button><br>
-					<span>Pogo *Body*: </span><input readonly="true" id="bodyCP"
-						class="jscolor {onFineChange:'updateBody()'}" value="ed00ed"><br>
-					<span>Pogo *Stick*: </span><input readonly="true" id="stickCP"
-						class="jscolor {onFineChange:'updateStick()'}" value="ff66ff"><br>
-					<h3>Keyboard Sensitivity</h3><br>
-					<input id="keyslider" type="range" min="25" max="200"><br>
-					<button onclick="openDebug()">Open Debugger</button>
-				</div>
+			<h1>Settings</h1>
+			<div class="controlsdiv">
+				<h3>Select a control mode:</h3></div>
+			<button onclick="resetcolors()">Reset colors</button><br><br>
+			<button onclick="colorful=!colorful">Toggle colors</button><br>
+			<span>Pogo *Body*: </span><input readonly="true" id="bodyCP" class="jscolor {onFineChange:'updateBody()'}" value="ed00ed"><br>
+			<span>Pogo *Stick*: </span><input readonly="true" id="stickCP" class="jscolor {onFineChange:'updateStick()'}" value="ff66ff"><br>
+			<h3>Keyboard Sensitivity</h3><br>
+			<input id="keyslider" type="range" min="25" max="200"><br>
+			<button onclick="openDebug()">Open Debugger</button>
+		</div>
 
-				<button id="tutnextb" class="circlebuttoni" onclick="tutnext()">
+		<button id="tutnextb" class="circlebuttoni" onclick="tutnext()">
 					<i class="fa fa-arrow-right"></i>
 				</button>
-				<div id="tuthelp">
-					<br>
-					<div id="lvl0" class="th">
-						Welcome to the tutorial. <div class="tutcontrolsdiv">Choose the controls that you want to learn about.</div>
-					</div>
-					<div id="lvl1" class="th" style="display: none;">
-						Now, try to get as far as possible without letting the pogostick
-						frame touch the ground or fall off the cliff at the beginning. <br>
-						Your score is how far you get.
-					</div>
-					<div id="lvl2" class="th" style="display: none;">
-						Now do the same thing, but don't let the pogostick's frame hit the
-						obstacles (the circles). <br> You lose one heart (out of 3)
-						if you hit them.<br> Click the next button to end the
-						tutorial! Have fun!
-					</div>
-					<div id="nexttxt">Click the next arrow when you are ready to
-						move on.</div>
+		<div id="tuthelp">
+			<br>
+			<div id="lvl0" class="th">
+				Welcome to the tutorial.
+				<div class="tutcontrolsdiv">Choose the controls that you want to learn about.</div>
+			</div>
+			<div id="lvl1" class="th" style="display: none;">
+				Now, try to get as far as possible without letting the pogostick frame touch the ground or fall off the cliff at the beginning. <br> Your score is how far you get.
+			</div>
+			<div id="lvl2" class="th" style="display: none;">
+				Now do the same thing, but don't let the pogostick's frame hit the obstacles (the circles). <br> You lose one heart (out of 3) if you hit them.<br> Click the next button to end the tutorial! Have fun!
+			</div>
+			<div id="nexttxt">Click the next arrow when you are ready to move on.</div>
 		</div>
 
 	</div>
 	<script src="javascripts/perlin.min.js"></script>
 
-<!--<script src="javascripts/menu.js"></script>
-<script src="javascripts/main.js"></script>
-<script src="javascripts/control.js"></script>
-<script src="javascripts/render.js"></script>
-<script src="javascripts/tutorial.js"></script>-->
+	<!--<script src="javascripts/menu.js"></script>
+	<script src="javascripts/main.js"></script>
+	<script src="javascripts/control.js"></script>
+	<script src="javascripts/render.js"></script>
+	<script src="javascripts/tutorial.js"></script>-->
 
-<script src="javascripts/fullgame.min.js"></script>
+	<script src="javascripts/fullgame.min.js"></script>
 
-<script src="javascripts/fulltilt.min.js"></script>
+	<script src="javascripts/fulltilt.min.js"></script>
 
-<script src="javascripts/hidpi-canvas.min.js"></script>
-<script src="javascripts/rangeslider.min.js"></script>
+	<script src="javascripts/hidpi-canvas.min.js"></script>
+	<script src="javascripts/rangeslider.min.js"></script>
 
-<script>
-	onload()
-</script>
+	<script>
+		onload()
+	</script>
 </body>
+
 </html>
