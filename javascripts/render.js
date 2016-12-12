@@ -409,7 +409,7 @@ function hexToRgb(hex) {
 var fullPause = false;
 
 var sendScore = function () {
-
+	conn.send(score)
 }
 
 function render() {

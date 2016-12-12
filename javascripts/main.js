@@ -246,40 +246,41 @@ function onload() {
 
 	if (QueryString.multi === "1") {
 		multi = true;
+
 		var id = '' + Math.round(Math.random() * 10000);
 
 		peer = new Peer(id, {
 			key: peerkey,
-			secure: true
+			secure: false,
+			debug: 3
 		});
 
-		peer.on('open', function (id1) {
-			console.log('My peer ID is: ' + id1);
-		});
+		if (QueryString.leader === "1") {
+			var otherid = prompt("What is you're opponent's id number?")
+			console.log("Other id: " + otherid);
 
-		var otherid = prompt("You're id is: " + id + "\nWhat is you're opponent's id?")
-		console.log("Other id: " + otherid);
+			conn = peer.connect('' + otherid);
+			conn.on('open', function () {
+				// Receive messages
+				conn.on('data', function (data) {
+					// console.log('Received', data);
+					opponentScore = parseInt(data);
+				});
 
-		conn = peer.connect('' + otherid);
-		conn.on('open', function () {
-			// Receive messages
-			conn.on('data', function (data) {
-				console.log('Received', data);
+				// Send messages
+				// conn.send('Hello!');
 			});
-
-			// Send messages
-			conn.send('Hello!');
-		});
-		// conn.on('open', function () {
-		// 	conn.send('' + 100);
-		// });
-		//
-		// peer.on('connection', function (conn) {
-		// 	conn.on('data', function (data) {
-		// 		// Will print 'hi!'
-		// 		opponentScore = data;
-		// 	});
-		// });
+		} else {
+			alert("Give this id number to the leader: " + id)
+			peer.on('connection', function (conn1) {
+				conn = conn1;
+				conn.on('data', function (data) {
+					// Will print 'hi!'
+					// console.log(data);
+					opponentScore = parseInt(data);
+				});
+			});
+		}
 	}
 
 	$('#keyslider').rangeslider({
