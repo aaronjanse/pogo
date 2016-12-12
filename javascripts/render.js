@@ -772,7 +772,9 @@ function render() {
 	timeTxt += (hours > 11) ? "PM" : "AM"
 
 	ctx.fillText(timeTxt, 10, 60);
-	// "Level/Half-Days: "+Math.round(progress*10000)/10000
+
+	ctx.fillText('' + opponentScore, 10, 80)
+		// "Level/Half-Days: "+Math.round(progress*10000)/10000
 
 	if (gameOver) {
 		ctx.font = "30px Courier New";

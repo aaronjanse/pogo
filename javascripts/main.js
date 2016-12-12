@@ -24,6 +24,8 @@ var firstrh = true;
 
 var angularVelocity = -0.25;
 
+var opponentScore = 0;
+
 var FRAME = 1,
 	STICK = 2,
 	GROUND = 4,
@@ -206,6 +208,8 @@ function saveopts1(tutsave) {
 	setupjoy();
 }
 
+var multi = false;
+
 function onload() {
 
 	var QueryString = function () {
@@ -233,6 +237,29 @@ function onload() {
 
 	if (QueryString.debug === "1") {
 		openDebug();
+	}
+
+	if (QueryString.multi === "1") {
+		multi = true;
+		var id = '' + Math.round(Math.random() * 10000);
+
+		var peer = new Peer(id, {
+			key: 'k21h7zsvzls4te29'
+		});
+
+		var otherid = prompt("You're id is: " + id + "\nWhat is you're opponent's id?")
+
+		var conn = peer.connect(otherid);
+		conn.on('open', function () {
+			conn.send('' + score);
+		});
+
+		peer.on('connection', function (conn) {
+			conn.on('data', function (data) {
+				// Will print 'hi!'
+				opponentScore = data;
+			});
+		});
 	}
 
 	$('#keyslider').rangeslider({
