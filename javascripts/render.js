@@ -423,9 +423,6 @@ function render() {
 		fullPause = false;
 	}
 	var px = pogo.frame.body.position[0]
-	if (px > secwidth) {
-		//		console.log("Sec #2")
-	}
 
 	if (px - w / 50 / 2 > secwidth) {
 		removeSection(sectionA)
@@ -463,7 +460,6 @@ function render() {
 	if (px < w / 50 / 2 && secnum > 2) {
 		removeSection(sectionA)
 		removeSection(sectionB)
-			//		sectionA.inverts = sectionA.inverts.map(value => !value)
 		for (var i = 0; i < sectionA.inverts.length; i++) {
 			sectionA.inverts[i] = !sectionA.inverts[i]
 		}
@@ -472,20 +468,6 @@ function render() {
 			sectionB.inverts[i] = !sectionB.inverts[i]
 		}
 
-		for (var i = 0; i < sectionB.o.length && false; i++) {
-			//			sectionB.o[i].velocity = [-sectionB.o[i].velocity[0], -sectionB.o[i].velocity[1]]
-			//			sectionB.o[i].invert = true;
-			var o = sectionB.o[i]
-			if (o.position[0] < sectionB.h.body.position[0]) {
-				//				o.velocity = [-o.velocity[0], -o.velocity[1]]
-				sectionA.o.push(copysec(sectionB).o[i])
-				sectionB.o.splice(i, 1);
-				sectionA.inverts.push(true)
-				sectionB.inverts.splice(i, 1)
-			} else {
-				//				o.velocity = [-o.velocity[0], -o.velocity[1]]
-			}
-		}
 		secnum -= 2
 		sectionB = changenum(sectionA, 1, 0)
 		sectionA = generateSection()
@@ -783,9 +765,6 @@ function render() {
 	var minutes = Math.floor(delta / 60) % 60;
 	delta -= minutes * 60;
 
-	// what's left is seconds
-	var seconds = delta % 60; // in theory the modulus is not required
-
 	var timeTxt = "Day " + days + ", ";
 	var hrsTxt = hours % 12 + 1 + "";
 	timeTxt += ("0" + hrsTxt).substring(hrsTxt.length - 1) + ":";
@@ -1038,15 +1017,7 @@ function drawpogo() {
 	if (colorful) {
 		ctx.fill();
 	}
-	// drawBox({body: boxBody, shape: boxShape})
 }
-
-// function drawcircle(obj) {
-// var x = obj.body.interpolatedPosition[0],
-// y = obj.body.interpolatedPosition[1];
-// ctx.arc(95,50,40,0,2*Math.PI);
-// ctx.stroke();
-// }
 
 function drawbox(obj) {
 	ctx.beginPath();
@@ -1062,41 +1033,12 @@ function drawbox(obj) {
 }
 
 function drawObstacles1(s) {
-	var b = s.h.body.position[0] != -1
-	var m = w / 50 / 2
-	var d = m - 1
-	var px = -xscroll //pogo.frame.body.position[0]
-	var i1 = Math.floor(((px) + d) / (rarity * 2))
-
 	for (var i = 0; i < s.o.length; i++) {
 		o = s.o[i]
-		if (Math.abs(o.position[0] - px) <= m || true) {
-			ctx.beginPath();
-			ctx.arc(o.position[0], o.position[1], 0.5, 0, 2 * Math.PI, false);
-			ctx.stroke()
-		}
+		ctx.beginPath();
+		ctx.arc(o.position[0], o.position[1], 0.5, 0, 2 * Math.PI, false);
+		ctx.stroke()
 	}
-
-
-
-
-	//	if(px+d<obstacles[i].position[0]) {
-	//		ctx.beginPath();
-	//		ctx.arc(px+d, obstacles[i].position[1], 0.5, 0, 2 * Math.PI, false);
-	//		ctx.strokeStyle = "#555555"
-	//		ctx.stroke()
-	//	console.log(s.o[i1])
-	//	try {
-	//	if(!b) {
-	//		var co = sectionA.o.concat(sectionB.o)
-	//
-	//	canvas_arrow(px+d-0.3, co[i1].position[1], px+d+0.5, co[i1].position[1])
-	////	}
-	//	ctx.strokeStyle = "#000000"
-	//	}
-	//	} catch (e) {
-	//		return;
-	//	}
 }
 
 // from http://stackoverflow.com/a/6333775
