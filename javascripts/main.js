@@ -276,7 +276,7 @@ function onload() {
 				conn = conn1;
 				conn.on('data', function (data) {
 					// Will print 'hi!'
-					// console.log(data);
+					console.log(data);
 					opponentScore = parseInt(data);
 				});
 			});
