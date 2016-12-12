@@ -249,7 +249,7 @@ function onload() {
 			secure: true
 		});
 
-		var otherid = prompt("You're id is: " + peer.id + "\nWhat is you're opponent's id?")
+		var otherid = prompt("You're id is: " + id + "\nWhat is you're opponent's id?")
 
 		conn = peer.connect('' + otherid);
 		conn.on('open', function () {
