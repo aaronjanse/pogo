@@ -738,18 +738,14 @@ function render() {
 
 	drawControls()
 
-	ctx.font = "20px Comic Sans MS";
+	ctx.font = "20px Courier New";
 	ctx.fillStyle = "#555555";
-	ctx.textAlign = "center";
+	ctx.textAlign = "left";
 
 	//	var dist = (Math.floor(((-xscroll-((progress>2&&progress%2<=1)?4:0))%secwidth)%(rarity*2)))
-	ctx.fillText("Next obstacle: " + Math.floor(closest), 100, h - 20);
+	ctx.fillText("Next obstacle: " + Math.floor(closest), 10, h - 20);
 
-
-
-	ctx.font = "20px Courier New";
 	ctx.fillStyle = "#000000";
-	ctx.textAlign = "left";
 	var daysRaw = progress / 2 + 0.25;
 
 
@@ -779,7 +775,7 @@ function render() {
 	// "Level/Half-Days: "+Math.round(progress*10000)/10000
 
 	if (gameOver) {
-		ctx.font = "30px Comic Sans MS";
+		ctx.font = "30px Courier New";
 		ctx.fillStyle = "red";
 		ctx.textAlign = "center";
 		if (!pendingquit) {
@@ -809,11 +805,11 @@ function render() {
 		}
 		ctx.fillText(msg + "Score: " + endscore, w / 2, h / 2 - 40);
 	} else {
-		ctx.font = "16px Comic Sans MS";
+		ctx.font = "20px Courier New";
 		ctx.fillStyle = "black";
 		ctx.textAlign = "left";
-		ctx.fillText("High Score: " + topscore, 10, 20);
-		ctx.fillText("Score: " + (score - Math.floor(w / 50 / 2) + Math.round(pogo.frame.body.position[0])), 10, 36);
+		ctx.fillText("High Score: " + topscore, 10, 25);
+		ctx.fillText("Score: " + (score - Math.floor(w / 50 / 2) + Math.round(pogo.frame.body.position[0])), 10, 42);
 	}
 }
 
