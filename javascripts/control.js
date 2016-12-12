@@ -186,13 +186,9 @@ function ontouchmove(e) {
 	}
 	e.preventDefault();
 	if (lastmouse.x != null) {
-		if (lastmouse.x != e.touches[0].clientX || true) {
-			a = lastmouse.x - e.touches[0].clientX;
-			b = lastmouse.y - e.touches[0].clientY;
-			reacttocontrols()
-		} else {
-			pogo.frame.body.angularVelocity = 0;
-		}
+		a = lastmouse.x - e.touches[0].clientX;
+		b = lastmouse.y - e.touches[0].clientY;
+		reacttocontrols()
 	} else {
 		if (fixedjoy) {
 			lastmouse = {
@@ -233,13 +229,9 @@ function onmousedown() {
 		document.onmousemove = function (e) {
 			currentmouse = e
 			if (lastmouse.x != null) {
-				if (lastmouse.x != e.clientX || true) {
-					a = lastmouse.x - e.clientX;
-					b = lastmouse.y - e.clientY;
-					reacttocontrols()
-				} else {
-					pogo.frame.body.angularVelocity = 0;
-				}
+				a = lastmouse.x - e.clientX;
+				b = lastmouse.y - e.clientY;
+				reacttocontrols()
 			} else {
 				if (fixedjoy) {
 					lastmouse = {
@@ -335,17 +327,5 @@ function keyup(evt) {
 }
 
 function keypress(evt) {
-	//    if ([32, 37, 38, 39, 40].indexOf(evt.keyCode) > -1) {
-	//        evt.preventDefault();
-	//    }
-
 	return;
-
-	if (evt.keyCode == keys.left || evt.keyCode == 65) {
-		pogo.frame.body.angularVelocity = twistval
-	}
-
-	if (evt.keyCode == keys.right || evt.keyCode == 68) {
-		pogo.frame.body.angularVelocity = -twistval
-	}
 }

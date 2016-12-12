@@ -329,10 +329,6 @@ var tut = {
 
 		world.addSpring(pogo.spring);
 
-		var FRAME = 1,
-			STICK = 2,
-			GROUND = 4;
-
 		pogo.frame.shape.collisionGroup = FRAME;
 		pogo.stick.shape.collisionGroup = STICK;
 		pogo.frame.shape.collisionMask = ~STICK;
@@ -349,9 +345,6 @@ var tut = {
 		heightfield.body.addShape(heightfield.shape);
 		world.addBody(heightfield.body);
 
-		var FRAME = 1,
-			STICK = 2,
-			GROUND = 4;
 		heightfield.shape.collisionGroup = GROUND;
 		heightfield.shape.collisionMask = -1;
 	},
