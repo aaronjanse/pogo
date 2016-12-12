@@ -117,7 +117,11 @@ function pausegame() {
 //		  });
 		pause = true;
 	//	document.getElementById("myCanvas").style.display = 'none'
-		document.getElementById("myCanvas").style.opacity = '0.3'
+	  if(filtersEnabled) {
+		document.getElementById("myCanvas").style.opacity = '0.7'
+	} else {
+		document.getElementById("myCanvas").style.opacity = '0.5'
+	}
 		document.getElementById("pausebutton").innerHTML = '<i class="fa fa-play"></i>'
 		document.getElementById("helpbutton").style.display = 'inline-block'
 		document.getElementById("settingsbutton").style.display = 'inline-block'

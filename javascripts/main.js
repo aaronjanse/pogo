@@ -431,6 +431,8 @@ function init() {
     ctx = canvas.getContext("2d");
     ctx.lineWidth = 0.05;
 
+    filtersEnabled = (typeof ctx.filter != "undefined");
+
     noise.seed(Math.random() * 10);
     // Init p2.js
 
