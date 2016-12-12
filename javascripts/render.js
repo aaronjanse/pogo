@@ -813,14 +813,16 @@ function render() {
 	}
 }
 
+var gyro = false;
+
 function drawControls() {
-	if (keyboard) return;
+	if (keyboard || gyro) return;
 	var rect = canvas.getBoundingClientRect();
 
 	ctx.save()
 	if (fixedjoy && !nojoystick) {
-		var jx = Math.round((jloc.x - rect.left) / (rect.right - rect.left) * canvas.width)
-		var jy = Math.round((jloc.y - rect.top) / (rect.bottom - rect.top) * canvas.height);
+		var jx = Math.round(jloc.x)
+		var jy = Math.round(jloc.y);
 		ctx.beginPath();
 		ctx.arc(jx, jy, 50, 0, 2 * Math.PI, false);
 		ctx.globalAlpha = 0.5;
@@ -835,11 +837,12 @@ function drawControls() {
 	}
 	ctx.restore()
 
+	ctx.save()
 	if (mousedrag && !nojoystick) {
-		var mx1 = Math.round((lastmouse.x - rect.left) / (rect.right - rect.left) * canvas.width);
-		var my1 = Math.round((lastmouse.y - rect.top) / (rect.bottom - rect.top) * canvas.height);
-		var mx2 = Math.round((currentmouse.clientX - rect.left) / (rect.right - rect.left) * canvas.width);
-		var my2 = Math.round((currentmouse.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height);
+		var mx1 = Math.round(lastmouse.x);
+		var my1 = Math.round(lastmouse.y);
+		var mx2 = Math.round(currentmouse.clientX);
+		var my2 = Math.round(currentmouse.clientY);
 		ctx.beginPath();
 		var origw = ctx.lineWidth
 		ctx.lineWidth = 2
@@ -854,6 +857,7 @@ function drawControls() {
 		ctx.fill();
 		ctx.lineWidth = origw
 	}
+	ctx.restore()
 }
 
 function fadeColors(progress) {

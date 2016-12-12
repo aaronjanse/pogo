@@ -142,6 +142,7 @@ function loseHeart() {
 function processopts() {
 	var k, fj, nj;
 	k = fj = nj = false;
+	gyro = false;
 	switch ($(".dropdowntitle").val()) {
 	case 'Joystick':
 		fj = true
@@ -153,6 +154,7 @@ function processopts() {
 		break;
 	case 'Gyro':
 		nj = true;
+		gyro = true;
 		break;
 	case 'Keyboard':
 		k = true;
@@ -344,6 +346,10 @@ function init() {
 
 	nojoystick = true
 	keyboard = !mobile
+
+	if (mobile) {
+		gyro = true;
+	}
 
 	if (!mobile) {
 		$(".dropdowntitle").html('Keyboard' + ' <span class="caret">');
