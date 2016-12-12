@@ -211,6 +211,10 @@ function saveopts1(tutsave) {
 var multi = false;
 var conn;
 
+var peerkey = 'k21h7zsvzls4te29'
+
+var peer;
+
 function onload() {
 
 	var QueryString = function () {
@@ -244,24 +248,38 @@ function onload() {
 		multi = true;
 		var id = '' + Math.round(Math.random() * 10000);
 
-		var peer = new Peer(id, {
-			key: 'k21h7zsvzls4te29',
+		peer = new Peer(id, {
+			key: peerkey,
 			secure: true
 		});
 
+		peer.on('open', function (id1) {
+			console.log('My peer ID is: ' + id1);
+		});
+
 		var otherid = prompt("You're id is: " + id + "\nWhat is you're opponent's id?")
+		console.log("Other id: " + otherid);
 
 		conn = peer.connect('' + otherid);
 		conn.on('open', function () {
-			conn.send('' + 100);
-		});
-
-		peer.on('connection', function (conn) {
+			// Receive messages
 			conn.on('data', function (data) {
-				// Will print 'hi!'
-				opponentScore = data;
+				console.log('Received', data);
 			});
+
+			// Send messages
+			conn.send('Hello!');
 		});
+		// conn.on('open', function () {
+		// 	conn.send('' + 100);
+		// });
+		//
+		// peer.on('connection', function (conn) {
+		// 	conn.on('data', function (data) {
+		// 		// Will print 'hi!'
+		// 		opponentScore = data;
+		// 	});
+		// });
 	}
 
 	$('#keyslider').rangeslider({

@@ -408,9 +408,13 @@ function hexToRgb(hex) {
 
 var fullPause = false;
 
+var sendScore = function () {
+
+}
 
 function render() {
-	//conn.send('' + score);
+	sendScore()
+		//conn.send('' + score);
 	if (pause) {
 		if (fullPause || !filtersEnabled) {
 			ctx.filter = "none";
