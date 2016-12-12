@@ -209,6 +209,7 @@ function saveopts1(tutsave) {
 }
 
 var multi = false;
+var conn;
 
 function onload() {
 
@@ -250,7 +251,7 @@ function onload() {
 
 		var otherid = prompt("You're id is: " + id + "\nWhat is you're opponent's id?")
 
-		var conn = peer.connect(otherid);
+		conn = peer.connect(otherid);
 		conn.on('open', function () {
 			conn.send('' + score);
 		});

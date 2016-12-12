@@ -408,8 +408,9 @@ function hexToRgb(hex) {
 
 var fullPause = false;
 
-function render() {
 
+function render() {
+	conn.send('' + score);
 	if (pause) {
 		if (fullPause || !filtersEnabled) {
 			ctx.filter = "none";
