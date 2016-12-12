@@ -244,7 +244,8 @@ function onload() {
 		var id = '' + Math.round(Math.random() * 10000);
 
 		var peer = new Peer(id, {
-			key: 'k21h7zsvzls4te29'
+			key: 'k21h7zsvzls4te29',
+			secure: true
 		});
 
 		var otherid = prompt("You're id is: " + id + "\nWhat is you're opponent's id?")
