@@ -410,7 +410,7 @@ var fullPause = false;
 
 
 function render() {
-	conn.send('' + score);
+	//conn.send('' + score);
 	if (pause) {
 		if (fullPause || !filtersEnabled) {
 			ctx.filter = "none";

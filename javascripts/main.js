@@ -251,9 +251,9 @@ function onload() {
 
 		var otherid = prompt("You're id is: " + id + "\nWhat is you're opponent's id?")
 
-		conn = peer.connect(otherid);
+		conn = peer.connect('' + otherid);
 		conn.on('open', function () {
-			conn.send('' + score);
+			conn.send('' + 100);
 		});
 
 		peer.on('connection', function (conn) {
