@@ -408,13 +408,12 @@ function hexToRgb(hex) {
 
 var fullPause = false;
 
-var sendScore = function () {
-	conn.send(score)
+var sendScore = function (svalue) {
+	conn.send(svalue)
 }
 
 function render() {
-	sendScore()
-		//conn.send('' + score);
+	//conn.send('' + score);
 	if (pause) {
 		if (fullPause || !filtersEnabled) {
 			ctx.filter = "none";
@@ -816,7 +815,9 @@ function render() {
 		ctx.fillStyle = "black";
 		ctx.textAlign = "left";
 		ctx.fillText("High Score: " + topscore, 10, 25);
-		ctx.fillText("Score: " + (score - Math.floor(w / 50 / 2) + Math.round(pogo.frame.body.position[0])), 10, 42);
+		var scoreVal = (score - Math.floor(w / 50 / 2) + Math.round(pogo.frame.body.position[0]));
+		ctx.fillText("Score: " + scoreVal, 10, 42);
+		sendScore(scoreVal);
 	}
 }
 
