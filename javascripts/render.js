@@ -1057,7 +1057,7 @@ function drawpogo() {
 			var exactStick = score - Math.floor(w / 50 / 2) + pogo.stick.body.position[0];
 
 			drawboxGhost({
-				x: exactStick - opponentScoreData.scoreStick + pogo.stick.body.interpolatedPosition[0],
+				x: opponentScoreData.scoreStick - exactFrame + pogo.stick.body.position[0],
 				y: opponentCoords.stick.y,
 				angle: opponentScoreData.angle.stick,
 				width: opponentScoreData.size.stick.width,
@@ -1068,7 +1068,7 @@ function drawpogo() {
 			}
 			ctx.fillStyle = color.body;
 			drawboxGhost({
-				x: exactFrame - opponentScoreData.scoreFrame + pogo.frame.body.interpolatedPosition[0],
+				x: opponentScoreData.scoreFrame - exactFrame + pogo.frame.body.position[0],
 				y: opponentCoords.frame.y,
 				angle: opponentScoreData.angle.frame,
 				width: opponentScoreData.size.frame.width,
