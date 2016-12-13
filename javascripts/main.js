@@ -248,13 +248,13 @@ var opponentScoreData = {
 }
 
 function handleData(data) {
-	console.log(data)
+	// console.log(data)
 	var obj = JSON.parse(data)
 
 	opponentScoreData.scoreFrame = obj.scoreFrame
 	opponentScoreData.scoreStick = obj.scoreStick
-	opponentScoreData.angle.frame = pogo.frame.body.angle;
-	opponentScoreData.angle.stick = pogo.stick.body.angle;
+	opponentScoreData.angle.frame = obj.frameAngle;
+	opponentScoreData.angle.stick = obj.stickAngle;
 
 	opponentScoreData.size.frame.height = pogo.frame.shape.height
 	opponentScoreData.size.frame.width = pogo.frame.shape.width
