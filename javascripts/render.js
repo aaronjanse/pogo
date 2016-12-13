@@ -1057,7 +1057,7 @@ function drawpogo() {
 			var exactStick = score - Math.floor(w / 50 / 2) + pogo.stick.body.position[0];
 
 			drawboxGhost({
-				x: opponentScoreData.scoreStick - exactFrame + pogo.stick.body.position[0],
+				x: opponentScoreData.scoreStick - exactStick + pogo.stick.body.position[0],
 				y: opponentCoords.stick.y,
 				angle: opponentScoreData.angle.stick,
 				width: opponentScoreData.size.stick.width,

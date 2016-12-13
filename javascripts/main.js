@@ -258,8 +258,8 @@ function handleData(data) {
 
 	opponentScoreData.size.frame.height = obj.size.frame.height
 	opponentScoreData.size.frame.width = obj.size.frame.width
-	opponentScoreData.size.stick.height = obj.size.frame.height
-	opponentScoreData.size.stick.width = obj.size.frame.width
+	opponentScoreData.size.stick.height = obj.size.stick.height
+	opponentScoreData.size.stick.width = obj.size.stick.width
 
 	opponentCoords.frame.y = obj.frameY
 	opponentCoords.stick.y = obj.stickY
