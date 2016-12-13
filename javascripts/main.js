@@ -322,7 +322,7 @@ function onload() {
 
 				// Send messages
 				// conn.send('Hello!');
-				seedVal = Math.round(Math.random() * 10000);
+				seedVal = Math.round(Math.random() * 1000);
 				conn.send('' + seedVal)
 			});
 		} else {
@@ -345,6 +345,7 @@ function onload() {
 	} else {
 		seedVal = Math.random() * 10;
 	}
+	seedVal = 10;
 
 	$('#keyslider').rangeslider({
 
