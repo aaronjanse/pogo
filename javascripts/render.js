@@ -1045,7 +1045,7 @@ function drawpogo() {
 			var exactStick = score - Math.floor(w / 50 / 2) + pogo.stick.body.position[0];
 
 			drawbox({
-				x: exactStick - opponentScoreData.scoreStick + pogo.frame.stick.interpolatedPosition[0],
+				x: exactStick - opponentScoreData.scoreStick + pogo.stick.body.interpolatedPosition[0],
 				y: opponentCoords.stick.y
 			})
 			if (colorful) {
