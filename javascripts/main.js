@@ -323,11 +323,10 @@ function onload() {
 				// Send messages
 				// conn.send('Hello!');
 				// seedVal = Math.round(Math.random() * 1000);
-				seedVal = parseInt(otherid)
-				conn.send('' + seedVal)
+				seedVal = parseInt(otherid) / 10000
+				conn.send('' + 10101)
 			});
 		} else {
-			seedVal = parseInt(id)
 			peer.on('connection', function (conn1) {
 				conn = conn1;
 				conn.on('data', function (data) {
@@ -335,7 +334,7 @@ function onload() {
 					// console.log(data);
 					if (firstData) {
 						firstData = false;
-						seedVal = parseInt(data)
+						// seedVal = parseInt(data)
 					} else {
 						handleData(data)
 					}
@@ -343,11 +342,11 @@ function onload() {
 			});
 
 			alert("Give this id number to the leader: " + id)
+			seedVal = parseInt(id) / 10000
 		}
 	} else {
 		seedVal = Math.random() * 10;
 	}
-	seedVal = 10;
 
 	$('#keyslider').rangeslider({
 
