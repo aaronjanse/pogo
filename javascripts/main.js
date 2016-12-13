@@ -342,7 +342,7 @@ function onload() {
 			});
 
 			alert("Give this id number to the leader: " + id)
-			seedVal = parseInt(id)
+			seedVal = parseInt(id) / 10000
 		}
 	} else {
 		seedVal = Math.random() * 10;
