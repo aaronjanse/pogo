@@ -823,7 +823,19 @@ function render() {
 			scoreFrame: '' + (score - Math.floor(w / 50 / 2) + pogo.frame.body.position[0]),
 			scoreStick: '' + (score - Math.floor(w / 50 / 2) + pogo.stick.body.position[0]),
 			stickY: '' + pogo.stick.body.position[1],
-			frameY: '' + pogo.frame.body.position[1]
+			frameY: '' + pogo.frame.body.position[1],
+			frameAngle: pogo.frame.body.angle,
+			stickAngle: pogo.stick.body.angle,
+			size: {
+				frame: {
+					height: pogo.frame.shape.height,
+					width: pogo.frame.shape.width
+				},
+				stick: {
+					height: pogo.stick.shape.height,
+					width: pogo.stick.shape.width
+				}
+			}
 		}));
 	}
 }
@@ -1044,17 +1056,23 @@ function drawpogo() {
 			var exactFrame = score - Math.floor(w / 50 / 2) + pogo.frame.body.position[0];
 			var exactStick = score - Math.floor(w / 50 / 2) + pogo.stick.body.position[0];
 
-			drawbox({
+			drawboxGhost({
 				x: exactStick - opponentScoreData.scoreStick + pogo.stick.body.interpolatedPosition[0],
-				y: opponentCoords.stick.y
+				y: opponentCoords.stick.y,
+				angle: opponentCoords.angle.stick,
+				width: opponentScoreData.size.stick.width,
+				height: opponentScoreData.size.stick.height
 			})
 			if (colorful) {
 				ctx.fill();
 			}
 			ctx.fillStyle = color.body;
-			drawbox({
+			drawboxGhost({
 				x: exactFrame - opponentScoreData.scoreFrame + pogo.frame.body.interpolatedPosition[0],
-				y: opponentCoords.frame.y
+				y: opponentCoords.frame.y,
+				angle: opponentCoords.angle.frame,
+				width: opponentScoreData.size.frame.width,
+				height: opponentScoreData.size.frame.height
 			})
 			if (colorful) {
 				ctx.fill();
@@ -1078,12 +1096,12 @@ function drawbox(obj) {
 
 function drawboxGhost(obj) {
 	ctx.beginPath();
-	var x = obj.body.interpolatedPosition[0],
-		y = obj.body.interpolatedPosition[1];
+	var x = obj.x,
+		y = obj.y;
 	ctx.save();
 	ctx.opacity = '0.5'
 	ctx.translate(x, y); // Translate to the center of the box
-	ctx.rotate(obj.body.angle); // Rotate to the box body frame
+	ctx.rotate(obj.angle); // Rotate to the box body frame
 	ctx.rect(-obj.shape.width / 2, -obj.shape.height / 2, obj.shape.width,
 		obj.shape.height);
 	ctx.stroke();

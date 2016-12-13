@@ -230,7 +230,21 @@ var opponentCoords = {
 
 var opponentScoreData = {
 	scoreFrame: 0,
-	scoreStick: 0
+	scoreStick: 0,
+	angle: {
+		frame: 0,
+		stick: 0
+	},
+	size: {
+		frame: {
+			height: 0,
+			width: 0
+		},
+		stick: {
+			height: 0,
+			width: 0
+		}
+	}
 }
 
 function handleData(data) {
@@ -239,6 +253,13 @@ function handleData(data) {
 
 	opponentScoreData.scoreFrame = obj.scoreFrame
 	opponentScoreData.scoreStick = obj.scoreStick
+	opponentScoreData.angle.frame = pogo.frame.body.angle;
+	opponentScoreData.angle.stick = pogo.stick.body.angle;
+
+	opponentScoreData.size.frame.height = pogo.frame.shape.height
+	opponentScoreData.size.frame.width = pogo.frame.shape.width
+	opponentScoreData.size.stick.height = pogo.stick.shape.height
+	opponentScoreData.size.stick.width = pogo.stick.shape.width
 
 	opponentCoords.frame.y = obj.frameY
 	opponentCoords.stick.y = obj.stickY
