@@ -1059,7 +1059,7 @@ function drawpogo() {
 			drawboxGhost({
 				x: exactStick - opponentScoreData.scoreStick + pogo.stick.body.interpolatedPosition[0],
 				y: opponentCoords.stick.y,
-				angle: opponentCoords.angle.stick,
+				angle: opponentScoreData.angle.stick,
 				width: opponentScoreData.size.stick.width,
 				height: opponentScoreData.size.stick.height
 			})
@@ -1070,7 +1070,7 @@ function drawpogo() {
 			drawboxGhost({
 				x: exactFrame - opponentScoreData.scoreFrame + pogo.frame.body.interpolatedPosition[0],
 				y: opponentCoords.frame.y,
-				angle: opponentCoords.angle.frame,
+				angle: opponentScoreData.angle.frame,
 				width: opponentScoreData.size.frame.width,
 				height: opponentScoreData.size.frame.height
 			})
@@ -1102,8 +1102,8 @@ function drawboxGhost(obj) {
 	ctx.opacity = '0.5'
 	ctx.translate(x, y); // Translate to the center of the box
 	ctx.rotate(obj.angle); // Rotate to the box body frame
-	ctx.rect(-obj.shape.width / 2, -obj.shape.height / 2, obj.shape.width,
-		obj.shape.height);
+	ctx.rect(-obj.width / 2, -obj.height / 2, obj.width,
+		obj.height);
 	ctx.stroke();
 	ctx.opacity = '1'
 	ctx.restore();
