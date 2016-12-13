@@ -348,6 +348,10 @@ function onload() {
 		seedVal = Math.random() * 10;
 	}
 
+	if (!QueryString.seed.isEmpty) {
+		seedVal = parseInt(QueryString.seed)
+	}
+
 	$('#keyslider').rangeslider({
 
 		// Feature detection the default is `true`.
