@@ -504,7 +504,7 @@ function init() {
 
 	filtersEnabled = (typeof ctx.filter != "undefined");
 
-	noise.seed(seedVal);
+	noise.seed(10 + 0 * seedVal);
 	// Init p2.js
 
 	if (!tutorialm) {
