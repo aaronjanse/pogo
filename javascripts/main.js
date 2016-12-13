@@ -322,10 +322,12 @@ function onload() {
 
 				// Send messages
 				// conn.send('Hello!');
-				seedVal = Math.round(Math.random() * 1000);
+				// seedVal = Math.round(Math.random() * 1000);
+				seedVal = parseInt(otherid)
 				conn.send('' + seedVal)
 			});
 		} else {
+			seedVal = parseInt(id)
 			peer.on('connection', function (conn1) {
 				conn = conn1;
 				conn.on('data', function (data) {
