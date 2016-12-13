@@ -24,7 +24,7 @@ var firstrh = true;
 
 var angularVelocity = -0.25;
 
-var opponentScore = 0;
+var opponentScore = -1;
 
 var FRAME = 1,
 	STICK = 2,
@@ -219,6 +219,32 @@ var seedVal;
 
 var firstData = true;
 
+var opponentCoords = {
+	frame: {
+		y: 0
+	},
+	stick: {
+		y: 0
+	}
+}
+
+var opponentScoreData = {
+	scoreFrame: 0,
+	scoreStick: 0
+}
+
+function handleData(data) {
+	var obj = JSON.parse(data)
+
+	opponentScoreData.scoreFrame = obj.scoreFrame
+	opponentScoreData.scoreStick = obj.scoreStick
+
+	opponentCoords.frame.y = obj.frameY
+	opponentCoords.stick.y = obj.stickY
+
+	opponentScore = Math.round(parseInt(obj.scoreFrame));
+}
+
 function onload() {
 
 	var QueryString = function () {
@@ -268,7 +294,8 @@ function onload() {
 				// Receive messages
 				conn.on('data', function (data) {
 					// console.log('Received', data);
-					opponentScore = parseInt(data);
+					handleData(data)
+						// opponentScore = parseInt(data);
 				});
 
 				// Send messages
@@ -286,7 +313,7 @@ function onload() {
 						firstData = false;
 						seedVal = parseInt(data)
 					} else {
-						opponentScore = parseInt(data);
+						handleData(data)
 					}
 				});
 			});

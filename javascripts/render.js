@@ -2,6 +2,8 @@ var canvas, ctx, w, h;
 
 var colorful = true;
 
+var scoreVal = 0;
+
 var colordef = {
 	sky: "#4d79ff",
 	skyday: "#4d79ff",
@@ -408,7 +410,7 @@ function hexToRgb(hex) {
 
 var fullPause = false;
 
-var sendScore = function (svalue) {
+var sendData = function (svalue) {
 	conn.send(svalue)
 }
 
@@ -815,9 +817,14 @@ function render() {
 		ctx.fillStyle = "black";
 		ctx.textAlign = "left";
 		ctx.fillText("High Score: " + topscore, 10, 25);
-		var scoreVal = (score - Math.floor(w / 50 / 2) + Math.round(pogo.frame.body.position[0]));
+		scoreVal = (score - Math.floor(w / 50 / 2) + Math.round(pogo.frame.body.position[0]));
 		ctx.fillText("Score: " + scoreVal, 10, 42);
-		sendScore(scoreVal);
+		sendData(JSON.stringify({
+			scoreFrame: score - Math.floor(w / 50 / 2) + pogo.frame.body.position[0],
+			scoreStick: score - Math.floor(w / 50 / 2) + pogo.stick.body.position[0],
+			stickY: pogo.stick.body.position[1],
+			frameY: pogo.frame.body.position[1]
+		}));
 	}
 }
 
@@ -1029,6 +1036,31 @@ function drawpogo() {
 	if (colorful) {
 		ctx.fill();
 	}
+
+	if (opponentScore != -1) {
+		var scoreDiff = scoreVal - opponentScore
+		if (Math.abs(scoreDiff) < w / 50 / 2 + 1) {
+			ctx.fillStyle = color.stick;
+			var exactFrame = score - Math.floor(w / 50 / 2) + pogo.frame.body.position[0];
+			var exactStick = score - Math.floor(w / 50 / 2) + pogo.stick.body.position[0];
+
+			drawbox({
+				x: exactStick - opponentScoreData.scoreStick + pogo.frame.stick.interpolatedPosition[0],
+				y: opponentCoords.stick.y
+			})
+			if (colorful) {
+				ctx.fill();
+			}
+			ctx.fillStyle = color.body;
+			drawbox({
+				x: exactFrame - opponentScoreData.scoreFrame + pogo.frame.body.interpolatedPosition[0],
+				y: opponentCoords.frame.y
+			})
+			if (colorful) {
+				ctx.fill();
+			}
+		}
+	}
 }
 
 function drawbox(obj) {
@@ -1041,6 +1073,21 @@ function drawbox(obj) {
 	ctx.rect(-obj.shape.width / 2, -obj.shape.height / 2, obj.shape.width,
 		obj.shape.height);
 	ctx.stroke();
+	ctx.restore();
+}
+
+function drawboxGhost(obj) {
+	ctx.beginPath();
+	var x = obj.body.interpolatedPosition[0],
+		y = obj.body.interpolatedPosition[1];
+	ctx.save();
+	ctx.opacity = '0.5'
+	ctx.translate(x, y); // Translate to the center of the box
+	ctx.rotate(obj.body.angle); // Rotate to the box body frame
+	ctx.rect(-obj.shape.width / 2, -obj.shape.height / 2, obj.shape.width,
+		obj.shape.height);
+	ctx.stroke();
+	ctx.opacity = '1'
 	ctx.restore();
 }
 
