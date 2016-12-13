@@ -349,7 +349,7 @@ function onload() {
 		seedVal = Math.random() * 10;
 	}
 
-	if (!QueryString.seed.isEmpty) {
+	if (!QueryString.seed) {
 		// seedVal = parseInt(QueryString.seed)
 		seedVal = 999
 	}
