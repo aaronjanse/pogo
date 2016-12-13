@@ -322,7 +322,7 @@ function onload() {
 
 				// Send messages
 				// conn.send('Hello!');
-				seedVal = Math.random() * 10;
+				seedVal = Math.round(Math.random() * 10000);
 				conn.send('' + seedVal)
 			});
 		} else {
