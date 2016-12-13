@@ -234,6 +234,7 @@ var opponentScoreData = {
 }
 
 function handleData(data) {
+	console.log(data)
 	var obj = JSON.parse(data)
 
 	opponentScoreData.scoreFrame = obj.scoreFrame

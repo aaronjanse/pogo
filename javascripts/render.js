@@ -820,10 +820,10 @@ function render() {
 		scoreVal = (score - Math.floor(w / 50 / 2) + Math.round(pogo.frame.body.position[0]));
 		ctx.fillText("Score: " + scoreVal, 10, 42);
 		sendData(JSON.stringify({
-			scoreFrame: score - Math.floor(w / 50 / 2) + pogo.frame.body.position[0],
-			scoreStick: score - Math.floor(w / 50 / 2) + pogo.stick.body.position[0],
-			stickY: pogo.stick.body.position[1],
-			frameY: pogo.frame.body.position[1]
+			scoreFrame: '' + (score - Math.floor(w / 50 / 2) + pogo.frame.body.position[0]),
+			scoreStick: '' + (score - Math.floor(w / 50 / 2) + pogo.stick.body.position[0]),
+			stickY: '' + pogo.stick.body.position[1],
+			frameY: '' + pogo.frame.body.position[1]
 		}));
 	}
 }
