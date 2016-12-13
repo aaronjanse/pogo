@@ -215,6 +215,10 @@ var peerkey = 'k21h7zsvzls4te29'
 
 var peer;
 
+var seedVal;
+
+var firstData = true;
+
 function onload() {
 
 	var QueryString = function () {
@@ -269,18 +273,32 @@ function onload() {
 
 				// Send messages
 				// conn.send('Hello!');
+				seedVal = Math.random() * 10;
+				conn.send('' + seedVal)
 			});
 		} else {
-			alert("Give this id number to the leader: " + id)
 			peer.on('connection', function (conn1) {
 				conn = conn1;
 				conn.on('data', function (data) {
 					// Will print 'hi!'
 					// console.log(data);
-					opponentScore = parseInt(data);
+					if (firstData) {
+						firstData = false;
+						seedVal = parseInt(data)
+					} else {
+						opponentScore = parseInt(data);
+					}
 				});
 			});
+
+			alert("Give this id number to the leader: " + id)
+
+			while (firstData) {
+
+			}
 		}
+	} else {
+		seedVal = Math.random() * 10;
 	}
 
 	$('#keyslider').rangeslider({
@@ -433,7 +451,7 @@ function init() {
 
 	filtersEnabled = (typeof ctx.filter != "undefined");
 
-	noise.seed(Math.random() * 10);
+	noise.seed(seedVal);
 	// Init p2.js
 
 	if (!tutorialm) {
