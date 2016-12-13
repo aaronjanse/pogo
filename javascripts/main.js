@@ -323,9 +323,10 @@ function onload() {
 				// Send messages
 				// conn.send('Hello!');
 				// seedVal = Math.round(Math.random() * 1000);
-				seedVal = parseInt(otherid) / 10000
 				conn.send('' + 10101)
 			});
+
+			seedVal = parseInt(otherid) / 10000
 		} else {
 			peer.on('connection', function (conn1) {
 				conn = conn1;
@@ -349,7 +350,8 @@ function onload() {
 	}
 
 	if (!QueryString.seed.isEmpty) {
-		seedVal = parseInt(QueryString.seed)
+		// seedVal = parseInt(QueryString.seed)
+		seedVal = 999
 	}
 
 	$('#keyslider').rangeslider({
