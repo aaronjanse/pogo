@@ -292,10 +292,6 @@ function onload() {
 			});
 
 			alert("Give this id number to the leader: " + id)
-
-			while (firstData) {
-
-			}
 		}
 	} else {
 		seedVal = Math.random() * 10;
