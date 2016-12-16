@@ -93,14 +93,14 @@ function changeOrientation() {
 }
 
 function fullscreen() {
-	document.getElementById("myCanvas").style.width = '100%';
-	document.getElementById("myCanvas").style.height = '100%';
+	document.getElementById("myCanvas").style.width = '' //window.innerWidth + 'px';
+	document.getElementById("myCanvas").style.height = '' //window.innerHeight + 'px';
 	document.getElementById("myCanvas").width = window.innerWidth
 	document.getElementById("myCanvas").height = window.innerHeight
-	canvas = document.getElementById("myCanvas");
+		// canvas = document.getElementById("myCanvas");
 	w = canvas.width;
 	h = canvas.height;
-	ctx = canvas.getContext("2d");
+	// ctx = canvas.getContext("2d");
 }
 
 function resetHealth() {
@@ -445,6 +445,9 @@ function onload() {
 	window.onresize = function onresize() {
 		w = canvas.width = window.innerWidth;
 		w = canvas.height = window.innerHeight;
+
+		document.getElementById("myCanvas").style.width = '' //window.innerWidth + 'px';
+		document.getElementById("myCanvas").style.height = '' //window.innerHeight + 'px';
 
 		ctx = canvas.getContext("2d");
 		ctx.lineWidth = 0.05;
