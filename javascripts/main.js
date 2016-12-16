@@ -97,6 +97,9 @@ function fullscreen() {
 	document.getElementById("myCanvas").style.height = '100%';
 	document.getElementById("myCanvas").width = window.innerWidth
 	document.getElementById("myCanvas").height = window.innerHeight
+	w = canvas.width;
+	h = canvas.height;
+	ctx = canvas.getContext("2d");
 }
 
 function resetHealth() {
