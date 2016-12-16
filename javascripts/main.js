@@ -76,12 +76,12 @@ function clearTimer() {
 }
 
 function changeOrientation() {
-	var canv = document.getElementById("myCanvas");
-	if (canv.width != window.innerWidth) {
-		var tmp = canv.width;
-		document.getElementById("myCanvas").width = canv.height;
-		document.getElementById("myCanvas").height = tmp;
-	}
+	// var canvas = document.getElementById("myCanvas");
+	// if (canv.width != window.innerWidth) {
+	// 	var tmp = canv.width;
+	// 	document.getElementById("myCanvas").width = canv.height;
+	// 	document.getElementById("myCanvas").height = tmp;
+	// }
 
 	canvas = document.getElementById("myCanvas");
 	w = canvas.width;
@@ -97,6 +97,7 @@ function fullscreen() {
 	document.getElementById("myCanvas").style.height = '100%';
 	document.getElementById("myCanvas").width = window.innerWidth
 	document.getElementById("myCanvas").height = window.innerHeight
+	canvas = document.getElementById("myCanvas");
 	w = canvas.width;
 	h = canvas.height;
 	ctx = canvas.getContext("2d");
