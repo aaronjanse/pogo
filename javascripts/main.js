@@ -8,6 +8,8 @@ var home = true;
 
 var restarttimer = null;
 
+var multiplayer = false;
+
 var lives = 3;
 
 var tutorialm = false;
@@ -307,6 +309,7 @@ function onload() {
 	}
 
 	if (QueryString.multi === "1") {
+		multiplayer = true;
 		multi = true;
 
 		var id = '' + Math.round(Math.random() * 10000);

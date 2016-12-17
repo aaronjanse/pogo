@@ -411,6 +411,10 @@ function hexToRgb(hex) {
 var fullPause = false;
 
 var sendData = function (svalue) {
+	if (!multiplayer) {
+		return;
+	}
+
 	conn.send(svalue)
 }
 
@@ -819,24 +823,26 @@ function render() {
 		ctx.fillText("High Score: " + topscore, 10, 25);
 		scoreVal = (score - Math.floor(w / 50 / 2) + Math.round(pogo.frame.body.position[0]));
 		ctx.fillText("Score: " + scoreVal, 10, 42);
-		sendData(JSON.stringify({
-			scoreFrame: '' + (score - Math.floor(w / 50 / 2) + pogo.frame.body.position[0]),
-			scoreStick: '' + (score - Math.floor(w / 50 / 2) + pogo.stick.body.position[0]),
-			stickY: '' + pogo.stick.body.position[1],
-			frameY: '' + pogo.frame.body.position[1],
-			frameAngle: pogo.frame.body.angle,
-			stickAngle: pogo.stick.body.angle,
-			size: {
-				frame: {
-					height: pogo.frame.shape.height,
-					width: pogo.frame.shape.width
-				},
-				stick: {
-					height: pogo.stick.shape.height,
-					width: pogo.stick.shape.width
+		if (multiplayer) {
+			sendData(JSON.stringify({
+				scoreFrame: '' + (score - Math.floor(w / 50 / 2) + pogo.frame.body.position[0]),
+				scoreStick: '' + (score - Math.floor(w / 50 / 2) + pogo.stick.body.position[0]),
+				stickY: '' + pogo.stick.body.position[1],
+				frameY: '' + pogo.frame.body.position[1],
+				frameAngle: pogo.frame.body.angle,
+				stickAngle: pogo.stick.body.angle,
+				size: {
+					frame: {
+						height: pogo.frame.shape.height,
+						width: pogo.frame.shape.width
+					},
+					stick: {
+						height: pogo.stick.shape.height,
+						width: pogo.stick.shape.width
+					}
 				}
-			}
-		}));
+			}));
+		}
 	}
 }
 
