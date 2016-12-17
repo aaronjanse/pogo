@@ -9,6 +9,10 @@
     transition-duration: 0.5s;
 }
 
+html {
+  overflow: hidden;
+}
+
 #errortxt {
     color: white;
     position: absolute;

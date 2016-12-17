@@ -90,17 +90,20 @@ function changeOrientation() {
 	ctx.lineWidth = 0.05;
 
 	setupjoy();
+
+	secwidth = getsecwidth();
 }
 
 function fullscreen() {
-	document.getElementById("myCanvas").style.width = ''; //window.innerWidth + 'px';
-	document.getElementById("myCanvas").style.height = ''; //window.innerHeight + 'px';
+	// document.getElementById("myCanvas").style.width = ''; //window.innerWidth + 'px';
+	// document.getElementById("myCanvas").style.height = ''; //window.innerHeight + 'px';
 	document.getElementById("myCanvas").width = window.innerWidth;
 	document.getElementById("myCanvas").height = window.innerHeight;
-	// canvas = document.getElementById("myCanvas");
+	canvas = document.getElementById("myCanvas");
 	w = canvas.width;
 	h = canvas.height;
 	// ctx = canvas.getContext("2d");
+	secwidth = getsecwidth();
 }
 
 function resetHealth() {
@@ -447,13 +450,15 @@ function onload() {
 
 	window.onresize = function onresize() {
 		w = canvas.width = window.innerWidth;
-		w = canvas.height = window.innerHeight;
+		h = canvas.height = window.innerHeight;
 
 		document.getElementById("myCanvas").style.width = ''; //window.innerWidth + 'px';
 		document.getElementById("myCanvas").style.height = ''; //window.innerHeight + 'px';
 
 		ctx = canvas.getContext("2d");
 		ctx.lineWidth = 0.05;
+
+		secwidth = getsecwidth();
 	};
 }
 
