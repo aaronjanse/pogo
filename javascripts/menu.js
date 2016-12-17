@@ -21,17 +21,17 @@ function openDebug() {
 			}
 		};
 		scriptTag.onload = ready;
-	})();
+	})()
 }
 
 function gohome() {
-	home = true;
-	//	ga('send', 'event', {
-	//	    eventCategory: 'Menu Interaction',
-	//	    eventAction: 'click',
-	//	    eventLabel: "home"
-	//	  });
-	console.log(oldlabel);
+	home = true
+		//	ga('send', 'event', {
+		//	    eventCategory: 'Menu Interaction',
+		//	    eventAction: 'click',
+		//	    eventLabel: "home"
+		//	  });
+	console.log(oldlabel)
 	$(".dropdowntitle").val(oldlabel);
 	document.getElementById("pausebutton").className = 'circlebutton';
 	document.getElementById("helpbutton").className = 'circlebutton';
@@ -39,7 +39,7 @@ function gohome() {
 	document.getElementById("pausebutton").style.display = 'none';
 	document.getElementById("modeHUD").style.display = 'none';
 	document.getElementById("helpbutton").style.display = 'none';
-	document.getElementById("settingsbutton").style.display = 'none';
+	document.getElementById("settingsbutton").style.display = 'none'
 	document.getElementById("mainmenu").style.display = 'inline';
 	document.getElementById("mainmenu").style.opacity = '1';
 	document.getElementById("myCanvas").style.display = 'none';
@@ -62,15 +62,15 @@ function gohome() {
 
 function play() {
 	tutorialm = false;
-	home = false;
+	home = false
 	ga('send', 'event', {
 		eventCategory: 'Menu Interaction',
 		eventAction: 'click',
 		eventLabel: "play"
 	});
 	if (pause) {
-		back();
-		//		pause=false;
+		back()
+			//		pause=false;
 	}
 
 	document.getElementById("modeHUD").style.display = 'block';
@@ -189,7 +189,7 @@ function tutorial() {
 	document.getElementById("tuthelp").style.opacity = '1';
 
 	document.getElementById("lvl0").style.display = 'block';
-	document.getElementById("lvl2").style.display = 'none';
+	document.getElementById("lvl2").style.display = 'none'
 
 	document.getElementById("homebutton").style.display = 'none';
 
@@ -236,8 +236,8 @@ function settings() {
 }
 
 function settings1() {
-	mainbpprep();
-	settings();
+	mainbpprep()
+	settings()
 }
 
 function back() {

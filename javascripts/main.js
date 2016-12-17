@@ -198,11 +198,8 @@ function saveopts1(tutsave) {
 	case 'Keyboard':
 		keyboard = true;
 		document.getElementById("modeHUD").innerHTML = "Mode: Keyboard";
-		break;
 	case '':
-		break;
 	default:
-		break;
 	}
 
 	//	if(tutsave) {
@@ -554,7 +551,7 @@ function copysec(s) {
 		//	        idx+=1
 	}
 
-	var heightfield = {};
+	var heightfield = new Object();
 	heightfield.shape = new p2.Heightfield({
 		heights: s.d,
 		elementWidth: 2
@@ -568,29 +565,28 @@ function copysec(s) {
 	heightfield.body.addShape(heightfield.shape);
 
 	var h1 = null;
-	if (s.h1 !== null) {
-		h1 = {};
+	if (s.h1 != null) {
+		h1 = new Object();
+		h1.body = new p2.Body({
+			position: s.h1.body.position
+		});
+		h1.body.fromPolygon(JSON.parse(JSON.stringify(s.h1verts)));
+		for (var i = 0; i < h1.body.shapes.length; i++) {
+			h1.body.shapes[i].collisionGroup = GROUND;
+			h1.body.shapes[i].collisionMask = FRAME | STICK;
+			h1.body.shapes[i].material = icematerial;
+		}
 	}
-	h1.body = new p2.Body({
-		position: s.h1.body.position
-	});
-	h1.body.fromPolygon(JSON.parse(JSON.stringify(s.h1verts)));
-	for (var i = 0; i < h1.body.shapes.length; i++) {
-		h1.body.shapes[i].collisionGroup = GROUND;
-		h1.body.shapes[i].collisionMask = FRAME | STICK;
-		h1.body.shapes[i].material = icematerial;
-	}
-}
 
-return {
-	d: s.d,
-	h: heightfield,
-	h1: h1,
-	h1verts: s.h1verts,
-	o: obstacles,
-	od: s.od,
-	inverts: s.inverts
-};
+	return {
+		d: s.d,
+		h: heightfield,
+		h1: h1,
+		h1verts: s.h1verts,
+		o: obstacles,
+		od: s.od,
+		inverts: s.inverts
+	};
 }
 
 function changenum(s1, num, oldnum) {
@@ -682,7 +678,7 @@ function generateSection() {
 		data.push(value);
 	}
 
-	var heightfield = {};
+	var heightfield = new Object();
 	heightfield.shape = new p2.Heightfield({
 		heights: data,
 		elementWidth: 2
@@ -722,7 +718,7 @@ function generateSection() {
 	var y = null;
 	var obstacles = [];
 	for (var i = 1; i < data.length; i++) {
-		if (i % rarity === 0) {
+		if (i % rarity == 0) {
 			var lvl = Math.floor(distToTime(secnum * secwidth + i * 2));
 			if (Math.random() > 0.5 && lvl != 0 && (lvl > 2 && lvl % 2 < 1)) {
 				y = data[i] + Math.random() * 2;
@@ -757,7 +753,7 @@ function generateSection() {
 
 	secnum += 1;
 
-	if (h1 !== null && ceilverts.length < 1) {
+	if (h1 != null && ceilverts.length < 1) {
 		ceilverts = [
 			[-1, 1],
 			[-1, 0],
