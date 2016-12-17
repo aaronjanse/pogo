@@ -19,7 +19,7 @@ function openDebug() {
 			if (scriptTag.readyState == 'complete') {
 				ready();
 			}
-		}
+		};
 		scriptTag.onload = ready;
 	})()
 }
@@ -33,30 +33,30 @@ function gohome() {
 		//	  });
 	console.log(oldlabel)
 	$(".dropdowntitle").val(oldlabel);
-	document.getElementById("pausebutton").className = 'circlebutton'
-	document.getElementById("helpbutton").className = 'circlebutton'
-	document.getElementById("settingsbutton").className = 'circlebutton'
-	document.getElementById("pausebutton").style.display = 'none'
-	document.getElementById("modeHUD").style.display = 'none'
-	document.getElementById("helpbutton").style.display = 'none'
+	document.getElementById("pausebutton").className = 'circlebutton';
+	document.getElementById("helpbutton").className = 'circlebutton';
+	document.getElementById("settingsbutton").className = 'circlebutton';
+	document.getElementById("pausebutton").style.display = 'none';
+	document.getElementById("modeHUD").style.display = 'none';
+	document.getElementById("helpbutton").style.display = 'none';
 	document.getElementById("settingsbutton").style.display = 'none'
-	document.getElementById("mainmenu").style.display = 'inline'
-	document.getElementById("mainmenu").style.opacity = '1'
-	document.getElementById("myCanvas").style.display = 'none'
+	document.getElementById("mainmenu").style.display = 'inline';
+	document.getElementById("mainmenu").style.opacity = '1';
+	document.getElementById("myCanvas").style.display = 'none';
 
-	document.getElementById("gamearea").style.backgroundColor = 'white'
+	document.getElementById("gamearea").style.backgroundColor = 'white';
 
-	document.getElementById("homebutton").style.display = 'none'
+	document.getElementById("homebutton").style.display = 'none';
 
-	document.getElementById("tutnextb").style.display = 'none'
+	document.getElementById("tutnextb").style.display = 'none';
 
-	document.getElementById("health").style.display = 'none'
-	clearTimer()
+	document.getElementById("health").style.display = 'none';
+	clearTimer();
 	if (gameOver) {
 		leftplay = true;
 	}
 
-	tutorialm = false
+	tutorialm = false;
 	pause = false;
 }
 
@@ -73,29 +73,29 @@ function play() {
 			//		pause=false;
 	}
 
-	document.getElementById("modeHUD").style.display = 'block'
+	document.getElementById("modeHUD").style.display = 'block';
 
 	document.getElementById("modeHUD").style.animation = 'zoominout 0.75s linear forwards';
 
 
 
-	document.getElementById("pausebutton").className = 'circlebutton'
-	document.getElementById("helpbutton").className = 'circlebutton'
-	document.getElementById("settingsbutton").className = 'circlebutton'
+	document.getElementById("pausebutton").className = 'circlebutton';
+	document.getElementById("helpbutton").className = 'circlebutton';
+	document.getElementById("settingsbutton").className = 'circlebutton';
 
-	document.getElementById("helpbutton").style.display = 'none'
-	document.getElementById("settingsbutton").style.display = 'none'
-	document.getElementById("mainmenu").style.display = 'none'
-	document.getElementById("mainmenu").style.opacity = '0'
-	document.getElementById("myCanvas").style.display = 'inline'
-	document.getElementById("pausebutton").innerHTML = '<i class="fa fa-pause"></i>'
-	document.getElementById("pausebutton").style.display = 'block'
-		//	document.getElementById("pausebutton").style.opacity = '1'
-	document.getElementById("myCanvas").style.opacity = '1'
+	document.getElementById("helpbutton").style.display = 'none';
+	document.getElementById("settingsbutton").style.display = 'none';
+	document.getElementById("mainmenu").style.display = 'none';
+	document.getElementById("mainmenu").style.opacity = '0';
+	document.getElementById("myCanvas").style.display = 'inline';
+	document.getElementById("pausebutton").innerHTML = '<i class="fa fa-pause"></i>';
+	document.getElementById("pausebutton").style.display = 'block';
+	//	document.getElementById("pausebutton").style.opacity = '1'
+	document.getElementById("myCanvas").style.opacity = '1';
 
-	document.getElementById("gamearea").style.backgroundColor = 'black'
+	document.getElementById("gamearea").style.backgroundColor = 'black';
 
-	document.getElementById("homebutton").style.display = 'none'
+	document.getElementById("homebutton").style.display = 'none';
 
 	if (!pause) {
 		init();
@@ -120,19 +120,19 @@ function pausegame() {
 		pause = true;
 		//	document.getElementById("myCanvas").style.display = 'none'
 		if (filtersEnabled) {
-			document.getElementById("myCanvas").style.opacity = '0.7'
+			document.getElementById("myCanvas").style.opacity = '0.7';
 		} else {
-			document.getElementById("myCanvas").style.opacity = '0.5'
+			document.getElementById("myCanvas").style.opacity = '0.5';
 		}
-		document.getElementById("pausebutton").innerHTML = '<i class="fa fa-play"></i>'
-		document.getElementById("helpbutton").style.display = 'inline-block'
-		document.getElementById("settingsbutton").style.display = 'inline-block'
+		document.getElementById("pausebutton").innerHTML = '<i class="fa fa-play"></i>';
+		document.getElementById("helpbutton").style.display = 'inline-block';
+		document.getElementById("settingsbutton").style.display = 'inline-block';
 
-		document.getElementById("homebutton").style.display = 'inline-block'
+		document.getElementById("homebutton").style.display = 'inline-block';
 
-		document.getElementById("pausebutton").className = 'circlebuttoni'
-		document.getElementById("helpbutton").className = 'circlebuttoni'
-		document.getElementById("settingsbutton").className = 'circlebuttoni'
+		document.getElementById("pausebutton").className = 'circlebuttoni';
+		document.getElementById("helpbutton").className = 'circlebuttoni';
+		document.getElementById("settingsbutton").className = 'circlebuttoni';
 	} else {
 		play();
 	}
@@ -140,34 +140,34 @@ function pausegame() {
 }
 
 function mainbpprep() {
-	document.getElementById("mainmenu").style.display = 'none'
-	document.getElementById("mainmenu").style.opacity = '0'
-	document.getElementById("myCanvas").style.display = 'inline'
-	document.getElementById("pausebutton").innerHTML = '<i class="fa fa-pause"></i>'
-	document.getElementById("pausebutton").style.display = 'block'
-		//	document.getElementById("pausebutton").style.opacity = '1'
-	document.getElementById("myCanvas").style.opacity = '1'
+	document.getElementById("mainmenu").style.display = 'none';
+	document.getElementById("mainmenu").style.opacity = '0';
+	document.getElementById("myCanvas").style.display = 'inline';
+	document.getElementById("pausebutton").innerHTML = '<i class="fa fa-pause"></i>';
+	document.getElementById("pausebutton").style.display = 'block';
+	//	document.getElementById("pausebutton").style.opacity = '1'
+	document.getElementById("myCanvas").style.opacity = '1';
 
-	document.getElementById("gamearea").style.backgroundColor = 'black'
+	document.getElementById("gamearea").style.backgroundColor = 'black';
 	init();
 	animate();
 	pause = true;
-	document.getElementById("myCanvas").style.opacity = '0.3'
-	document.getElementById("pausebutton").innerHTML = '<i class="fa fa-play"></i>'
-	document.getElementById("helpbutton").style.display = 'inline-block'
-	document.getElementById("settingsbutton").style.display = 'inline-block'
+	document.getElementById("myCanvas").style.opacity = '0.3';
+	document.getElementById("pausebutton").innerHTML = '<i class="fa fa-play"></i>';
+	document.getElementById("helpbutton").style.display = 'inline-block';
+	document.getElementById("settingsbutton").style.display = 'inline-block';
 
-	document.getElementById("pausebutton").className = 'circlebuttoni'
-	document.getElementById("helpbutton").className = 'circlebuttoni'
-	document.getElementById("settingsbutton").className = 'circlebuttoni'
+	document.getElementById("pausebutton").className = 'circlebuttoni';
+	document.getElementById("helpbutton").className = 'circlebuttoni';
+	document.getElementById("settingsbutton").className = 'circlebuttoni';
 }
 
-var test = function () {}
+var test = function () {};
 
 function tutorial() {
-	console.log("tutorial() Called")
-	test()
-	home = false
+	console.log("tutorial() Called");
+	test();
+	home = false;
 	ga('send', 'event', {
 		eventCategory: 'Menu Interaction',
 		eventAction: 'click',
@@ -180,25 +180,25 @@ function tutorial() {
 	//	}
 	oldlabel = $(".dropdowntitle").val();
 
-	document.getElementById("mainmenu").style.display = 'none'
-	document.getElementById("mainmenu").style.opacity = '0'
-	document.getElementById("myCanvas").style.display = 'inline'
-	document.getElementById("myCanvas").style.opacity = '1'
+	document.getElementById("mainmenu").style.display = 'none';
+	document.getElementById("mainmenu").style.opacity = '0';
+	document.getElementById("myCanvas").style.display = 'inline';
+	document.getElementById("myCanvas").style.opacity = '1';
 
-	document.getElementById("tuthelp").style.display = 'block'
-	document.getElementById("tuthelp").style.opacity = '1'
+	document.getElementById("tuthelp").style.display = 'block';
+	document.getElementById("tuthelp").style.opacity = '1';
 
-	document.getElementById("lvl0").style.display = 'block'
+	document.getElementById("lvl0").style.display = 'block';
 	document.getElementById("lvl2").style.display = 'none'
 
-	document.getElementById("homebutton").style.display = 'none'
+	document.getElementById("homebutton").style.display = 'none';
 
-	document.getElementById("gamearea").style.backgroundColor = 'black'
+	document.getElementById("gamearea").style.backgroundColor = 'black';
 
-	tutorialm = true
-	pause = false
-	lvl = 0
-	init()
+	tutorialm = true;
+	pause = false;
+	lvl = 0;
+	init();
 	animate();
 }
 
@@ -208,17 +208,17 @@ function help() {
 		eventAction: 'click',
 		eventLabel: "help"
 	});
-	document.getElementById("helpbutton").style.display = 'none'
-	document.getElementById("settingsbutton").style.display = 'none'
+	document.getElementById("helpbutton").style.display = 'none';
+	document.getElementById("settingsbutton").style.display = 'none';
 
-	document.getElementById("helparea").style.display = 'block'
-	document.getElementById("helparea").style.opacity = '1'
-	document.getElementById("homebutton").style.display = 'none'
+	document.getElementById("helparea").style.display = 'block';
+	document.getElementById("helparea").style.opacity = '1';
+	document.getElementById("homebutton").style.display = 'none';
 }
 
 function help1() {
-	mainbpprep()
-	help()
+	mainbpprep();
+	help();
 }
 
 function settings() {
@@ -227,12 +227,12 @@ function settings() {
 		eventAction: 'click',
 		eventLabel: "settings"
 	});
-	document.getElementById("homebutton").style.display = 'none'
-	document.getElementById("helpbutton").style.display = 'none'
-	document.getElementById("settingsbutton").style.display = 'none'
+	document.getElementById("homebutton").style.display = 'none';
+	document.getElementById("helpbutton").style.display = 'none';
+	document.getElementById("settingsbutton").style.display = 'none';
 
-	document.getElementById("settings").style.display = 'block'
-	document.getElementById("settings").style.opacity = '1'
+	document.getElementById("settings").style.display = 'block';
+	document.getElementById("settings").style.opacity = '1';
 }
 
 function settings1() {
@@ -241,27 +241,27 @@ function settings1() {
 }
 
 function back() {
-	document.getElementById("helpbutton").style.display = 'inline-block'
-	document.getElementById("settingsbutton").style.display = 'inline-block'
-	document.getElementById("homebutton").style.display = 'inline-block'
+	document.getElementById("helpbutton").style.display = 'inline-block';
+	document.getElementById("settingsbutton").style.display = 'inline-block';
+	document.getElementById("homebutton").style.display = 'inline-block';
 
-	document.getElementById("helparea").style.display = 'none'
-	document.getElementById("helparea").style.opacity = '0'
+	document.getElementById("helparea").style.display = 'none';
+	document.getElementById("helparea").style.opacity = '0';
 
-	document.getElementById("settings").style.display = 'none'
-	document.getElementById("settings").style.opacity = '0'
+	document.getElementById("settings").style.display = 'none';
+	document.getElementById("settings").style.opacity = '0';
 }
 
 function togglefixedjoy() {
 	fixedjoy = !fixedjoy;
 	document.getElementById("fixedjoy").innerHTML = (fixedjoy ? "Unfix" : "Fix") + " joystick location";
 	if (fixedjoy) {
-		document.getElementById("unfixjoyhelp").display = 'none'
-		document.getElementById("fixjoyhelp").display = 'inherit'
-		setupjoy()
+		document.getElementById("unfixjoyhelp").display = 'none';
+		document.getElementById("fixjoyhelp").display = 'inherit';
+		setupjoy();
 	} else {
-		document.getElementById("unfixjoyhelp").display = 'inherit'
-		document.getElementById("fixjoyhelp").display = 'none'
+		document.getElementById("unfixjoyhelp").display = 'inherit';
+		document.getElementById("fixjoyhelp").display = 'none';
 	}
 }
 
@@ -273,14 +273,14 @@ function updatehelp(nojoystickself, keyboardself, fixedjoyself) {
 	if (!nojoystickself && !keyboardself) {
 		$(".joyhelp").show();
 
-		$(".fixjoyhelp").hide()
-		$(".unfixjoyhelp").hide()
+		$(".fixjoyhelp").hide();
+		$(".unfixjoyhelp").hide();
 
 		if (fixedjoyself) {
-			$(".fixjoyhelp").show()
+			$(".fixjoyhelp").show();
 
 		} else {
-			$(".unfixjoyhelp").show()
+			$(".unfixjoyhelp").show();
 		}
 	} else {
 		if (keyboardself) {
@@ -297,32 +297,32 @@ function toggleColor() {
 }
 
 function updateSky() {
-	color.sky = "#" + document.getElementById("skyCP").value
+	color.sky = "#" + document.getElementById("skyCP").value;
 }
 
 function updateGround() {
-	color.ground = "#" + document.getElementById("groundCP").value
+	color.ground = "#" + document.getElementById("groundCP").value;
 }
 
 function updateBody() {
-	color.body = "#" + document.getElementById("bodyCP").value
+	color.body = "#" + document.getElementById("bodyCP").value;
 }
 
 function updateStick() {
-	color.stick = "#" + document.getElementById("stickCP").value
+	color.stick = "#" + document.getElementById("stickCP").value;
 }
 
 function resetcolors() {
 	if (!colorful) {
-		toggleColor()
+		toggleColor();
 	}
 
-	document.getElementById("skyCP").jscolor.fromString(colordef.sky.slice(1))
-	document.getElementById("groundCP").jscolor.fromString(colordef.ground.slice(1))
-	document.getElementById("bodyCP").jscolor.fromString(colordef.body.slice(1))
-	document.getElementById("stickCP").jscolor.fromString(colordef.stick.slice(1))
-	color.sky = colordef.sky
-	color.ground = colordef.ground
-	color.body = colordef.body
-	color.stick = colordef.stick
+	document.getElementById("skyCP").jscolor.fromString(colordef.sky.slice(1));
+	document.getElementById("groundCP").jscolor.fromString(colordef.ground.slice(1));
+	document.getElementById("bodyCP").jscolor.fromString(colordef.body.slice(1));
+	document.getElementById("stickCP").jscolor.fromString(colordef.stick.slice(1));
+	color.sky = colordef.sky;
+	color.ground = colordef.ground;
+	color.body = colordef.body;
+	color.stick = colordef.stick;
 }
