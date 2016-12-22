@@ -259,7 +259,7 @@ function renderCloud() {
 
 	// var image = offscreenContext.getImageData(0, 0, 300, 300);
 	// cloudContext.putImageData(image, this.x ``- cloudSize / 2, this.y);
-	ctx.drawImage(offscreenCanvas, this.x - cloudSize / 2, this.y)
+	ctx.drawImage(offscreenCanvas, 2 * (this.x - cloudSize / 2), this.y)
 
 	return;
 	ctx.shadowBlur = 7;
