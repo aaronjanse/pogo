@@ -217,6 +217,12 @@ function splash(x, y, col, cnt) {
 	}
 }
 
+var offscreenCanvas = document.createElement('canvas');
+offscreenCanvas.width = 300;
+offscreenCanvas.height = 300;
+var offscreenContext = offscreenCanvas.getContext('2d');
+
+
 function renderCloud() {
 	//	ctx.clearRect(0, 0, W, H);
 	var val = Math.floor(distToTime(score + pogo.frame.body.position[0] - w / 50 / 2))
@@ -251,13 +257,18 @@ function renderCloud() {
 		ctx.fill();
 	}
 
+	// var image = offscreenContext.getImageData(0, 0, 300, 300);
+	// cloudContext.putImageData(image, this.x ``- cloudSize / 2, this.y);
+	ctx.drawImage(offscreenCanvas, this.x - cloudSize / 2, this.y)
+
+	return;
 	ctx.shadowBlur = 7;
 	ctx.shadowColor = "black";
 	ctx.font = cloudSize + "px FontAwesome";
 	ctx.globalAlpha = "0.7"
 	ctx.fillStyle = "#ffffff";
 	ctx.textAlign = "center";
-	ctx.fillText("\uf0c2", this.x - cloudSize / 2, this.y)
+	ctx.fillText("\uf0c2", 2 * (this.x - cloudSize / 2), this.y)
 	ctx.shadowBlur = 0;
 	ctx.globalAlpha = "1"
 }
@@ -305,10 +316,21 @@ function Cloud(x, y, speed, w, h, idx) {
 	//	console.log("Check1")
 }
 
+
 var clouds = [];
 
 function initRender() {
 	//	console.log("Checking??")
+	offscreenContext.fillStyle = "rgba(255, 255, 255, 0)"
+	offscreenContext.fillRect(0, 0, 300, 300)
+	offscreenContext.shadowBlur = 7;
+	offscreenContext.shadowColor = "black";
+	offscreenContext.font = cloudSize + "px FontAwesome";
+	offscreenContext.globalAlpha = "0.7"
+	offscreenContext.fillStyle = "#ffffff";
+	// offscreenContext.textAlign = "left";
+	offscreenContext.fillText("\uf0c2", 0, 80)
+
 	clouds = [];
 	for (var i = 0; i < cloudCnt; i++) {
 		clouds.push(new Cloud(Math.random() * w, (h / 2 - 20 - h / (1.75 * 50) - 10) * Math.random() - 10, Math.random() * (cloudSpeedDef - cloudSpeedMin) + cloudSpeedMin, w, h, i))
