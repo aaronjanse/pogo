@@ -178,6 +178,9 @@ function handleOrientation(event) {
 }
 
 function ontouchstart(e) {
+	if (pendingquit) {
+		return;
+	}
 	e.preventDefault();
 
 	if (controlMode.mode == controlMode.GYRO) {
@@ -202,6 +205,9 @@ function ontouchstart(e) {
 }
 
 function ontouchmove(e) {
+	if (pendingquit) {
+		return;
+	}
 	if (!controlMode.isJoystickVariant) {
 		return;
 	}
@@ -252,6 +258,9 @@ function ontouchend(e) {
 }
 
 function onmousedown() {
+	if (pendingquit) {
+		return;
+	}
 	pogo.spring.restLength = 0.25;
 	pogo.spring.applyForce();
 	if (controlMode.isJoystickVariant) {
@@ -311,6 +320,13 @@ function getDifference(x, y) {
 }
 
 function keydown(evt) {
+	if (evt.keyCode == 80) {
+		pausegame();
+	}
+
+	if (pendingquit) {
+		return;
+	}
 	if ([32, 37, 38, 39, 40].indexOf(evt.keyCode) > -1) {
 		evt.preventDefault();
 	}

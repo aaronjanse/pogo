@@ -306,6 +306,7 @@ function handleData(data) {
 function onload() {
 	setupControlSettings();
 
+	// I think that this is from SO (I am not taking credit)
 	var QueryString = function () {
 		// This function is anonymous, is executed immediately and
 		// the return value is assigned to QueryString!
@@ -957,16 +958,28 @@ function initgamepartial() {
 	world.on("postStep", updateObstacles);
 
 	world.on("beginContact", function (event) {
-		if (debugtesting) {
-			return;
-		}
+
 		if (event.bodyA == pogo.frame.body || event.bodyB == pogo.frame.body) {
 			var h = event.bodyA == sectionA.h.body || event.bodyB == sectionA.h.body;
 			h = h || event.bodyA == sectionB.h.body || event.bodyB == sectionB.h.body;
 			if (!h) {
-				lives -= 1;
-				loseHeart();
+				if (rabbitElegible && !rabbitMode && !event.shapeA.sensor && !event.shapeB.sensor) {
+					console.log(event)
+					rabbitMode = 1;
+					lives = 3;
+					icematerial.friction *= 2;
+					alert("Welcome. You found my *easter egg* (pun intended)! Don't tell others how to get the rabbit but be sure to show them the result!")
+				} else {
+					if (debugtesting) {
+						return;
+					}
+					lives -= 1;
+					loseHeart();
+				}
 			} else {
+				if (debugtesting) {
+					return;
+				}
 				lives = 0;
 				loseHeart();
 			}
