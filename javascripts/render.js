@@ -28,6 +28,8 @@ var cloudSpeedDef = 1.5;
 var cloudSpeedMin = 0.2;
 var cloudCnt = 5;
 
+
+
 function getHatX(x) {
 	var gh = 0;
 	var worldX = x / 50 - xscroll - w / 50 / 2
@@ -88,7 +90,7 @@ function updateCloud() {
 			if (i % 3 > 0) // 66.67% of the flakes
 			{
 				this.snow.particles[i] = {
-					x: Math.random() * w,
+					x: Math.random() * w * 1.75,
 					y: -10,
 					r: p.r,
 					d: p.d
@@ -106,7 +108,7 @@ function updateCloud() {
 				} else {
 					// Enter from the right
 					this.snow.particles[i] = {
-						x: w + 5,
+						x: w * 1.25 + 5,
 						y: Math.random() * h,
 						r: p.r,
 						d: p.d
@@ -122,7 +124,7 @@ function updateCloud() {
 
 	for (var i = 0; i < this.rain.particles.length; i++) {
 		this.rain.particles[i].x -= this.xoffset
-		this.rain.particles[i].y -= this.yoffset
+		this.rain.particles[i].y += this.yoffset
 	}
 
 	//	this.xoffset = 0;
@@ -166,23 +168,36 @@ function updateCloud() {
 			i = 0
 			break;
 		}
-		this.rain.addRaindrops(Math.floor(Math.random() * this.w * 1.5), -500); //this.x-cloudSize*2+(Math.random()*cloudSize*2)...this.y-15
+		this.rain.addRaindrops(Math.random() * this.w * 2, -500); //this.x-cloudSize*2+(Math.random()*cloudSize*2)...this.y-15
 	}
 
 	var left = this.x < -cloudSize
-	var right = this.x > this.w * 2 + cloudSize
-	if (left || right) {
+	var right = this.x > this.w * 6 + cloudSize
+
+	if ((cloudsVisible || newlyVisible) && (left || right)) {
 		this.y = (this.h / 2 - 20 - this.h / (1.75 * 50) - 10) * Math.random() - 10
 		this.speed = Math.random() * (cloudSpeedDef - cloudSpeedMin) + cloudSpeedMin
-		if (left) {
+		if (left || justNowVisible) {
 			this.x = this.w + cloudSize // to right
-		} else {
+			if (justNowVisible) {
+				this.x += this.w * 2.4 * (Math.random() + 0.25)
+			}
+		} else if (!newlyVisible) {
 			this.x = -cloudSize; // to left
 		}
 	}
 
+	if (cloudsVisible) {
+		justNowVisible = false;
+	} else {
+		justNowVisible = true;
+	}
+
 	this.x += this.speed * cloudSpeed;
 }
+
+var newlyVisible = true;
+var justNowVisible = true;
 
 //based off of https://codepen.io/Sheepeuh/pen/cFazd?editors=0010
 function addRaindrops(x, y, pieces) {
@@ -259,7 +274,9 @@ function renderCloud() {
 
 	// var image = offscreenContext.getImageData(0, 0, 300, 300);
 	// cloudContext.putImageData(image, this.x ``- cloudSize / 2, this.y);
+
 	ctx.drawImage(offscreenCanvas, 2 * (this.x - cloudSize / 2), this.y)
+
 
 	return;
 	ctx.shadowBlur = 7;
@@ -307,9 +324,10 @@ function Cloud(x, y, speed, w, h, idx) {
 		pieces: 2,
 		particles: [],
 		drops: [],
-		addRaindrops: addRaindrops,
 		splash: splash
 	};
+
+	this.rain.addRaindrops = addRaindrops;
 
 	//	console.log("Check")
 	this.snow = new Snow();
@@ -333,7 +351,7 @@ function initRender() {
 
 	clouds = [];
 	for (var i = 0; i < cloudCnt; i++) {
-		clouds.push(new Cloud(Math.random() * w, (h / 2 - 20 - h / (1.75 * 50) - 10) * Math.random() - 10, Math.random() * (cloudSpeedDef - cloudSpeedMin) + cloudSpeedMin, w, h, i))
+		clouds.push(new Cloud(Math.random() * w, (h / 2 - 20 - h / (1.75 * 50) - 10) * Math.random() - 10, Math.random() * (cloudSpeedDef - cloudSpeedMin) + cloudSpeedMin, w * 1.2, h, i))
 	}
 
 	lastpx = w / 50 / 2;
@@ -399,6 +417,9 @@ function animate(time) {
 	}
 }
 
+
+var cloudsDark = false;
+
 var xscroll = 0
 var yscroll = 0
 
@@ -440,16 +461,25 @@ var sendData = function (svalue) {
 	conn.send(svalue)
 }
 
+var alreadyWelcomed = false;
+
 function render() {
+
+	if (score > 5899 && !alreadyWelcomed) {
+		alreadyWelcomed = true;
+		alert("Welcome to the end. Sadly, no dragon (yet). P.S. I know you would never cheat to get here ;)")
+	}
+
 	//conn.send('' + score);
 	if (pause) {
 		if (fullPause || !filtersEnabled) {
 			ctx.filter = "none";
+			fullPause = true;
 			return;
 		} else {
 			ctx.filter = "blur(30px)";
+			fullPause = true;
 		}
-		fullPause = true;
 	} else {
 		ctx.filter = "none";
 		fullPause = false;
@@ -513,11 +543,11 @@ function render() {
 		score -= secwidth
 	}
 
-	if (pogo.frame.body.position[0] < 0) {
+	if (pogo.frame.body.position[0] < 0 || pogo.frame.body.position[1] < -15) {
 		gameOver = true;
 		leftplay = false;
 		pogo.frame.body.position[0] = Math.max(pogo.frame.body.position[0], -2)
-		pogo.frame.body.position[1] = Math.max(pogo.frame.body.position[1], -5)
+		pogo.frame.body.position[1] = Math.max(pogo.frame.body.position[1], -15)
 	}
 	// Clear the canvas
 	ctx.clearRect(0, 0, w, h);
@@ -530,7 +560,7 @@ function render() {
 	}
 
 	ctx.fillRect(0, 0, w, h);
-	ctx.fill()
+	// ctx.fill()
 
 
 	// Transform the canvas
@@ -582,8 +612,49 @@ function render() {
 		addedClouds = true
 	}
 
+	if (filtersEnabled) {
+		if (Math.floor(progress) == 3 || Math.floor(progress) == 5 || progress >= 7) {
+			if (!cloudsDark) {
+				offscreenContext.fillStyle = "rgba(255, 255, 255, 0)"
+				offscreenContext.fillRect(0, 0, 300, 300)
+
+				offscreenContext.filter = "brightness(50%)"
+
+				offscreenContext.shadowBlur = 7;
+				offscreenContext.shadowColor = "black";
+				offscreenContext.font = cloudSize + "px FontAwesome";
+				offscreenContext.globalAlpha = "0.7"
+				offscreenContext.fillStyle = "#ffffff";
+				// offscreenContext.textAlign = "left";
+				offscreenContext.fillText("\uf0c2", 0, 80)
+
+				cloudsDark = true;
+			}
+		} else {
+			if (cloudsDark) {
+				offscreenContext.fillStyle = "rgba(255, 255, 255, 0)"
+				offscreenContext.fillRect(0, 0, 300, 300)
+
+				offscreenContext.filter = "none"
+
+				offscreenContext.shadowBlur = 7;
+				offscreenContext.shadowColor = "black";
+				offscreenContext.font = cloudSize + "px FontAwesome";
+				offscreenContext.globalAlpha = "0.7"
+				offscreenContext.fillStyle = "#ffffff";
+				// offscreenContext.textAlign = "left";
+				offscreenContext.fillText("\uf0c2", 0, 80)
+
+				cloudsDark = false;
+			}
+		}
+	}
+
 	if (progress > 3) {
 		currentRainAmnt = (progress < 4) ? rainAmnt : 0;
+		// if (progress < 4) {
+		// 	cloudsDark = true;
+		// }
 	}
 
 
@@ -594,7 +665,7 @@ function render() {
 	ctx.scale(50, -50); // Zoom in and flip y axis
 
 	for (var i = 0; i < clouds.length; i++) {
-		clouds[i].yoffset = -(yscroll - ysold) * 50
+		clouds[i].yoffset = -(yscroll - ysold) * 50 * 1.75
 	}
 
 	ctx.translate(xscroll, -yscroll)
@@ -758,9 +829,11 @@ function render() {
 		} else {
 			var o = sectionB.o[idx]
 		}
+		canvas_arrow(px + w / 50 / 2 - 0.3 - 1, o.position[1], px + w / 50 / 2 + 0.5 - 1 + 2 / 50, o.position[1])
+		ctx.strokeStyle = "white"
+		ctx.stroke()
 		canvas_arrow(px + w / 50 / 2 - 0.3 - 1, o.position[1], px + w / 50 / 2 + 0.5 - 1, o.position[1])
-
-		ctx.strokeStyle = "#000000"
+		ctx.strokeStyle = "black"
 		ctx.stroke()
 	} catch (e) {
 		//		console.log(e)
@@ -770,14 +843,36 @@ function render() {
 
 	drawControls()
 
+	//
+	var groundRGB = hexToRgb(color.ground)
+	var groundLuma = Math.round((groundRGB.r * 0.2126 + groundRGB.g * 0.7152 + groundRGB.b * 0.0722 - 40) * 255 / 100)
+	ctx.fillStyle = rgbToHex(255 - groundLuma, 255 - groundLuma, 255 - groundLuma)
+
 	ctx.font = "20px Courier New";
-	ctx.fillStyle = "#555555";
+	// if (groundLuma < 40) {
+	// 	ctx.fillStyle = "#dddddd"
+	// } else {
+	// 	ctx.fillStyle = "#000000";
+	// }
 	ctx.textAlign = "left";
 
 	//	var dist = (Math.floor(((-xscroll-((progress>2&&progress%2<=1)?4:0))%secwidth)%(rarity*2)))
 	ctx.fillText("Next obstacle: " + Math.floor(closest), 10, h - 20);
 
-	ctx.fillStyle = "#000000";
+	// ctx.fillStyle = "#000000";
+
+	var skyRGB = hexToRgb(color.sky)
+	var skyLuma = Math.round((skyRGB.r * 0.2126 + skyRGB.g * 0.7152 + skyRGB.b * 0.0722 - 30) * 255 / 90)
+
+	// if (skyLuma < 70) {
+	// 	ctx.fillStyle = "#dddddd"
+	// } else {
+	// 	ctx.fillStyle = "#000000";
+	// }
+
+	ctx.fillStyle = rgbToHex(255 - skyLuma, 255 - skyLuma, 255 - skyLuma)
+
+
 	var daysRaw = progress / 2 + 0.25;
 
 
@@ -805,8 +900,10 @@ function render() {
 
 	ctx.fillText(timeTxt, 10, 60);
 
-	ctx.fillText('' + opponentScore, 10, 80)
-		// "Level/Half-Days: "+Math.round(progress*10000)/10000
+	if (multi) {
+		ctx.fillText('' + opponentScore, 10, 80)
+	}
+	// "Level/Half-Days: "+Math.round(progress*10000)/10000
 
 	if (gameOver) {
 		ctx.font = "30px Courier New";
@@ -839,16 +936,16 @@ function render() {
 		}
 		ctx.fillText(msg + "Score: " + endscore, w / 2, h / 2 - 40);
 	} else {
-		ctx.font = "20px Courier New";
-		ctx.fillStyle = "black";
+		// ctx.font = "20px Courier New";
+		// ctx.fillStyle = "black";
 		ctx.textAlign = "left";
 		ctx.fillText("High Score: " + topscore, 10, 25);
 		scoreVal = (score - Math.floor(w / 50 / 2) + Math.round(pogo.frame.body.position[0]));
 		ctx.fillText("Score: " + scoreVal, 10, 42);
 		if (multiplayer) {
 			sendData(JSON.stringify({
-				scoreFrame: '' + (score - Math.floor(w / 50 / 2) + pogo.frame.body.position[0]),
-				scoreStick: '' + (score - Math.floor(w / 50 / 2) + pogo.stick.body.position[0]),
+				scoreFrame: '' + (score - Math.floor(w / 50 / 2) + pogo.frame.body.interpolatedPosition[0]),
+				scoreStick: '' + (score - Math.floor(w / 50 / 2) + pogo.stick.body.interpolatedPosition[0]),
 				stickY: '' + pogo.stick.body.position[1],
 				frameY: '' + pogo.frame.body.position[1],
 				frameAngle: pogo.frame.body.angle,
@@ -915,6 +1012,10 @@ function drawControls() {
 	ctx.restore()
 }
 
+var cloudsVisible = true;
+
+var rabbitElegible = false;
+
 function fadeColors(progress) {
 	var nightCol = hexToRgb(color.skynight)
 	var dayCol = hexToRgb(color.skyday)
@@ -935,13 +1036,14 @@ function fadeColors(progress) {
 
 	color.sky = rgbToHex(r, g, b)
 
-	if (!(Math.floor(progress) < 7 || Math.floor(progress) == 9)) {
+
+	if (Math.floor(progress) >= 7 && Math.floor(progress) != 9) {
 		return;
 	}
 
 	var skyold = color.sky
 
-	var caveFade = 0.025
+	var caveFade = 0.02
 
 	if (progress > 2 && progress % 2 < 1 - caveFade) {
 		color.sky = "#222222"
@@ -958,19 +1060,19 @@ function fadeColors(progress) {
 		var b = Math.round(lerp(a.b, b.b, val));
 
 		color.sky = rgbToHex(r, g, b)
-	}
+	} else {
+		if (progress > 2 && progress % 2 > 1 - caveFade) {
+			a = hexToRgb("#222222")
+			b = hexToRgb(color.sky)
 
-	if (progress > 2 && progress % 2 > 1 - caveFade) {
-		b = hexToRgb(color.sky)
-		a = hexToRgb("#222222")
+			var val = 1 - (1 - progress % 2) * 1 / caveFade
 
-		var val = 1 - (1 - progress % 2) * 1 / caveFade
+			var r = Math.round(lerp(a.r, b.r, val));
+			var g = Math.round(lerp(a.g, b.g, val));
+			var b = Math.round(lerp(a.b, b.b, val));
 
-		var r = Math.round(lerp(a.r, b.r, val));
-		var g = Math.round(lerp(a.g, b.g, val));
-		var b = Math.round(lerp(a.b, b.b, val));
-
-		color.sky = rgbToHex(r, g, b)
+			color.sky = rgbToHex(r, g, b)
+		}
 	}
 
 	if (((progress > 2 && progress % 2 > 1) || (progress < 2)) && progress % 2 < 2 - caveFade) {
@@ -981,12 +1083,17 @@ function fadeColors(progress) {
 	// Ground
 
 	if (progress > 2 && progress % 2 <= 1) {
-		color.ground = "#222222"
+		color.ground = "#555555"
+		cloudsVisible = false;
+		newlyVisible = false;
+		rabbitElegible = false
+	} else {
+		rabbitElegible = true
 	}
 
 	if (progress % 2 > 2 - caveFade) {
 		a = hexToRgb(colordef.ground)
-		b = hexToRgb("#222222")
+		b = hexToRgb("#555555")
 
 		var val = 1 - (2 - progress % 2) * 1 / caveFade
 
@@ -995,23 +1102,29 @@ function fadeColors(progress) {
 		var b = Math.round(lerp(a.b, b.b, val));
 
 		color.ground = rgbToHex(r, g, b)
-	}
+	} else {
+		if (progress > 2 && progress % 2 > 1 - caveFade) {
+			b = hexToRgb(colordef.ground)
+			a = hexToRgb("#555555")
 
-	if (progress > 2 && progress % 2 > 1 - caveFade) {
-		b = hexToRgb(colordef.ground)
-		a = hexToRgb("#555555")
+			var val = 1 - (1 - (progress % 2)) * 1 / caveFade
 
-		var val = 1 - (1 - (progress % 2)) * 1 / caveFade
+			var r = Math.round(lerp(a.r, b.r, val));
+			var g = Math.round(lerp(a.g, b.g, val));
+			var b = Math.round(lerp(a.b, b.b, val));
 
-		var r = Math.round(lerp(a.r, b.r, val));
-		var g = Math.round(lerp(a.g, b.g, val));
-		var b = Math.round(lerp(a.b, b.b, val));
+			newlyVisible = true
+			cloudsVisible = true
 
-		color.ground = rgbToHex(r, g, b)
+			color.ground = rgbToHex(r, g, b)
+		}
 	}
 
 	if (progress > 2 && progress % 2 > 1 && progress % 2 < 2 - caveFade) {
 		color.ground = colordef.ground
+		rabbitElegible = true;
+		cloudsVisible = true;
+		newlyVisible = false;
 	}
 }
 
@@ -1045,6 +1158,10 @@ function drawObstacles() {
 			ctx.beginPath();
 			ctx.arc(o.position[0], o.position[1], 0.5, 0, 2 * Math.PI, false);
 			ctx.stroke()
+			ctx.strokeStyle = "#ffffff"
+			ctx.beginPath();
+			ctx.arc(o.position[0], o.position[1], 0.7, 0, 2 * Math.PI, false);
+			ctx.stroke()
 		}
 	}
 
@@ -1065,16 +1182,51 @@ function drawObstacles() {
 	ctx.strokeStyle = "#000000"
 }
 
+var roboBunny = document.getElementById("roboBunnyImg")
+var roboBunnyLegs = document.getElementById("roboBunnyImgLegs")
+
+var rabbitMode = false;
+
 function drawpogo() {
 	ctx.fillStyle = color.stick;
-	drawbox(pogo.stick)
-	if (colorful) {
-		ctx.fill();
+	if (!rabbitMode) {
+		drawbox(pogo.stick)
+		if (colorful) {
+			ctx.fill();
+		}
 	}
-	ctx.fillStyle = color.body;
-	drawbox(pogo.frame)
-	if (colorful) {
-		ctx.fill();
+
+	if (rabbitMode) {
+		var ps = pogo.stick
+		ctx.save();
+		// ctx.opacity = '0.5'
+		ctx.translate(ps.body.position[0], ps.body.position[1]); // Translate to the center of the box
+
+		ctx.rotate(ps.body.angle + Math.PI); // Rotate to the box body frame
+
+		ctx.drawImage(roboBunnyLegs, -ps.shape.width * 4, -ps.shape.height * 0.5, 2, 2 * 59 / 52)
+		ctx.restore();
+	}
+
+	if (!rabbitMode) {
+		ctx.fillStyle = color.body;
+
+		drawbox(pogo.frame)
+		if (colorful) {
+			ctx.fill();
+		}
+	}
+
+	if (rabbitMode) {
+		var pf = pogo.frame
+		ctx.save();
+		// ctx.opacity = '0.5'
+		ctx.translate(pf.body.position[0], pf.body.position[1]); // Translate to the center of the box
+
+		ctx.rotate(pf.body.angle + Math.PI); // Rotate to the box body frame
+
+		ctx.drawImage(roboBunny, -pf.shape.width * 2, -pf.shape.height - 1, 2, 2 * 76 / 41)
+		ctx.restore();
 	}
 
 	if (opponentScore != -1) {
@@ -1111,7 +1263,9 @@ function drawpogo() {
 
 function drawbox(obj) {
 	ctx.beginPath();
-	var x = obj.body.interpolatedPosition[0],
+	// var inter = obj.body.interpolatedPosition[0]
+	var normpos = obj.body.position[0]
+	var x = normpos, //Math.abs(inter - normpos) > 0.1 ? normpos : inter, //interpolatedPosition[0],
 		y = obj.body.interpolatedPosition[1];
 	ctx.save();
 	ctx.translate(x, y); // Translate to the center of the box
@@ -1140,9 +1294,20 @@ function drawboxGhost(obj) {
 function drawObstacles1(s) {
 	for (var i = 0; i < s.o.length; i++) {
 		o = s.o[i]
+		ctx.strokeStyle = "white"
+		ctx.beginPath();
+		ctx.arc(o.position[0], o.position[1], 0.485, 0, 2 * Math.PI, false);
+		ctx.stroke()
+		ctx.strokeStyle = "orange"
+		ctx.beginPath();
+		ctx.arc(o.position[0], o.position[1], 0.525, 0, 2 * Math.PI, false);
+		ctx.stroke()
+		ctx.strokeStyle = "black"
 		ctx.beginPath();
 		ctx.arc(o.position[0], o.position[1], 0.5, 0, 2 * Math.PI, false);
 		ctx.stroke()
+
+
 	}
 }
 

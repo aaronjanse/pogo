@@ -36,6 +36,7 @@ html {
     -webkit-transition-duration: 0.35s;
     /* Safari */
     transition-duration: 0.35s;
+    color: #dddddd;
 }
 
 #mainmenu span {

@@ -61,6 +61,7 @@ function gohome() {
 }
 
 function play() {
+	// document.getElementById("health").style.display = 'inherit';
 	tutorialm = false;
 	home = false
 	ga('send', 'event', {
@@ -72,6 +73,8 @@ function play() {
 		back()
 			//		pause=false;
 	}
+
+	resetHealth();
 
 	document.getElementById("modeHUD").style.display = 'block';
 
