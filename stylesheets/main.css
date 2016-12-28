@@ -7,6 +7,12 @@
     -webkit-transition-duration: 0.5s;
     /* Safari */
     transition-duration: 0.5s;
+  background-position: center;
+  /*background-color: #aaaaaa;*/
+  /*background-blend-mode: hardlight;;*/
+
+  /*background-clip: */
+    background-image: url(file:///Users/aaronjanse/Github/pogo/images/blur_screenshot.png);
 }
 
 html {
