@@ -109,7 +109,7 @@ function fullscreen() {
 }
 
 function resetHealth() {
-	document.getElementById("health").style.animation = 'fadeinout 4s linear forwards';
+	document.getElementById("health").style.animation = 'fadeinout 2s linear forwards';
 
 	var elm = document.getElementById("health");
 	elm.style.display = 'block';
@@ -123,7 +123,10 @@ function resetHealth() {
 }
 
 function loseHeart() {
-	document.getElementById("health").style.animation = 'fadeinout 4s linear forwards';
+	if (pendingquit) {
+		return;
+	}
+	document.getElementById("health").style.animation = 'fadeinout 2s linear forwards';
 	var elm = document.getElementById("health");
 	elm.style.display = 'block';
 	var newone = elm.cloneNode(true);

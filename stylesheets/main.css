@@ -170,34 +170,72 @@ button {
 #health {
     pointer-events: none;
     display: none;
-    opacity: 0.8;
+    opacity: 1;
     position: absolute;
     z-index: 2;
-    left: 50%;
-    top: 50%;
-    -webkit-transform: translate(-50%, -50%);
+    right: 5px;
+    bottom: 5px;
+    color: red;
+    /*transform: scale(0.1);*/
+    /*-webkit-transform: translate(-50%, -50%);
     -moz-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) scale(0.5);*/
+
+    /*-webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    transform: translateX(50%);*/
     font-size: 50px;
-    animation: fadeinout 4s linear forwards;
+    animation: fadeinout 2s linear forwards;
 }
 
 @-webkit-keyframes fadeinout {
-    0%, 100% {
-        opacity: 0;
-    }
-    50% {
-        opacity: 1;
-    }
+  0%, 100% {
+    right: 10px;
+    bottom: 30px;
+  }
+
+  15%, 85% {
+    bottom: 50%;
+    right: 50%;
+  }
+
+  0%, 100% {
+      opacity: 0.8;
+      -webkit-transform: translate(0%, 50%) scale(0.5);
+      -moz-transform: translate(0%, 50%) scale(0.5);
+      transform: translate(0%, 50%) scale(0.5);
+  }
+  15%, 85% {
+    opacity: 1;
+    -webkit-transform: translate(50%, 50%);
+    -moz-transform: translate(50%, 50%);
+    transform: translate(50%, 50%);
+  }
 }
 
 @keyframes fadeinout {
-    0%, 100% {
-        opacity: 0;
-    }
-    50% {
-        opacity: 1;
-    }
+  0%, 100% {
+    right: 10px;
+    bottom: 30px;
+  }
+
+  15%, 85% {
+    bottom: 50%;
+    right: 50%;
+  }
+
+  0%, 100% {
+      opacity: 0.8;
+      -webkit-transform: translate(0%, 50%) scale(0.5);
+      -moz-transform: translate(0%, 50%) scale(0.5);
+      transform: translate(0%, 50%) scale(0.5);
+  }
+  15%, 85% {
+    opacity: 1;
+    -webkit-transform: translate(50%, 50%);
+    -moz-transform: translate(50%, 50%);
+    transform: translate(50%, 50%);
+  }
 }
 
 #tuthelp {
