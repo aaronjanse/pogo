@@ -304,7 +304,6 @@ function handleData(data) {
 }
 
 function onload() {
-	setupControlSettings();
 
 	// I think that this is from SO (I am not taking credit)
 	var QueryString = function () {
@@ -333,6 +332,8 @@ function onload() {
 	if (QueryString.debug === "1") {
 		openDebug();
 	}
+
+	setupControlSettings();
 
 	if (QueryString.multi === "1") {
 		multiplayer = true;
