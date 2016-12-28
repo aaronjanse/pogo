@@ -26,7 +26,18 @@ var keyspressed = {
 	space: false
 };
 
+function setupControlSettings() {
+	if (mobile) {
+		controlMode.mode = controlMode.GYRO;
+		$(".keyboard").hide();
+	} else {
+		controlMode.mode = controlMode.KEYBOARD;
+		$(".gyro").hide();
+	}
+}
+
 function initControls() {
+	var gyroIncompatible = false;
 	setupjoy();
 
 	window.addEventListener("keydown", keydown, false);
@@ -51,17 +62,17 @@ function initControls() {
 
 	if (!window.DeviceOrientationEvent) {
 		console.log("DeviceOrientation is not supported");
-		nojoystick = false;
+		gyroIncompatible = true;
 		setupjoy();
 	}
 
 	try {
-		if (nojoystick) {
+		if (!gyroIncompatible) {
 			var orientationData = new FULLTILT.DeviceOrientation({
 				'type': 'game'
 			});
 			orientationData.start(function () {
-				if (!nojoystick) {
+				if (gyroIncompatible) {
 					return;
 				}
 				// DeviceOrientation updated
@@ -97,7 +108,18 @@ function initControls() {
 		}
 	} catch (e) {
 		console.log("DeviceOrientation library is not supported");
-		nojoystick = false;
+		console.error(e)
+		if (controlMode.mode == controlMode.GYRO) {
+			controlMode.mode = controlMode.JOYSTICK;
+		}
+		setupjoy()
+	}
+
+	if (gyroIncompatible) {
+		console.log("Gyro Incompatible");
+		if (controlMode.mode == controlMode.GYRO) {
+			controlMode.mode = controlMode.JOYSTICK;
+		}
 		setupjoy()
 	}
 
@@ -120,7 +142,7 @@ function initControls() {
 }
 
 function setupjoy() {
-	if (fixedjoy) {
+	if (controlMode.mode == controlMode.JOYSTICK) {
 		jloc = {
 			x: w * 3 / 4,
 			y: h * 3 / 4
@@ -152,15 +174,18 @@ function handleOrientation(event) {
 	console.log(y)
 	y = Math.PI * 2 * y / 360 // Convert to radians
 	var diff = getDifference(y, pogo.frame.body.angle)
-	pogo.frame.body.angularVelocity = 3 * diff;
+	pogo.frame.body.angularVelocity = 5 * diff;
 }
 
 function ontouchstart(e) {
 	e.preventDefault();
 
-	if (nojoystick) {
+	if (controlMode.mode == controlMode.GYRO) {
 		pogo.spring.restLength = 1.25;
 		pogo.spring.applyForce();
+	}
+
+	if (!controlMode.isJoystickVariant) {
 		return;
 	}
 
@@ -177,7 +202,7 @@ function ontouchstart(e) {
 }
 
 function ontouchmove(e) {
-	if (nojoystick) {
+	if (!controlMode.isJoystickVariant) {
 		return;
 	}
 	currentmouse = {
@@ -206,11 +231,15 @@ function ontouchmove(e) {
 }
 
 function ontouchend(e) {
-	if (nojoystick) {
+	if (controlMode.mode == controlMode.GYRO) {
 		pogo.spring.restLength = 0.25;
 		pogo.spring.applyForce();
+	}
+
+	if (!controlMode.isJoystickVariant) {
 		return;
 	}
+
 	currentmouse = null
 	mousedrag = false
 	lastmouse = {
@@ -225,7 +254,7 @@ function ontouchend(e) {
 function onmousedown() {
 	pogo.spring.restLength = 0.25;
 	pogo.spring.applyForce();
-	if (!nojoystick) {
+	if (controlMode.isJoystickVariant) {
 		document.onmousemove = function (e) {
 			currentmouse = e
 			if (lastmouse.x != null) {

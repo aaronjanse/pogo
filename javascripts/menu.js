@@ -265,7 +265,32 @@ function togglefixedjoy() {
 	}
 }
 
-function updatehelp(nojoystickself, keyboardself, fixedjoyself) {
+function updatehelp() {
+	if (controlMode.isJoystickVariant) {
+		$(".joyhelp").show();
+		$(".gyrohelp").hide();
+		$(".keyboardhelp").hide();
+
+		if (controlMode.mode == controlMode.JOYSTICK) {
+			$(".fixjoyhelp").show();
+			$(".unfixjoyhelp").hide();
+		} else if (controlMode.mode == controlMode.UNFIXED_JOYSTICK) {
+			$(".fixjoyhelp").hide();
+			$(".unfixjoyhelp").show();
+		}
+	} else {
+		$(".joyhelp").hide();
+		if (controlMode.mode == controlMode.KEYBOARD) {
+			$(".gyrohelp").hide();
+			$(".keyboardhelp").show();
+		} else if (controlMode.mode == controlMode.GYRO) {
+			$(".gyrohelp").show();
+			$(".keyboardhelp").hide();
+		}
+	}
+
+	return;
+
 	$(".gyrohelp").hide();
 	$(".keyboardhelp").hide();
 	$(".joyhelp").hide();
