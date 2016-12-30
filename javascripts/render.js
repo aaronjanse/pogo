@@ -1,4 +1,5 @@
 var canvas, ctx, w, h;
+var progress = 0;
 
 var colorful = true;
 
@@ -56,7 +57,7 @@ function getHatX(x) {
 
 function updateCloud() {
 	for (var i = 0; i < this.snow.particles.length; i++) {
-		this.snow.particles[i].x -= this.xoffset
+		this.snow.particles[i].x -= this.xoffset * 0.5
 		this.snow.particles[i].y -= this.yoffset
 	}
 
@@ -90,7 +91,7 @@ function updateCloud() {
 			if (i % 3 > 0) // 66.67% of the flakes
 			{
 				this.snow.particles[i] = {
-					x: Math.random() * w * 1.75,
+					x: Math.random() * w * 2,
 					y: -10,
 					r: p.r,
 					d: p.d
@@ -108,7 +109,7 @@ function updateCloud() {
 				} else {
 					// Enter from the right
 					this.snow.particles[i] = {
-						x: w * 1.25 + 5,
+						x: w + 5,
 						y: Math.random() * h,
 						r: p.r,
 						d: p.d
@@ -165,7 +166,7 @@ function updateCloud() {
 	var i = currentRainAmnt;
 	while (i--) {
 		if (this.idx != 0) {
-			i = 0
+			i = 0;
 			break;
 		}
 		this.rain.addRaindrops(Math.random() * this.w * 2, -500); //this.x-cloudSize*2+(Math.random()*cloudSize*2)...this.y-15
@@ -463,27 +464,7 @@ var sendData = function (svalue) {
 
 var alreadyWelcomed = false;
 
-function render() {
-
-	if (score > 5899 && !alreadyWelcomed) {
-		alreadyWelcomed = true;
-		alert("Welcome to the end. Sadly, no dragon (yet). P.S. I know you would never cheat to get here ;)")
-	}
-
-	//conn.send('' + score);
-	if (pause) {
-		if (fullPause || !filtersEnabled) {
-			ctx.filter = "none";
-			fullPause = true;
-			return;
-		} else {
-			ctx.filter = "blur(30px)";
-			fullPause = true;
-		}
-	} else {
-		ctx.filter = "none";
-		fullPause = false;
-	}
+function manageSectioning() {
 	var px = pogo.frame.body.position[0]
 
 	if (px - w / 50 / 2 > secwidth) {
@@ -542,6 +523,46 @@ function render() {
 		updateObstacles()
 		score -= secwidth
 	}
+}
+
+function drawSunAndMoon() {
+	var angle = progress * Math.PI - Math.PI
+
+	ctx.font = "100px FontAwesome";
+	ctx.fillStyle = "#ffff00";
+	ctx.textAlign = "center";
+	ctx.fillText("\uf185", Math.cos(angle) * h / 2 + w / 2, Math.sin(angle) * h / 2 + yscroll * 50 + 5 * h / 9)
+
+	ctx.fillStyle = "#ddddff";
+	ctx.textAlign = "center";
+	ctx.fillText("\uf186", Math.cos(angle + Math.PI) * h / 2 + w / 2, Math.sin(angle + Math.PI) * h / 2 + yscroll * 50 + 5 * h / 9)
+}
+
+function render() {
+
+	if (score > 5899 && !alreadyWelcomed) {
+		alreadyWelcomed = true;
+		alert("Welcome to the end. Sadly, no dragon (yet). P.S. I know you would never cheat to get here ;)")
+	}
+
+	//conn.send('' + score);
+	if (pause) {
+		if (fullPause || !filtersEnabled) {
+			ctx.filter = "none";
+			fullPause = true;
+			return;
+		} else {
+			ctx.filter = "blur(30px)";
+			fullPause = true;
+		}
+	} else {
+		ctx.filter = "none";
+		fullPause = false;
+	}
+
+	var px = pogo.frame.body.position[0]
+
+	manageSectioning();
 
 	if (pogo.frame.body.position[0] < 0 || pogo.frame.body.position[1] < -15) {
 		gameOver = true;
@@ -550,7 +571,7 @@ function render() {
 		pogo.frame.body.position[1] = Math.max(pogo.frame.body.position[1], -15)
 	}
 	// Clear the canvas
-	ctx.clearRect(0, 0, w, h);
+	// ctx.clearRect(0, 0, w, h);
 
 
 	if (colorful) {
@@ -590,18 +611,9 @@ function render() {
 	}
 	yscroll = v * lerpval + yscroll
 
-	var progress = distToTime(score + pogo.frame.body.position[0] - w / 50 / 2) // half days
+	progress = distToTime(score + pogo.frame.body.position[0] - w / 50 / 2) // half days
 
-	var angle = progress * Math.PI - Math.PI
-
-	ctx.font = "100px FontAwesome";
-	ctx.fillStyle = "#ffff00";
-	ctx.textAlign = "center";
-	ctx.fillText("\uf185", Math.cos(angle) * h / 2 + w / 2, Math.sin(angle) * h / 2 + yscroll * 50 + 5 * h / 9)
-
-	ctx.fillStyle = "#ddddff";
-	ctx.textAlign = "center";
-	ctx.fillText("\uf186", Math.cos(angle + Math.PI) * h / 2 + w / 2, Math.sin(angle + Math.PI) * h / 2 + yscroll * 50 + 5 * h / 9)
+	drawSunAndMoon();
 
 	fadeColors(progress)
 
@@ -652,9 +664,6 @@ function render() {
 
 	if (progress > 3) {
 		currentRainAmnt = (progress < 4) ? rainAmnt : 0;
-		// if (progress < 4) {
-		// 	cloudsDark = true;
-		// }
 	}
 
 
@@ -1224,8 +1233,11 @@ function drawpogo() {
 		ctx.translate(pf.body.position[0], pf.body.position[1]); // Translate to the center of the box
 
 		ctx.rotate(pf.body.angle + Math.PI); // Rotate to the box body frame
-
-		ctx.drawImage(roboBunny, -pf.shape.width * 2, -pf.shape.height - 1, 2, 2 * 76 / 41)
+		if (true) {
+			ctx.drawImage(roboBunny, -pf.shape.width * 2, -pf.shape.height - 1, 2, 2 * 76 / 41)
+		} else {
+			ctx.drawImage(roboBunny, -pf.shape.width * 3, -pf.shape.height - 1, 3, 3 * 1967 / 1753)
+		}
 		ctx.restore();
 	}
 

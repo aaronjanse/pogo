@@ -34,11 +34,11 @@ var FRAME = 1,
 	OBSTACLE = 8;
 
 
-var oldcontrols = {
-	nojoystick: null,
-	fixedjoy: null,
-	keyboard: null
-};
+// var oldcontrols = {
+// 	nojoystick: null,
+// 	fixedjoy: null,
+// 	keyboard: null
+// };
 
 
 
