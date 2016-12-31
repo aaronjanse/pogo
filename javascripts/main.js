@@ -1,5 +1,7 @@
 var debugtesting = false;
 
+var coinsCnt = 0;
+
 var gameOver = false;
 var pendingquit = false;
 var pause = false;
@@ -437,9 +439,12 @@ function onload() {
 	// $('input[type="range"]').rangeslider('update', true);
 
 	window.onbeforeunload = function () {
+		document.cookie = "coinsCnt=" + coinsCnt + "; expires=Tue, 19 Jan 2038 03:14:07 UTC";
 		document.cookie = "keysensitivity=" + keysensitivityval + "; expires=Tue, 19 Jan 2038 03:14:07 UTC";
 		return null;
 	};
+
+	coinsCnt = parseInt(getCookie("coinsCnt")) || 0;
 
 	$(".controls").clone().appendTo(".controlsdiv");
 
@@ -544,6 +549,8 @@ var secnum = 0;
 var secwidth = null;
 var padding = 2;
 
+var coinDist = 1;
+
 function copysec(s) {
 	var obstacles = [];
 	//	var idx = 0
@@ -559,10 +566,20 @@ function copysec(s) {
 			fixedY: s.o[idx].fixedY,
 			velocity: s.o[idx].velocity
 		});
+
+		var circleShapeCoin = new p2.Circle({
+			radius: 0.3,
+			sensor: true
+		});
+
 		circleBody.addShape(circleShape);
+		circleBody.addShape(circleShapeCoin, [0, coinDist]);
 		circleShape.collisionGroup = OBSTACLE;
 		circleShape.collisionMask = FRAME | STICK;
+		circleShapeCoin.collisionGroup = OBSTACLE;
+		circleShapeCoin.collisionMask = FRAME | STICK;
 		obstacles.push(circleBody);
+
 		//	        idx+=1
 	}
 
@@ -759,9 +776,18 @@ function generateSection() {
 				fixedX: true,
 				fixedY: true
 			});
+
+			var circleShapeCoin = new p2.Circle({
+				radius: 0.3,
+				sensor: true
+			});
+
 			circleBody.addShape(circleShape);
+			circleBody.addShape(circleShapeCoin);
 			circleShape.collisionGroup = OBSTACLE;
 			circleShape.collisionMask = FRAME | STICK;
+			circleShapeCoin.collisionGroup = OBSTACLE;
+			circleShapeCoin.collisionMask = FRAME | STICK;
 			obstacles.push(circleBody);
 		}
 	}
@@ -974,8 +1000,25 @@ function initgamepartial() {
 					if (debugtesting) {
 						return;
 					}
-					lives -= 1;
-					loseHeart();
+
+					var isCoin = false
+					if (event.shapeA == pogo.frame.shape) {
+						console.log(event.shapeB)
+						isCoin = event.shapeB.radius == 0.3;
+					} else {
+						console.log(event.shapeA)
+						isCoin = event.shapeA.radius == 0.3;
+					}
+					if (isCoin) {
+						// is coin
+						coinsCnt++;
+						// alert("coin!");
+						return;
+					} else {
+						// is obstacle
+						lives -= 1;
+						loseHeart();
+					}
 				}
 			} else {
 				if (debugtesting) {

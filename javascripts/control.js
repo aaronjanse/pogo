@@ -179,6 +179,10 @@ function handleOrientation(event) {
 
 function ontouchstart(e) {
 	if (pendingquit) {
+		if (!gameOver) {
+			pendingquit = false
+			initgame();
+		}
 		return;
 	}
 	e.preventDefault();
@@ -206,6 +210,10 @@ function ontouchstart(e) {
 
 function ontouchmove(e) {
 	if (pendingquit) {
+		if (!gameOver) {
+			pendingquit = false
+			initgame();
+		}
 		return;
 	}
 	if (!controlMode.isJoystickVariant) {
@@ -259,6 +267,10 @@ function ontouchend(e) {
 
 function onmousedown() {
 	if (pendingquit) {
+		if (!gameOver) {
+			pendingquit = false
+			initgame();
+		}
 		return;
 	}
 	pogo.spring.restLength = 0.25;
@@ -325,6 +337,10 @@ function keydown(evt) {
 	}
 
 	if (pendingquit) {
+		if (!gameOver) {
+			pendingquit = false
+			initgame();
+		}
 		return;
 	}
 	if ([32, 37, 38, 39, 40].indexOf(evt.keyCode) > -1) {

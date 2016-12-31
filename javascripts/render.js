@@ -525,6 +525,10 @@ function manageSectioning() {
 	}
 }
 
+function logistic(val) {
+	return Math.sign(val) / (1 + Math.pow(Math.E, -val));
+}
+
 function drawSunAndMoon() {
 	var angle = progress * Math.PI - Math.PI
 
@@ -871,7 +875,8 @@ function render() {
 	// ctx.fillStyle = "#000000";
 
 	var skyRGB = hexToRgb(color.sky)
-	var skyLuma = Math.round((skyRGB.r * 0.2126 + skyRGB.g * 0.7152 + skyRGB.b * 0.0722 - 30) * 255 / 90)
+	var skyLuma = Math.round((skyRGB.r * 0.2126 + skyRGB.g * 0.7152 + skyRGB.b * 0.0722 - 30) * 255 / 90) - 10
+		// skyLuma = Math.round((logistic(((skyLuma / 255) - 0.5) / 6) + 1) * 128)
 
 	// if (skyLuma < 70) {
 	// 	ctx.fillStyle = "#dddddd"
@@ -880,7 +885,7 @@ function render() {
 	// }
 
 	ctx.fillStyle = rgbToHex(255 - skyLuma, 255 - skyLuma, 255 - skyLuma)
-
+		// console.log(rgbToHex(255 - skyLuma, 255 - skyLuma, 255 - skyLuma))
 
 	var daysRaw = progress / 2 + 0.25;
 
@@ -908,9 +913,9 @@ function render() {
 	timeTxt += (hours > 11) ? "PM" : "AM"
 
 	ctx.fillText(timeTxt, 10, 60);
-
+	ctx.fillText(coinsCnt + '€', 10, 80)
 	if (multi) {
-		ctx.fillText('' + opponentScore, 10, 80)
+		ctx.fillText('' + opponentScore, 10, 100)
 	}
 	// "Level/Half-Days: "+Math.round(progress*10000)/10000
 
@@ -934,8 +939,11 @@ function render() {
 				//					return;
 				//				}
 				gameOver = false
-				pendingquit = false
-				initgame();
+
+				if (mobile) {
+					pendingquit = false
+					initgame();
+				}
 			}, 1000 * 3);
 		}
 
@@ -944,7 +952,7 @@ function render() {
 			msg = "New High Score!\n"
 		}
 		ctx.fillText(msg + "Score: " + endscore, w / 2, h / 2 - 40);
-	} else {
+	} else if (!pendingquit) {
 		// ctx.font = "20px Courier New";
 		// ctx.fillStyle = "black";
 		ctx.textAlign = "left";
@@ -971,6 +979,12 @@ function render() {
 				}
 			}));
 		}
+	} else {
+
+		ctx.font = "30px Courier New";
+		ctx.fillStyle = "red";
+		ctx.textAlign = "center";
+		ctx.fillText("Press Any Key to Continue...", w / 2, h / 2 - 40);
 	}
 }
 
@@ -1194,7 +1208,9 @@ function drawObstacles() {
 var roboBunny = document.getElementById("roboBunnyImg")
 var roboBunnyLegs = document.getElementById("roboBunnyImgLegs")
 
-var rabbitMode = false;
+var rabbitMode = true;
+
+var dragon = false
 
 function drawpogo() {
 	ctx.fillStyle = color.stick;
@@ -1233,10 +1249,10 @@ function drawpogo() {
 		ctx.translate(pf.body.position[0], pf.body.position[1]); // Translate to the center of the box
 
 		ctx.rotate(pf.body.angle + Math.PI); // Rotate to the box body frame
-		if (true) {
+		if (!dragon) {
 			ctx.drawImage(roboBunny, -pf.shape.width * 2, -pf.shape.height - 1, 2, 2 * 76 / 41)
 		} else {
-			ctx.drawImage(roboBunny, -pf.shape.width * 3, -pf.shape.height - 1, 3, 3 * 1967 / 1753)
+			ctx.drawImage(roboBunny, -pf.shape.width * 3.5, -pf.shape.height - 0, 3, 5 * 1213 / 1861)
 		}
 		ctx.restore();
 	}
@@ -1314,6 +1330,13 @@ function drawObstacles1(s) {
 		ctx.beginPath();
 		ctx.arc(o.position[0], o.position[1], 0.525, 0, 2 * Math.PI, false);
 		ctx.stroke()
+
+		// Coins
+		ctx.strokeStyle = "purple"
+		ctx.beginPath();
+		ctx.arc(o.position[0], o.position[1] + coinDist, 0.3, 0, 2 * Math.PI, false);
+		ctx.stroke()
+
 		ctx.strokeStyle = "black"
 		ctx.beginPath();
 		ctx.arc(o.position[0], o.position[1], 0.5, 0, 2 * Math.PI, false);
