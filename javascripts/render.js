@@ -338,6 +338,12 @@ function Cloud(x, y, speed, w, h, idx) {
 
 var clouds = [];
 
+
+var obstacleCanvas = document.createElement('canvas');
+obstacleCanvas.width = 4;
+obstacleCanvas.height = 6;
+var obstacleContext = obstacleCanvas.getContext('2d');
+
 function initRender() {
 	//	console.log("Checking??")
 	offscreenContext.fillStyle = "rgba(255, 255, 255, 0)"
@@ -349,6 +355,37 @@ function initRender() {
 	offscreenContext.fillStyle = "#ffffff";
 	// offscreenContext.textAlign = "left";
 	offscreenContext.fillText("\uf0c2", 0, 80)
+
+	/**** Obstacles ****/
+
+	var ow = obstacleCanvas.width;
+	var oh = obstacleCanvas.height;
+	// obstacleContext.scale(50, 50)
+	obstacleContext.lineWidth = "0.05"
+	obstacleContext.fillStyle = "green"
+	obstacleContext.fillRect(0, 0, ow * 2, oh * 2)
+
+	obstacleContext.strokeStyle = "white"
+	obstacleContext.beginPath();
+	obstacleContext.arc(ow / 2, oh / 2, 0.485, 0, 2 * Math.PI, false);
+	obstacleContext.stroke()
+
+	obstacleContext.strokeStyle = "orange"
+	obstacleContext.beginPath();
+	obstacleContext.arc(ow / 2, oh / 2, 0.525, 0, 2 * Math.PI, false);
+	obstacleContext.stroke()
+
+	// Coins
+	obstacleContext.strokeStyle = "purple"
+	obstacleContext.beginPath();
+	obstacleContext.arc(ow / 2, oh / 2 + coinDist, 0.3, 0, 2 * Math.PI, false);
+	obstacleContext.stroke()
+
+	// Original Obstacle Drawing
+	obstacleContext.strokeStyle = "black"
+	obstacleContext.beginPath();
+	obstacleContext.arc(ow / 2, oh / 2, 0.5, 0, 2 * Math.PI, false);
+	obstacleContext.stroke()
 
 	clouds = [];
 	for (var i = 0; i < cloudCnt; i++) {
@@ -1319,30 +1356,62 @@ function drawboxGhost(obj) {
 	ctx.restore();
 }
 
+//// if (Math.abs(o.position[0] - px) <= m) {
+// console.log(Math.round(d))
+// if (s.h.body.position[0] == -1) {
+// ctx.fillStyle = "red"
+// } else {
+// 	ctx.fillStyle = "yellow"
+// }
+// // ctx.drawImage(obstacleCanvas, o.position[0], o.position[1])
+// ctx.fillRect(o.position[0], o.position[1], 4, 4)
+//
+// // if (i % 2 == 0) {
+// ctx.drawImage(obstacleCanvas, o.position[0] + s.h.body.position[0], o.position[1])
+// }
+
+
+// ctx.drawImage(obstacleCanvas, o.position[0], o.position[1])
+
 function drawObstacles1(s) {
+	var closeO = [];
 	for (var i = 0; i < s.o.length; i++) {
-		o = s.o[i]
-		ctx.strokeStyle = "white"
-		ctx.beginPath();
-		ctx.arc(o.position[0], o.position[1], 0.485, 0, 2 * Math.PI, false);
-		ctx.stroke()
-		ctx.strokeStyle = "orange"
-		ctx.beginPath();
-		ctx.arc(o.position[0], o.position[1], 0.525, 0, 2 * Math.PI, false);
-		ctx.stroke()
+		var d = Math.abs(pogo.frame.body.position[0] - s.o[i].position[0])
 
-		// Coins
-		ctx.strokeStyle = "purple"
+		if (d < w / 50 / 2 + 1) {
+			closeO.push(s.o[i])
+		}
+	}
+
+	ctx.strokeStyle = "white";
+	for (var i = 0; i < closeO.length; i++) {
 		ctx.beginPath();
-		ctx.arc(o.position[0], o.position[1] + coinDist, 0.3, 0, 2 * Math.PI, false);
-		ctx.stroke()
+		ctx.arc(closeO[i].position[0], closeO[i].position[1], 0.485, 0, 2 * Math.PI, false);
+		ctx.stroke();
+	}
 
-		ctx.strokeStyle = "black"
+	ctx.strokeStyle = "orange";
+	for (var i = 0; i < closeO.length; i++) {
 		ctx.beginPath();
-		ctx.arc(o.position[0], o.position[1], 0.5, 0, 2 * Math.PI, false);
+		ctx.arc(closeO[i].position[0], closeO[i].position[1], 0.525, 0, 2 * Math.PI, false);
+		ctx.stroke();
+	}
+
+	// Coins
+	ctx.strokeStyle = "purple";
+	for (var i = 0; i < closeO.length; i++) {
+		ctx.beginPath();
+		ctx.arc(closeO[i].position[0], closeO[i].position[1] + coinDist, 0.3, 0, 2 * Math.PI, false);
 		ctx.stroke()
+	}
 
 
+	// Original Black Obstacle Circle
+	ctx.strokeStyle = "black";
+	for (var i = 0; i < closeO.length; i++) {
+		ctx.beginPath();
+		ctx.arc(closeO[i].position[0], closeO[i].position[1], 0.5, 0, 2 * Math.PI, false);
+		ctx.stroke();
 	}
 }
 

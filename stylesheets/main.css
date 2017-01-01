@@ -39,7 +39,13 @@ html {
     color: #dddddd;
 }
 
-#mainmenu span {
+#mainmenu a {
+  margin-right: 15px;
+  color: lightgrey;
+}
+
+#mainmenu span, #mainmenu h1 {
+    color: #dddddd;
     margin: 2px;
     width: 100%;
     align-content: center;
@@ -334,8 +340,4 @@ body {
 
 #mainmenu {
     height: 100%;
-}
-
-#mainmenu h1 {
-    color: #353535;
 }
