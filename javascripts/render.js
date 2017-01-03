@@ -1022,6 +1022,7 @@ function render() {
 		ctx.fillStyle = "red";
 		ctx.textAlign = "center";
 		ctx.fillText("Press Any Key to Continue...", w / 2, h / 2 - 40);
+		ctx.fillText("Score:" + scoreVal, w / 2, h / 2 - 90);
 	}
 }
 

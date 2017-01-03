@@ -752,14 +752,14 @@ function generateSection() {
 	for (var i = 1; i < data.length; i++) {
 		if (i % rarity == 0) {
 			var lvl = Math.floor(distToTime(secnum * secwidth + i * 2));
-			if (Math.random() > 0.5 && lvl != 0 && (lvl > 2 && lvl % 2 < 1)) {
-				y = data[i] + Math.random() * 2;
-			} else {
-				y = data[i] + 5 - Math.random() * 2;
-			}
+			// if (Math.random() > 0.5) {
+			y = data[i] + Math.random() * 5;
+			// } else {
+			// 	y = data[i] + 5 - Math.random() * 2;
+			// }
 
 			if (lvl == 0) {
-				y += 4;
+				y += 15;
 			}
 			if (lvl > 2 && lvl < 3) {
 				y -= 20;
