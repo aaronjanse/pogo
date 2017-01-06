@@ -998,8 +998,8 @@ function render() {
 		ctx.fillText("Score: " + scoreVal, 10, 42);
 		if (multiplayer) {
 			sendData(JSON.stringify({
-				scoreFrame: '' + (score - Math.floor(w / 50 / 2) + pogo.frame.body.interpolatedPosition[0]),
-				scoreStick: '' + (score - Math.floor(w / 50 / 2) + pogo.stick.body.interpolatedPosition[0]),
+				scoreFrame: '' + (score - Math.floor(w / 50 / 2) + pogo.frame.body.position[0]),
+				scoreStick: '' + (score - Math.floor(w / 50 / 2) + pogo.stick.body.position[0]),
 				stickY: '' + pogo.stick.body.position[1],
 				frameY: '' + pogo.frame.body.position[1],
 				frameAngle: pogo.frame.body.angle,
