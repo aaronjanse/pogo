@@ -985,6 +985,9 @@ function initgamepartial() {
 	world.on("postStep", updateObstacles);
 
 	world.on("beginContact", function (event) {
+		if (!gameOver && pendingquit) {
+			return;
+		}
 
 		if (event.bodyA == pogo.frame.body || event.bodyB == pogo.frame.body) {
 			var h = event.bodyA == sectionA.h.body || event.bodyB == sectionA.h.body;

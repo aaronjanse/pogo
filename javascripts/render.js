@@ -548,9 +548,12 @@ function manageSectioning() {
 			sectionB.inverts[i] = !sectionB.inverts[i]
 		}
 
-		secnum -= 2
+
 		sectionB = changenum(sectionA, 1, 0)
+		secnum -= 3
 		sectionA = generateSection()
+		secnum += 1
+
 		pogo.frame.body.position[0] += secwidth
 		pogo.stick.body.position[0] += secwidth
 		updateObstacles()
