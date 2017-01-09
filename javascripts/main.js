@@ -1,5 +1,7 @@
 var debugtesting = false;
 
+var rabbitMode = Math.random() < 1 / 5;
+
 var coinsCnt = 0;
 
 var gameOver = false;

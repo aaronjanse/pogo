@@ -1249,8 +1249,6 @@ function drawObstacles() {
 var roboBunny = document.getElementById("roboBunnyImg")
 var roboBunnyLegs = document.getElementById("roboBunnyImgLegs")
 
-var rabbitMode = false;
-
 var dragon = false
 
 function drawpogo() {

@@ -332,6 +332,10 @@ function getDifference(x, y) {
 }
 
 function keydown(evt) {
+	// console.log(evt.keyCode)
+	// if (home && evt.keyCode == 13) {
+	// 	play()
+	// }
 	if (evt.keyCode == 80) {
 		pausegame();
 	}
